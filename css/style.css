@@ -507,3 +507,77 @@ main#app {
     font-size: 0.75rem;
     color: var(--text-muted);
 }
+
+/* Tooltip Help Icons & Popover Cards */
+.label-with-help {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.help-tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-help-icon {
+    background: none;
+    border: none;
+    color: var(--accent-cyan);
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    padding: 0;
+}
+
+.btn-help-icon:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.tooltip-card {
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    width: 250px;
+    background: rgba(10, 15, 25, 0.96);
+    border: 1px solid var(--accent-cyan);
+    padding: 0.85rem;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 12px var(--accent-cyan-glow);
+    color: var(--text-main);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 100;
+}
+
+.tooltip-card strong {
+    color: var(--accent-cyan);
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+}
+
+.tooltip-card p {
+    margin-bottom: 0.3rem;
+    color: var(--text-muted);
+}
+
+.tooltip-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* Show Tooltip on Hover or Click Focus */
+.help-tooltip-wrapper:hover .tooltip-card,
+.help-tooltip-wrapper:focus-within .tooltip-card {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
