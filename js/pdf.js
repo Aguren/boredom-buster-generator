@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // SAFE WRAPPING & ENCODING
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // CERTIFICATE & SAFE WRAPPING
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,6 +30,9 @@ async function generateMissionPackPDF() {
     
     const includeHints = document.getElementById('opt-include-hints')?.checked ?? true;
     const includeCert = document.getElementById('opt-include-cert')?.checked ?? true;
+
+    const customAwardTitle = document.getElementById('cert-award-title')?.value.trim() || 'MASTER DECODER';
+    const customSealMark = document.getElementById('cert-stamp-seal')?.value || 'PASSED';
 
     const clues = [];
     const clue1 = document.getElementById('clue-1').value.trim() || 'LOOK IN THE FRIDGE';
@@ -79,7 +82,7 @@ async function generateMissionPackPDF() {
 
         if (includeCert) {
             doc.addPage();
-            buildCertificatePage(doc, agentName, currentTheme);
+            buildCertificatePage(doc, agentName, currentTheme, customAwardTitle, customSealMark);
         }
 
         const filename = `${currentTheme.id}_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
@@ -357,7 +360,7 @@ function buildNotebookPage(doc, pageNum, theme) {
     doc.rect(20, 130, 170, 130, 'S');
 }
 
-function buildCertificatePage(doc, name, theme) {
+function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', sealMark = 'PASSED') {
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(2);
     doc.rect(15, 15, 180, 267, 'S');
@@ -371,29 +374,50 @@ function buildCertificatePage(doc, name, theme) {
     doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("CERTIFICATE OF VICTORY", 105, 55, { align: "center" });
 
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setFont(theme.pdfFont, "normal");
-    doc.text("THIS CERTIFIES THAT MASTER DECODER", 105, 75, { align: "center" });
+    doc.text("THIS CERTIFIES THAT", 105, 75, { align: "center" });
 
+    // Custom Award Title
+    doc.setFontSize(16);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.text(awardTitle.toUpperCase(), 105, 85, { align: "center" });
+
+    // Agent / Hero Name
     doc.setFontSize(24);
     doc.setFont(theme.pdfFont, "bold");
     doc.setTextColor(...theme.pdfTextEncrypted);
-    doc.text(name.toUpperCase(), 105, 95, { align: "center" });
+    doc.text(name.toUpperCase(), 105, 102, { align: "center" });
 
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setFont(theme.pdfFont, "normal");
     doc.setTextColor(60, 60, 60);
-    doc.text(`HAS SUCCESSFULLY CRACKED ALL CIPHERS AND COMPLETED THE`, 105, 115, { align: "center" });
+    doc.text(`HAS SUCCESSFULLY CRACKED ALL CIPHERS AND COMPLETED THE`, 105, 120, { align: "center" });
+    
     doc.setFont(theme.pdfFont, "bold");
-    doc.text(`${theme.mainTitle}`, 105, 125, { align: "center" });
+    doc.text(`${theme.mainTitle}`, 105, 130, { align: "center" });
 
+    // Official Seal Badge
     doc.setDrawColor(...theme.pdfBadgeColor);
+    doc.setLineWidth(1);
     doc.circle(105, 175, 25, 'S');
-    doc.setFontSize(10);
-    doc.text("OFFICIAL SEAL", 105, 173, { align: "center" });
-    doc.text("PASSED", 105, 180, { align: "center" });
+    doc.setFontSize(9);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text("OFFICIAL SEAL", 105, 171, { align: "center" });
+    
+    doc.setFontSize(11);
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.text(`${sealMark}`, 105, 180, { align: "center" });
 
+    // Signature Lines
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(0.5);
     doc.line(40, 235, 90, 235);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
     doc.text("Parent Signature", 65, 242, { align: "center" });
 
     doc.line(120, 235, 170, 235);
