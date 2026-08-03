@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // CERTIFICATE & SAFE WRAPPING
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // CLEAN COVER & LEGIT SEAL
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -114,10 +114,14 @@ function addTopSecretWatermark(doc, theme) {
     doc.restoreGraphicsState();
 }
 
+/**
+ * Clean Cover Page (Photo frame box removed)
+ */
 function buildCoverPage(doc, name, code, theme) {
     doc.setFillColor(...theme.pdfCoverBg);
     doc.rect(0, 0, 210, 297, 'F');
 
+    // Classification Badge
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1);
     doc.rect(130, 18, 60, 15);
@@ -126,38 +130,32 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setFontSize(11);
     doc.text(theme.stampText || "CLASSIFIED", 160, 28, { align: "center" });
 
+    // Hero Codename Emblem
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1.5);
-    doc.circle(105, 85, 38, 'S');
+    doc.circle(105, 95, 42, 'S');
+    doc.setLineWidth(0.5);
+    doc.circle(105, 95, 40, 'S');
 
     doc.setTextColor(255, 183, 0);
     doc.setFontSize(14);
-    doc.text("IDENTIFICATION", 105, 78, { align: "center" });
-    doc.setFontSize(26);
-    doc.text(`${code}`, 105, 90, { align: "center" });
+    doc.text("IDENTIFICATION", 105, 87, { align: "center" });
+    doc.setFontSize(28);
+    doc.text(`${code}`, 105, 100, { align: "center" });
     doc.setFontSize(9);
     doc.setTextColor(...theme.pdfBadgeColor);
-    doc.text(`* ${theme.stampText || "CONFIDENTIAL"} *`, 105, 99, { align: "center" });
+    doc.text(`* ${theme.stampText || "CONFIDENTIAL"} *`, 105, 109, { align: "center" });
 
+    // Main Title
     doc.setTextColor(...theme.pdfCoverText);
-    doc.setFontSize(18);
-    doc.text(theme.pdfTitleText || "ADVENTURE MISSION PACK", 105, 140, { align: "center" });
+    doc.setFontSize(20);
+    doc.text(theme.pdfTitleText || "ADVENTURE MISSION PACK", 105, 160, { align: "center" });
 
-    doc.setDrawColor(...theme.pdfBadgeColor);
-    doc.setLineWidth(0.8);
-    doc.rect(75, 155, 60, 70, 'S');
-    doc.setDrawColor(120, 120, 120);
-    doc.rect(78, 158, 54, 64, 'S');
-    
-    doc.setTextColor(150, 150, 150);
-    doc.setFontSize(8);
-    doc.setFont(theme.pdfFont, "normal");
-    doc.text("[ ATTACH PHOTO / CREST HERE ]", 105, 192, { align: "center" });
-
+    // Target Name Block
     doc.setFont(theme.pdfFont, "bold");
-    doc.setFontSize(12);
+    doc.setFontSize(16);
     doc.setTextColor(...theme.pdfCoverText);
-    doc.text(`NAME: ${name.toUpperCase()}`, 105, 240, { align: "center" });
+    doc.text(`ISSUED TO: ${name.toUpperCase()}`, 105, 185, { align: "center" });
     
     doc.setFontSize(8);
     doc.text(`PROPERTY OF ${theme.mainTitle} // FOR YOUR EYES ONLY`, 105, 275, { align: "center" });
@@ -245,7 +243,6 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
 
     const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType) : rawMessage;
 
-    // Responsive font scaling & safe wrapping
     doc.setFont("courier", "bold");
     let fontSize = 14;
     if (encrypted.length > 50) fontSize = 12;
@@ -254,10 +251,9 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     doc.setFontSize(fontSize);
     doc.setTextColor(...theme.pdfTextEncrypted);
     
-    const maxTextWidth = boxWidth - 20; // 150mm printable width inside box
+    const maxTextWidth = boxWidth - 20;
     const splitLines = doc.splitTextToSize(encrypted, maxTextWidth);
 
-    // Vertically center lines inside box
     const lineHeight = fontSize * 0.45;
     const totalTextHeight = splitLines.length * lineHeight;
     const startY = boxY + (boxHeight / 2) - (totalTextHeight / 2) + (lineHeight / 2);
@@ -360,6 +356,9 @@ function buildNotebookPage(doc, pageNum, theme) {
     doc.rect(20, 130, 170, 130, 'S');
 }
 
+/**
+ * Legitimate Multi-Rings Official Victory Certificate Seal
+ */
 function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', sealMark = 'PASSED') {
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(2);
@@ -372,44 +371,54 @@ function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', s
     doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(26);
     doc.setTextColor(...theme.pdfTextPrimary);
-    doc.text("CERTIFICATE OF VICTORY", 105, 55, { align: "center" });
+    doc.text("CERTIFICATE OF VICTORY", 105, 50, { align: "center" });
 
     doc.setFontSize(11);
     doc.setFont(theme.pdfFont, "normal");
-    doc.text("THIS CERTIFIES THAT", 105, 75, { align: "center" });
+    doc.text("THIS CERTIFIES THAT", 105, 68, { align: "center" });
 
-    // Custom Award Title
     doc.setFontSize(16);
     doc.setFont(theme.pdfFont, "bold");
     doc.setTextColor(...theme.pdfBadgeColor);
-    doc.text(awardTitle.toUpperCase(), 105, 85, { align: "center" });
+    doc.text(awardTitle.toUpperCase(), 105, 78, { align: "center" });
 
-    // Agent / Hero Name
     doc.setFontSize(24);
     doc.setFont(theme.pdfFont, "bold");
     doc.setTextColor(...theme.pdfTextEncrypted);
-    doc.text(name.toUpperCase(), 105, 102, { align: "center" });
+    doc.text(name.toUpperCase(), 105, 95, { align: "center" });
 
     doc.setFontSize(11);
     doc.setFont(theme.pdfFont, "normal");
     doc.setTextColor(60, 60, 60);
-    doc.text(`HAS SUCCESSFULLY CRACKED ALL CIPHERS AND COMPLETED THE`, 105, 120, { align: "center" });
+    doc.text(`HAS SUCCESSFULLY CRACKED ALL CIPHERS AND COMPLETED THE`, 105, 112, { align: "center" });
     
     doc.setFont(theme.pdfFont, "bold");
-    doc.text(`${theme.mainTitle}`, 105, 130, { align: "center" });
+    doc.text(`${theme.mainTitle}`, 105, 122, { align: "center" });
 
-    // Official Seal Badge
+    // Multi-Ring Official Medal Seal
+    const sealCenterX = 105;
+    const sealCenterY = 172;
+
     doc.setDrawColor(...theme.pdfBadgeColor);
-    doc.setLineWidth(1);
-    doc.circle(105, 175, 25, 'S');
-    doc.setFontSize(9);
+    doc.setLineWidth(1.8);
+    doc.circle(sealCenterX, sealCenterY, 26, 'S'); // Outer thick ring
+    
+    doc.setLineWidth(0.6);
+    doc.circle(sealCenterX, sealCenterY, 23.5, 'S'); // Inner thin ring
+    doc.circle(sealCenterX, sealCenterY, 21, 'S'); // Core ring
+
+    doc.setFontSize(7.5);
     doc.setFont(theme.pdfFont, "bold");
     doc.setTextColor(...theme.pdfTextPrimary);
-    doc.text("OFFICIAL SEAL", 105, 171, { align: "center" });
-    
-    doc.setFontSize(11);
+    doc.text("OFFICIAL SEAL OF EXCELLENCE", sealCenterX, sealCenterY - 11, { align: "center" });
+
+    doc.setFontSize(12);
     doc.setTextColor(...theme.pdfBadgeColor);
-    doc.text(`${sealMark}`, 105, 180, { align: "center" });
+    doc.text(`${sealMark}`, sealCenterX, sealCenterY + 2, { align: "center" });
+
+    doc.setFontSize(7.5);
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text("VERIFIED & GRANTED", sealCenterX, sealCenterY + 13, { align: "center" });
 
     // Signature Lines
     doc.setDrawColor(180, 180, 180);
