@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA PDF GENERATOR ENGINE // LOWER-THIRD WATERMARK COMPILER
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // DYNAMIC PALETTE & TEXT MATCHING
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,58 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnGenerate.addEventListener('click', generateMissionPackPDF);
     }
 });
-
-/**
- * Palette Configurator matching CSS Theme selections
- */
-function getThemePalette() {
-    const currentTheme = document.body.className || 'theme-spy';
-
-    if (currentTheme.includes('theme-stealth')) {
-        return {
-            name: 'stealth',
-            coverBg: [8, 5, 6],
-            coverText: [255, 240, 243],
-            badgeColor: [255, 51, 102],
-            accentColor: [255, 51, 102],
-            watermarkColor: [245, 210, 215],
-            boxBg: [255, 240, 245],
-            boxBorder: [255, 180, 200],
-            textPrimary: [20, 10, 12],
-            textEncrypted: [200, 0, 50],
-            fontFamily: 'helvetica'
-        };
-    } else if (currentTheme.includes('theme-dossier')) {
-        return {
-            name: 'dossier',
-            coverBg: [235, 224, 200], // Manila Folder Tone
-            coverText: [43, 37, 32],
-            badgeColor: [153, 51, 0],
-            accentColor: [153, 51, 0],
-            watermarkColor: [220, 205, 180],
-            boxBg: [248, 243, 230],
-            boxBorder: [180, 150, 110],
-            textPrimary: [43, 37, 32],
-            textEncrypted: [130, 40, 0],
-            fontFamily: 'courier' // Vintage typewriter style
-        };
-    }
-
-    // Default: CIA Cyan (theme-spy)
-    return {
-        name: 'spy',
-        coverBg: [18, 24, 36],
-        coverText: [240, 244, 248],
-        badgeColor: [0, 240, 255],
-        accentColor: [0, 240, 255],
-        watermarkColor: [220, 235, 245],
-        boxBg: [245, 247, 250],
-        boxBorder: [210, 215, 220],
-        textPrimary: [10, 13, 18],
-        textEncrypted: [0, 100, 200],
-        fontFamily: 'helvetica'
-    };
-}
 
 async function generateMissionPackPDF() {
     if (window.SoundEngine) {
@@ -74,10 +22,10 @@ async function generateMissionPackPDF() {
         format: 'a4'
     });
 
-    const palette = getThemePalette();
+    const currentTheme = window.ThemeManager ? window.ThemeManager.getCurrentTheme() : {};
 
-    const agentName = document.getElementById('junior-agent-name').value.trim() || 'AGENT';
-    const agentCode = document.getElementById('junior-agent-code').value.trim() || '007½';
+    const agentName = document.getElementById('junior-agent-name').value.trim() || 'HERO';
+    const agentCode = document.getElementById('junior-agent-code').value.trim() || '007';
     const cipherType = document.getElementById('cipher-type').value;
     
     const clues = [];
@@ -99,94 +47,88 @@ async function generateMissionPackPDF() {
         clues.push(clue5);
     }
 
-    const finalRewardClue = document.getElementById('clue-final').value.trim() || 'MISSION COMPLETE GREAT JOB AGENT';
+    const finalRewardClue = document.getElementById('clue-final').value.trim() || 'QUEST COMPLETE GREAT JOB';
 
     const btnGenerate = document.getElementById('btn-generate-pdf');
     const originalText = btnGenerate.innerHTML;
     btnGenerate.disabled = true;
-    btnGenerate.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> GENERATING DOSSIER...`;
+    btnGenerate.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> GENERATING PACK...`;
 
     try {
-        buildCoverPage(doc, agentName, agentCode, palette);
+        buildCoverPage(doc, agentName, agentCode, currentTheme);
 
         doc.addPage();
-        buildDecoderKeyPage(doc, cipherType, palette);
+        buildDecoderKeyPage(doc, cipherType, currentTheme);
 
         clues.forEach((clueText, idx) => {
             doc.addPage();
-            buildMissionPage(doc, idx + 1, clueText, cipherType, palette);
+            buildMissionPage(doc, idx + 1, clueText, cipherType, currentTheme);
         });
 
         doc.addPage();
-        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, palette);
+        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, currentTheme);
 
         doc.addPage();
-        buildParentInstructionsPage(doc, clues, finalRewardClue, palette);
+        buildParentInstructionsPage(doc, clues, finalRewardClue, currentTheme);
 
         doc.addPage();
-        buildNotebookPage(doc, 1, palette);
+        buildNotebookPage(doc, 1, currentTheme);
 
-        const filename = `HIA_Mission_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
+        const filename = `${currentTheme.id}_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
         doc.save(filename);
 
     } catch (error) {
         console.error("PDF Compilation Failed:", error);
-        alert("An error occurred while compiling the PDF. Check console for details.");
+        alert("An error occurred while compiling the PDF pack.");
     } finally {
         btnGenerate.disabled = false;
         btnGenerate.innerHTML = originalText;
     }
 }
 
-/* Background Watermark Helper (Positioned in Lower Third) */
-function addTopSecretWatermark(doc, palette) {
+function addTopSecretWatermark(doc, theme) {
     doc.saveGraphicsState();
-    doc.setTextColor(...palette.watermarkColor);
-    doc.setFont(palette.fontFamily, "bold");
-    doc.setFontSize(48);
+    doc.setTextColor(...theme.pdfWatermarkColor);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(44);
     
-    // Positioned at lower third (Y = 225mm) at a subtle 15-degree angle
-    doc.text("TOP SECRET", 105, 225, {
+    doc.text(theme.stampText || "TOP SECRET", 105, 225, {
         align: "center",
         angle: 15
     });
     doc.restoreGraphicsState();
 }
 
-function buildCoverPage(doc, name, code, palette) {
-    doc.setFillColor(...palette.coverBg);
+function buildCoverPage(doc, name, code, theme) {
+    doc.setFillColor(...theme.pdfCoverBg);
     doc.rect(0, 0, 210, 297, 'F');
 
-    // Header Stamp
-    doc.setDrawColor(255, 51, 102);
+    doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1);
-    doc.rect(140, 18, 50, 15);
-    doc.setTextColor(255, 51, 102);
-    doc.setFont(palette.fontFamily, "bold");
-    doc.setFontSize(13);
-    doc.text("TOP SECRET", 165, 28, { align: "center" });
+    doc.rect(130, 18, 60, 15);
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(11);
+    doc.text(theme.stampText || "CLASSIFIED", 160, 28, { align: "center" });
 
-    // Agency Badge Ring
-    doc.setDrawColor(...palette.badgeColor);
+    doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1.5);
     doc.circle(105, 85, 38, 'S');
 
     doc.setTextColor(255, 183, 0);
-    doc.setFontSize(16);
-    doc.text("AGENT", 105, 78, { align: "center" });
-    doc.setFontSize(28);
+    doc.setFontSize(14);
+    doc.text("IDENTIFICATION", 105, 78, { align: "center" });
+    doc.setFontSize(26);
     doc.text(`${code}`, 105, 90, { align: "center" });
     doc.setFontSize(9);
-    doc.setTextColor(...palette.badgeColor);
-    doc.text("* CLASSIFIED *", 105, 99, { align: "center" });
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.text(`* ${theme.stampText || "CONFIDENTIAL"} *`, 105, 99, { align: "center" });
 
-    // Document Title
-    doc.setTextColor(...palette.coverText);
-    doc.setFontSize(20);
-    doc.text("SECRET AGENT MISSION PACK", 105, 140, { align: "center" });
+    doc.setTextColor(...theme.pdfCoverText);
+    doc.setFontSize(18);
+    doc.text(theme.pdfTitleText || "ADVENTURE MISSION PACK", 105, 140, { align: "center" });
 
-    // Printable Agent ID Photo Frame
-    doc.setDrawColor(...palette.accentColor);
+    doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(0.8);
     doc.rect(75, 155, 60, 70, 'S');
     doc.setDrawColor(120, 120, 120);
@@ -194,30 +136,29 @@ function buildCoverPage(doc, name, code, palette) {
     
     doc.setTextColor(150, 150, 150);
     doc.setFontSize(8);
-    doc.setFont(palette.fontFamily, "normal");
-    doc.text("[ ATTACH AGENT PHOTO HERE ]", 105, 192, { align: "center" });
+    doc.setFont(theme.pdfFont, "normal");
+    doc.text("[ ATTACH PHOTO / CREST HERE ]", 105, 192, { align: "center" });
 
-    // Agent Details Footer
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(12);
-    doc.setTextColor(...palette.coverText);
-    doc.text(`AGENT NAME: ${name.toUpperCase()}`, 105, 240, { align: "center" });
+    doc.setTextColor(...theme.pdfCoverText);
+    doc.text(`NAME: ${name.toUpperCase()}`, 105, 240, { align: "center" });
     
     doc.setFontSize(8);
-    doc.text("PROPERTY OF THE HOME INTELLIGENCE AGENCY // FOR AGENT'S EYES ONLY", 105, 275, { align: "center" });
+    doc.text(`PROPERTY OF ${theme.mainTitle} // FOR YOUR EYES ONLY`, 105, 275, { align: "center" });
 }
 
-function buildDecoderKeyPage(doc, cipherType, palette) {
-    addTopSecretWatermark(doc, palette);
+function buildDecoderKeyPage(doc, cipherType, theme) {
+    addTopSecretWatermark(doc, theme);
 
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(18);
-    doc.setTextColor(...palette.textPrimary);
+    doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("DECODER KEY", 105, 25, { align: "center" });
     
     doc.setFontSize(10);
-    doc.setFont(palette.fontFamily, "normal");
-    doc.text("Every letter has a secret code. Keep this handy for every mission!", 105, 33, { align: "center" });
+    doc.setFont(theme.pdfFont, "normal");
+    doc.text("Every letter has a secret code. Keep this key handy to solve every clue!", 105, 33, { align: "center" });
 
     doc.setLineWidth(0.5);
     doc.setDrawColor(200, 200, 200);
@@ -239,7 +180,7 @@ function buildDecoderKeyPage(doc, cipherType, palette) {
         }
 
         doc.setFontSize(14);
-        doc.setFont(palette.fontFamily, "bold");
+        doc.setFont(theme.pdfFont, "bold");
         doc.text(`${letter} = ${encodedChar}`, x, y);
     });
 
@@ -248,55 +189,51 @@ function buildDecoderKeyPage(doc, cipherType, palette) {
     doc.text("TIP: Use '/' to mark spaces between encoded words.", 105, 265, { align: "center" });
 }
 
-function buildMissionPage(doc, missionNum, rawMessage, cipherType, palette) {
+function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme) {
     const isFinal = missionNum === 'FINAL';
 
-    addTopSecretWatermark(doc, palette);
+    addTopSecretWatermark(doc, theme);
 
-    // Foldable Seal Banner Header
     doc.setDrawColor(180, 180, 180);
     doc.setLineDashPattern([2, 2], 0);
     doc.line(20, 20, 190, 20);
     doc.setLineDashPattern([], 0);
 
     doc.setFontSize(8);
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setTextColor(120, 120, 120);
-    doc.text(`[ FOLD AND TAPE HERE — DO NOT OPEN UNTIL ${isFinal ? "FINAL MISSION" : "MISSION " + missionNum} ]`, 105, 16, { align: "center" });
+    doc.text(`[ FOLD AND SEAL HERE — DO NOT OPEN UNTIL ${isFinal ? "FINAL REWARD" : theme.cluePrefix.toUpperCase() + " " + missionNum} ]`, 105, 16, { align: "center" });
 
-    // Mission Title
-    doc.setFont(palette.fontFamily, "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(...palette.textPrimary);
-    doc.text(isFinal ? "FINAL MISSION" : `MISSION ${missionNum}`, 20, 38);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text(isFinal ? "FINAL REWARD QUEST" : `${theme.cluePrefix.toUpperCase()} ${missionNum}`, 20, 38);
 
     doc.setFontSize(10);
-    doc.setFont(palette.fontFamily, "normal");
+    doc.setFont(theme.pdfFont, "normal");
     doc.setTextColor(100, 100, 100);
-    doc.text(isFinal ? "You've cracked every code. One last message awaits..." : "Report to headquarters and decode your next assignment.", 20, 46);
+    doc.text(isFinal ? "You've solved every clue. One final message awaits..." : "Decode the message below to reveal your next secret location.", 20, 46);
 
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 52, 190, 52);
 
-    // Encrypted Box styled per theme
-    doc.setFillColor(...palette.boxBg);
+    doc.setFillColor(...theme.pdfBoxBg);
     doc.rect(20, 62, 170, 70, 'F');
-    doc.setDrawColor(...palette.boxBorder);
+    doc.setDrawColor(...theme.pdfBoxBorder);
     doc.rect(20, 62, 170, 70, 'S');
 
     const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType) : rawMessage;
 
     doc.setFont("courier", "bold");
     doc.setFontSize(16);
-    doc.setTextColor(...palette.textEncrypted);
+    doc.setTextColor(...theme.pdfTextEncrypted);
     
     const splitLines = doc.splitTextToSize(encrypted, 150);
     doc.text(splitLines, 105, 92, { align: "center" });
 
-    // Agent Answer Fill-in Area
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(11);
-    doc.setTextColor(...palette.textPrimary);
+    doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("MY DECODED MESSAGE:", 20, 155);
 
     doc.setDrawColor(160, 160, 160);
@@ -304,15 +241,15 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, palette) {
     doc.line(20, 200, 190, 200);
 }
 
-function buildParentInstructionsPage(doc, clues, finalClue, palette) {
-    addTopSecretWatermark(doc, palette);
+function buildParentInstructionsPage(doc, clues, finalClue, theme) {
+    addTopSecretWatermark(doc, theme);
 
-    doc.setFont(palette.fontFamily, "bold");
-    doc.setFontSize(18);
-    doc.setTextColor(...palette.textPrimary);
-    doc.text("MISSION CONTROL // PARENT INSTRUCTIONS", 105, 25, { align: "center" });
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(16);
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text(theme.pdfInstructionsTitle || "PARENT INSTRUCTIONS", 105, 25, { align: "center" });
     doc.setFontSize(9);
-    doc.setFont(palette.fontFamily, "normal");
+    doc.setFont(theme.pdfFont, "normal");
     doc.setTextColor(255, 51, 102);
     doc.text("FOR PARENT EYES ONLY", 105, 32, { align: "center" });
 
@@ -321,16 +258,16 @@ function buildParentInstructionsPage(doc, clues, finalClue, palette) {
 
     doc.setFontSize(11);
     doc.setTextColor(40, 40, 40);
-    doc.setFont(palette.fontFamily, "bold");
-    doc.text("How this works:", 20, 50);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.text("How to run this adventure:", 20, 50);
 
-    doc.setFont(palette.fontFamily, "normal");
+    doc.setFont(theme.pdfFont, "normal");
     doc.setFontSize(10);
     const steps = [
-        "1. Cut out pages for Missions 1 through " + clues.length + " and hide them in matching locations below.",
-        "2. Hand your agent the Decoder Key (Page 2) to start Mission 1.",
+        `1. Cut out pages for ${theme.cluePrefix} 1 through ${clues.length} and hide them in the matching spots below.`,
+        "2. Hand your child the Decoder Key (Page 2) to solve Clue 1.",
         "3. Each cracked clue reveals the hiding spot of the next clue.",
-        "4. Place a small prize (snack, sticker, extra screen time) at the final location!"
+        "4. Place a small prize or treasure at the final location!"
     ];
     let y = 60;
     steps.forEach(step => {
@@ -339,42 +276,42 @@ function buildParentInstructionsPage(doc, clues, finalClue, palette) {
     });
 
     y += 10;
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(11);
-    doc.text("Target Hideout Cheat Sheet:", 20, y);
+    doc.text("Hideout Cheat Sheet:", 20, y);
 
     y += 10;
-    doc.setFont(palette.fontFamily, "normal");
+    doc.setFont(theme.pdfFont, "normal");
     doc.setFontSize(10);
     clues.forEach((c, idx) => {
-        doc.text(`• Mission ${idx + 1}: ${c}`, 25, y);
+        doc.text(`• ${theme.cluePrefix} ${idx + 1}: ${c}`, 25, y);
         y += 8;
     });
-    doc.text(`• Final Mission: ${finalClue}`, 25, y);
+    doc.text(`• Final Reward: ${finalClue}`, 25, y);
 }
 
-function buildNotebookPage(doc, pageNum, palette) {
-    addTopSecretWatermark(doc, palette);
+function buildNotebookPage(doc, pageNum, theme) {
+    addTopSecretWatermark(doc, theme);
 
-    doc.setFont(palette.fontFamily, "bold");
+    doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(16);
-    doc.setTextColor(...palette.textPrimary);
-    doc.text(`AGENT NOTEBOOK // CASE FILE`, 20, 25);
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text(theme.pdfNotebookTitle || "JOURNAL & LOGBOOK", 20, 25);
     
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 30, 190, 30);
 
     doc.setFontSize(10);
-    doc.setFont(palette.fontFamily, "normal");
+    doc.setFont(theme.pdfFont, "normal");
     doc.text("Date: _____________", 20, 42);
-    doc.text("Case Number: _____________", 120, 42);
+    doc.text("Quest ID: _____________", 120, 42);
 
-    doc.text("What was my mission today?", 20, 58);
+    doc.text("What was my quest today?", 20, 58);
     doc.line(20, 72, 190, 72);
 
-    doc.text("What clues did I find?", 20, 88);
+    doc.text("What secret clues did I discover?", 20, 88);
     doc.line(20, 102, 190, 102);
 
-    doc.text("Draw a picture of your secret hideout or spy gadget below:", 20, 120);
+    doc.text("Draw a picture of your secret hideout, treasure, or magical gadget below:", 20, 120);
     doc.rect(20, 130, 170, 130, 'S');
 }

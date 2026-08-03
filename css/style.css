@@ -1,106 +1,131 @@
 /* ==========================================================================
-   HIA DESIGN SYSTEM // BASE STYLES & VARIABLES
+   HIA & MULTI-THEME MASTER STYLESHEET
    ========================================================================== */
 
 :root {
-    /* Color Palette - CIA/Intelligence Aesthetic */
-    --bg-dark: #0a0d12;
-    --bg-surface: #121824;
-    --panel-bg: rgba(18, 24, 36, 0.65);
-    --panel-border: rgba(0, 240, 255, 0.18);
-    --panel-border-hover: rgba(0, 240, 255, 0.4);
-    
-    /* Neon & Status Accents */
-    --accent-cyan: #00f0ff;
-    --accent-cyan-glow: rgba(0, 240, 255, 0.35);
-    --accent-blue: #0077ff;
-    --accent-gold: #ffb700;
-    --status-green: #00ff88;
-    --status-red: #ff3366;
-    
-    /* Text Colors */
-    --text-main: #f0f4f8;
-    --text-muted: #8a99ad;
-    --text-dim: #4e5d6c;
-    
-    /* Typography */
-    --font-heading: 'Orbitron', sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Fonts */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    
-    /* Spacing & Transitions */
+    --font-display: 'Orbitron', sans-serif;
+    --font-fancy: 'Cinzel', serif;
+    --font-typewriter: 'Special Elite', monospace;
+
+    /* Base Dimensions */
     --radius-sm: 6px;
     --radius-md: 12px;
-    --radius-lg: 18px;
-    --transition-fast: 0.2s ease;
-    --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    --radius-lg: 20px;
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
-/* ==========================================================================
-   THEME VARIATIONS // SPY, STEALTH & VINTAGE DOSSIER
-   ========================================================================== */
-
-/* 1. Default CIA Cyan (Active via body.theme-spy) */
-body.theme-spy {
+    /* Default Theme 1: CIA Cyan (theme-spy) */
     --bg-dark: #0a0d12;
-    --panel-bg: rgba(18, 24, 36, 0.65);
-    --panel-border: rgba(0, 240, 255, 0.18);
+    --panel-bg: rgba(18, 24, 36, 0.72);
+    --panel-border: rgba(0, 240, 255, 0.22);
     --accent-cyan: #00f0ff;
     --accent-cyan-glow: rgba(0, 240, 255, 0.35);
+    --accent-gold: #ffb700;
+    --accent-red: #ff3366;
     --text-main: #f0f4f8;
+    --text-muted: #8a99ad;
+    --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    --font-active: var(--font-display);
 }
 
-/* 2. Stealth Ops (Red & Matte Black) */
+/* THEME OVERRIDES */
+
+/* Theme 2: Stealth Black Ops */
 body.theme-stealth {
     --bg-dark: #080506;
-    --panel-bg: rgba(26, 12, 16, 0.7);
-    --panel-border: rgba(255, 51, 102, 0.3);
+    --panel-bg: rgba(26, 12, 16, 0.78);
+    --panel-border: rgba(255, 51, 102, 0.35);
     --accent-cyan: #ff3366;
-    --accent-cyan-glow: rgba(255, 51, 102, 0.4);
+    --accent-cyan-glow: rgba(255, 51, 102, 0.45);
+    --accent-gold: #ff9900;
     --text-main: #fff0f3;
+    --text-muted: #b38890;
+    --font-active: var(--font-display);
 }
 
-/* 3. Vintage Dossier (Classified Manila Folder Paper Aesthetic) */
+/* Theme 3: Vintage CIA Dossier */
 body.theme-dossier {
     --bg-dark: #1e1b18;
-    --panel-bg: rgba(245, 238, 220, 0.9);
-    --panel-border: rgba(180, 140, 90, 0.4);
+    --panel-bg: rgba(245, 238, 220, 0.92);
+    --panel-border: rgba(180, 140, 90, 0.5);
     --accent-cyan: #993300;
-    --accent-cyan-glow: rgba(153, 51, 0, 0.2);
+    --accent-cyan-glow: rgba(153, 51, 0, 0.22);
+    --accent-gold: #b8860b;
     --text-main: #2b2520;
-    --text-muted: #5c5248;
+    --text-muted: #6b5e52;
+    --font-active: var(--font-typewriter);
 }
 
-body.theme-dossier .glass-panel {
-    color: var(--text-main);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+/* Theme 4: Enchanted Academy & Spellbook */
+body.theme-magic {
+    --bg-dark: #12091f;
+    --panel-bg: rgba(35, 18, 55, 0.82);
+    --panel-border: rgba(215, 125, 255, 0.38);
+    --accent-cyan: #d77dff;
+    --accent-cyan-glow: rgba(215, 125, 255, 0.45);
+    --accent-gold: #ffd700;
+    --text-main: #f9f0ff;
+    --text-muted: #b899cc;
+    --font-active: var(--font-fancy);
 }
 
-body.theme-dossier input,
-body.theme-dossier select {
-    background: #eae1cb;
-    color: #2b2520;
-    border-color: #b8a686;
+/* Theme 5: Royal Secret Order */
+body.theme-royal {
+    --bg-dark: #1c0812;
+    --panel-bg: rgba(50, 18, 32, 0.82);
+    --panel-border: rgba(230, 80, 130, 0.38);
+    --accent-cyan: #e65082;
+    --accent-cyan-glow: rgba(230, 80, 130, 0.45);
+    --accent-gold: #ffcf40;
+    --text-main: #fff0f5;
+    --text-muted: #c493a5;
+    --font-active: var(--font-fancy);
 }
 
-/* Header Theme Selector Styling */
-.theme-selector-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--accent-cyan);
+/* Theme 6: Sleuth Society & Detective Club */
+body.theme-sleuth {
+    --bg-dark: #08181a;
+    --panel-bg: rgba(15, 42, 46, 0.82);
+    --panel-border: rgba(40, 190, 180, 0.38);
+    --accent-cyan: #28beb4;
+    --accent-cyan-glow: rgba(40, 190, 180, 0.45);
+    --accent-gold: #ffb830;
+    --text-main: #f0ffff;
+    --text-muted: #85b0b0;
+    --font-active: var(--font-sans);
 }
 
-.theme-selector-wrapper select {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
-    border-radius: var(--radius-sm);
+/* Theme 7: Pirate Treasure Hunt */
+body.theme-pirate {
+    --bg-dark: #1a1008;
+    --panel-bg: rgba(45, 28, 15, 0.85);
+    --panel-border: rgba(220, 140, 20, 0.4);
+    --accent-cyan: #dc8c14;
+    --accent-cyan-glow: rgba(220, 140, 20, 0.45);
+    --accent-gold: #ffd700;
+    --text-main: #fff8eb;
+    --text-muted: #b89b7d;
+    --font-active: 'Pirata One', cursive;
 }
 
-/* Base Reset */
-* {
+/* Theme 8: Galactic Space Fleet */
+body.theme-galaxy {
+    --bg-dark: #050a18;
+    --panel-bg: rgba(12, 22, 50, 0.82);
+    --panel-border: rgba(0, 180, 255, 0.38);
+    --accent-cyan: #00b4ff;
+    --accent-cyan-glow: rgba(0, 180, 255, 0.45);
+    --accent-gold: #00ffcc;
+    --text-main: #f0f8ff;
+    --text-muted: #7da3c7;
+    --font-active: 'Press Start 2P', monospace;
+}
+
+/* GLOBAL RESET & LAYOUT */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -109,27 +134,25 @@ body.theme-dossier select {
 body {
     background-color: var(--bg-dark);
     color: var(--text-main);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.5;
+    font-family: var(--font-sans);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
-
-/* ==========================================================================
-   BACKGROUND EFFECTS (Grid & Ambient Glow)
-   ========================================================================== */
 
 .bg-grid-overlay {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background-image: 
-        linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
-    z-index: -2;
     pointer-events: none;
+    z-index: 0;
 }
 
 .ambient-glow {
@@ -137,101 +160,105 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vh;
-    background: radial-gradient(circle, rgba(0, 119, 255, 0.08) 0%, rgba(0, 240, 255, 0.03) 40%, transparent 70%);
-    filter: blur(80px);
-    z-index: -1;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 70%);
     pointer-events: none;
+    z-index: 0;
+    transition: background var(--transition-smooth);
 }
 
-/* ==========================================================================
-   VIEWPORT MANAGEMENT (Screen Switcher)
-   ========================================================================== */
-
-#app {
-    width: 100%;
+main#app {
+    position: relative;
+    z-index: 1;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .view-screen {
-    width: 100%;
-    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    display: none;
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+}
+
+.view-screen.active {
+    display: block;
+    opacity: 1;
 }
 
 .view-screen.hidden {
     display: none !important;
-    opacity: 0;
-    pointer-events: none;
 }
 
-.view-screen.active {
-    display: flex;
-    opacity: 1;
-}
-
-/* ==========================================================================
-   REUSABLE UI COMPONENTS (Glass Panels, Buttons, Tags)
-   ========================================================================== */
-
-/* Glassmorphism Panel */
 .glass-panel {
     background: var(--panel-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--panel-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: var(--radius-md);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    transition: border-color var(--transition-fast);
+    box-shadow: var(--card-shadow);
+    transition: background var(--transition-smooth), border-color var(--transition-smooth);
 }
 
-.glass-panel:hover {
-    border-color: var(--panel-border-hover);
+/* Master Theme Selector Hub in Auth Card */
+.master-theme-picker {
+    width: 100%;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
-/* Primary Action Buttons */
-.btn-primary {
-    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 119, 255, 0.2) 100%);
+.master-theme-picker label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.theme-hub-dropdown {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--accent-cyan);
     color: var(--text-main);
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
     font-weight: 600;
-    letter-spacing: 1px;
-    padding: 0.85rem 1.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 12px var(--accent-cyan-glow);
+    transition: all var(--transition-fast);
+}
+
+.theme-hub-dropdown optgroup {
+    background: #121824;
+    color: var(--accent-gold);
+    font-weight: bold;
+}
+
+.theme-hub-dropdown option {
+    background: #0d111a;
+    color: #ffffff;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, rgba(0, 180, 255, 0.8) 100%);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     transition: all var(--transition-fast);
-    text-transform: uppercase;
-    box-shadow: 0 0 15px var(--accent-cyan-glow);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, rgba(0, 240, 255, 0.4) 0%, rgba(0, 119, 255, 0.4) 100%);
-    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
     transform: translateY(-2px);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
-
-/* Status Indicators */
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.status-indicator.online {
-    background-color: var(--status-green);
-    box-shadow: 0 0 8px var(--status-green);
+    box-shadow: 0 6px 20px var(--accent-cyan-glow);
 }

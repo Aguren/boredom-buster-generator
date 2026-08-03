@@ -1,53 +1,55 @@
 /* ==========================================================================
-   STAGE 1: AUTHENTICATION / LOGIN SCREEN STYLES
+   AUTHENTICATION & LOGIN CARD STYLING // MULTI-THEME COMPATIBLE
    ========================================================================== */
 
 #auth-screen {
-    padding: 2rem;
+    display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    padding: 1.5rem;
 }
 
 .auth-card {
     width: 100%;
-    max-width: 440px;
-    padding: 2.5rem;
+    max-width: 460px;
+    padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    align-items: center;
     position: relative;
     overflow: hidden;
 }
 
-/* Header & Agency Badge */
+/* Header Badge & Title */
 .agency-header {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 1.5rem;
 }
 
 .agency-badge {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem auto;
     border-radius: 50%;
-    background: rgba(0, 240, 255, 0.08);
-    border: 1px solid var(--accent-cyan);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1.5px solid var(--accent-cyan);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
-    color: var(--accent-cyan);
-    margin-bottom: 1.25rem;
     box-shadow: 0 0 20px var(--accent-cyan-glow);
 }
 
+.agency-badge i {
+    font-size: 1.8rem;
+    color: var(--accent-cyan);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
 .agency-header h1 {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-family: var(--font-active);
+    font-size: 1.35rem;
+    letter-spacing: 1px;
     color: var(--text-main);
     margin-bottom: 0.35rem;
 }
@@ -55,45 +57,86 @@
 .agency-header .subtitle {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    letter-spacing: 1.5px;
     color: var(--accent-cyan);
+    letter-spacing: 1px;
 }
 
-/* Security Status Bar */
+/* Security Status Indicator */
 .security-status {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-sm);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    letter-spacing: 1px;
     color: var(--text-muted);
+    margin-bottom: 1.5rem;
 }
 
-/* Form Controls */
-#login-form {
+.status-indicator.online {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff66;
+    box-shadow: 0 0 10px #00ff66;
+}
+
+/* Master Theme Selector Hub */
+.master-theme-picker {
+    width: 100%;
+    margin-bottom: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.4rem;
+}
+
+.master-theme-picker label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.theme-hub-dropdown {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--accent-cyan);
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 12px var(--accent-cyan-glow);
+    transition: all var(--transition-fast);
+}
+
+/* Form Groups & Inputs */
+#login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .input-group label {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 1px;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .input-wrapper {
@@ -105,49 +148,74 @@
 .input-wrapper i {
     position: absolute;
     left: 1rem;
-    color: var(--text-dim);
-    font-size: 0.9rem;
-    transition: color var(--transition-fast);
+    color: var(--accent-cyan);
+    font-size: 1rem;
+    pointer-events: none;
 }
 
 .input-wrapper input {
     width: 100%;
-    padding: 0.85rem 1rem 0.85rem 2.75rem;
-    background: rgba(10, 13, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--panel-border);
     border-radius: var(--radius-sm);
     color: var(--text-main);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
     outline: none;
-    transition: all var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .input-wrapper input:focus {
     border-color: var(--accent-cyan);
     box-shadow: 0 0 12px var(--accent-cyan-glow);
-    background: rgba(10, 13, 18, 0.85);
 }
 
-.input-wrapper input:focus + i,
-.input-wrapper input:focus ~ i {
-    color: var(--accent-cyan);
+/* Fingerprint & Login Submit Button */
+.btn-fingerprint {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.9rem;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, rgba(0, 180, 255, 0.8) 100%);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    transition: all var(--transition-fast);
 }
 
-/* Card Footer */
+.btn-fingerprint:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--accent-cyan-glow);
+}
+
+.fingerprint-icon {
+    font-size: 1.2rem;
+}
+
+/* Card Footer Tags */
 .card-footer {
+    width: 100%;
+    margin-top: 1.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--panel-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 1rem;
     font-family: var(--font-mono);
     font-size: 0.65rem;
-    color: var(--text-dim);
-    letter-spacing: 0.5px;
+    color: var(--text-muted);
 }
 
-.card-footer .enc-tag {
+.enc-tag {
     color: var(--accent-cyan);
-    opacity: 0.7;
+    font-weight: 600;
 }

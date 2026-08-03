@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIA // Home Intelligence Agency</title>
+    <title>UNIFIED ADVENTURE GENERATOR // MULTI-THEME DECODER</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&family=Special+Elite&family=Pirata+One&family=Press+Start+2P&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome for UI Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS Modules -->
@@ -22,36 +22,55 @@
 </head>
 <body class="theme-spy">
 
-    <!-- Animated Dynamic Background Grid -->
+    <!-- Dynamic Overlay Backgrounds -->
     <div class="bg-grid-overlay"></div>
     <div class="ambient-glow"></div>
 
     <!-- MAIN APP CONTAINER -->
     <main id="app">
 
-        <!-- ========================================== -->
-        <!-- STAGE 1: AUTHENTICATION / LOGIN SCREEN      -->
-        <!-- ========================================== -->
+        <!-- STAGE 1: AUTHENTICATION & MASTER THEME PICKER -->
         <section id="auth-screen" class="view-screen active">
             <div class="auth-card glass-panel">
                 <div class="agency-header">
                     <div class="agency-badge">
-                        <i class="fa-solid fa-shield-halved"></i>
+                        <i id="theme-badge-icon" class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h1>HOME INTELLIGENCE AGENCY</h1>
-                    <p class="subtitle">CLASSIFIED MISSION GENERATOR</p>
+                    <h1 id="theme-main-title">HOME INTELLIGENCE AGENCY</h1>
+                    <p id="theme-sub-title" class="subtitle">CLASSIFIED MISSION GENERATOR</p>
+                </div>
+
+                <!-- MASTER THEME SELECTOR HUB -->
+                <div class="master-theme-picker">
+                    <label for="master-theme-select"><i class="fa-solid fa-wand-magic-sparkles"></i> SELECT ADVENTURE THEME:</label>
+                    <select id="master-theme-select" class="theme-hub-dropdown">
+                        <optgroup label="🕵️ Secret Agent & Tactical">
+                            <option value="theme-spy" selected>Top Secret HIA Agent</option>
+                            <option value="theme-stealth">Stealth Black Ops</option>
+                            <option value="theme-dossier">Vintage CIA Dossier</option>
+                        </optgroup>
+                        <optgroup label="✨ Magical & Fantasy (Girl Favorites)">
+                            <option value="theme-magic">Enchanted Academy & Spellbook</option>
+                            <option value="theme-royal">Royal Cryptography & Secret Order</option>
+                            <option value="theme-sleuth">Sleuth Society & Detective Club</option>
+                        </optgroup>
+                        <optgroup label="⚔️ High Adventure (Boy Favorites)">
+                            <option value="theme-pirate">Pirate Treasure Hunt & Sea Ciphers</option>
+                            <option value="theme-galaxy">Galactic Space Fleet & Cosmic Code</option>
+                        </optgroup>
+                    </select>
                 </div>
 
                 <div class="security-status">
                     <div class="status-indicator online"></div>
-                    <span>SECURITY LEVEL 7 // PARENTS ONLY</span>
+                    <span id="theme-security-label">SECURITY LEVEL 7 // PARENTS ONLY</span>
                 </div>
 
                 <form id="login-form" autocomplete="off">
                     <div class="input-group">
-                        <label for="agent-id">PARENT AGENT CODE</label>
+                        <label for="agent-id" id="label-parent-id">PARENT AGENT CODE</label>
                         <div class="input-wrapper">
-                            <i class="fa-solid fa-user-secret"></i>
+                            <i id="icon-parent-id" class="fa-solid fa-user-secret"></i>
                             <input type="text" id="agent-id" placeholder="e.g. AGENT-MOM" required>
                         </div>
                     </div>
@@ -65,22 +84,20 @@
                     </div>
 
                     <button type="submit" id="btn-login" class="btn-primary btn-fingerprint">
-                        <i class="fa-solid fa-fingerprint fingerprint-icon"></i>
-                        <span>SCAN FINGERPRINT & ACCESS</span>
+                        <i id="btn-auth-icon" class="fa-solid fa-fingerprint fingerprint-icon"></i>
+                        <span id="btn-auth-text">SCAN FINGERPRINT & ACCESS</span>
                     </button>
                 </form>
 
                 <div class="card-footer">
-                    <span>AUTHORIZED PERSONNEL ONLY</span>
-                    <span class="enc-tag">AES-256 ENCRYPTED</span>
+                    <span id="footer-auth-left">AUTHORIZED PERSONNEL ONLY</span>
+                    <span id="footer-auth-right" class="enc-tag">AES-256 ENCRYPTED</span>
                 </div>
             </div>
         </section>
 
 
-        <!-- ========================================== -->
-        <!-- STAGE 2: TERMINAL / BOOT SEQUENCE         -->
-        <!-- ========================================== -->
+        <!-- STAGE 2: BOOT TERMINAL / TRANSITION LOGS -->
         <section id="boot-screen" class="view-screen hidden">
             <div class="terminal-card glass-panel">
                 <div class="terminal-header">
@@ -89,11 +106,11 @@
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
                     </div>
-                    <div class="terminal-title">SECURE_BOOT_SEQUENCE.SH</div>
+                    <div id="terminal-title" class="terminal-title">INITIALIZING_ADVENTURE_ENGINE.SH</div>
                 </div>
 
                 <div class="terminal-body" id="terminal-logs">
-                    <!-- Dynamic logs will be injected here via login.js -->
+                    <!-- Dynamic theme boot logs injected by login.js -->
                 </div>
 
                 <div class="terminal-progress-bar">
@@ -103,72 +120,81 @@
         </section>
 
 
-        <!-- ========================================== -->
-        <!-- STAGE 3: MISSION CONTROL DASHBOARD         -->
-        <!-- ========================================== -->
+        <!-- STAGE 3: MISSION CONTROL WORKSTATION -->
         <section id="dashboard-screen" class="view-screen hidden">
-            <!-- App Navigation Bar -->
+            <!-- Navigation Bar -->
             <header class="app-header glass-panel">
                 <div class="brand">
-                    <i class="fa-solid fa-shield-cat"></i>
-                    <span>HIA // MISSION CONTROL</span>
+                    <i id="header-brand-icon" class="fa-solid fa-shield-cat"></i>
+                    <span id="header-brand-text">HIA // MISSION CONTROL</span>
                     <div class="radar-widget">
                         <div class="radar-sweep"></div>
                     </div>
                 </div>
 
-                <!-- Theme Switcher Selector -->
+                <!-- On-the-fly Header Theme Switcher -->
                 <div class="theme-selector-wrapper">
                     <i class="fa-solid fa-palette"></i>
                     <select id="theme-switcher">
-                        <option value="theme-spy" selected>CIA CYAN</option>
-                        <option value="theme-stealth">STEALTH OPS</option>
-                        <option value="theme-dossier">VINTAGE DOSSIER</option>
+                        <optgroup label="Secret Agent">
+                            <option value="theme-spy">CIA Cyan</option>
+                            <option value="theme-stealth">Stealth Ops</option>
+                            <option value="theme-dossier">Vintage Dossier</option>
+                        </optgroup>
+                        <optgroup label="Magical & Girl Themes">
+                            <option value="theme-magic">Enchanted Academy</option>
+                            <option value="theme-royal">Royal Secret Order</option>
+                            <option value="theme-sleuth">Sleuth Society</option>
+                        </optgroup>
+                        <optgroup label="Boy & Adventure Themes">
+                            <option value="theme-pirate">Pirate Treasure</option>
+                            <option value="theme-galaxy">Space Fleet</option>
+                        </optgroup>
                     </select>
                 </div>
 
                 <div class="user-profile">
-                    <span id="display-agent-id">AGENT PARENT</span>
+                    <span id="display-agent-id">PARENT COMMANDER</span>
                     <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
                 </div>
             </header>
 
             <div class="dashboard-grid">
                 
-                <!-- LEFT COLUMN: Mission Configuration Form -->
+                <!-- LEFT COLUMN: Configurations & Clues Form -->
                 <div class="config-panel glass-panel">
-                    <h2><i class="fa-solid fa-sliders"></i> MISSION SPECIFICATIONS</h2>
+                    <h2><i id="panel-spec-icon" class="fa-solid fa-sliders"></i> <span id="panel-spec-title">MISSION SPECIFICATIONS</span></h2>
 
                     <form id="mission-form">
-                        <!-- Agent Details -->
+                        <!-- Hero Details -->
                         <fieldset class="form-section">
-                            <legend>AGENT DOSSIER</legend>
+                            <legend id="legend-hero-details">AGENT DOSSIER</legend>
                             <div class="form-row">
                                 <div class="input-group">
-                                    <label for="junior-agent-name">Agent Name</label>
-                                    <input type="text" id="junior-agent-name" placeholder="e.g. John" value="John" required>
+                                    <label for="junior-agent-name" id="label-hero-name">Agent Name</label>
+                                    <input type="text" id="junior-agent-name" placeholder="e.g. John / Lily" value="John" required>
                                 </div>
                                 <div class="input-group">
-                                    <label for="junior-agent-code">Codename</label>
-                                    <input type="text" id="junior-agent-code" placeholder="e.g. 007½" value="007½" required>
+                                    <label for="junior-agent-code" id="label-hero-code">Codename</label>
+                                    <input type="text" id="junior-agent-code" placeholder="e.g. 007½ / Starlight" value="007½" required>
                                 </div>
                             </div>
                         </fieldset>
 
-                        <!-- Cipher & Difficulty -->
+                        <!-- Cipher & Clue Count -->
                         <fieldset class="form-section">
-                            <legend>ENCRYPTION SETTINGS</legend>
+                            <legend id="legend-encryption">ENCRYPTION SETTINGS</legend>
                             <div class="input-group">
-                                <label for="cipher-type">Cipher Protocol</label>
+                                <label for="cipher-type" id="label-cipher-protocol">Cipher Protocol</label>
                                 <select id="cipher-type">
                                     <option value="number" selected>A=1 Number Cipher (Default)</option>
-                                    <option value="symbol">Symbol Cipher (★ ♦ ▲ ✚)</option>
+                                    <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
                                     <option value="caesar">Caesar Shift (+1 Shift)</option>
                                 </select>
                             </div>
 
                             <div class="input-group">
-                                <label for="clue-count">Number of Clues</label>
+                                <label for="clue-count" id="label-clue-count">Number of Clues</label>
                                 <div class="radio-group" id="clue-count-selector">
                                     <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
                                     <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
@@ -177,70 +203,70 @@
                             </div>
                         </fieldset>
 
-                        <!-- Clue Locations -->
+                        <!-- Clues Input Area -->
                         <fieldset class="form-section" id="clues-container">
-                            <legend>CLUE LOCATIONS (MESSAGES TO DECODE)</legend>
+                            <legend id="legend-clues-header">CLUE LOCATIONS (MESSAGES TO DECODE)</legend>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-1"><i class="fa-solid fa-location-dot"></i> Mission 1 Hideout</label>
+                                <label for="clue-1" id="label-clue-1"><i class="fa-solid fa-location-dot"></i> Mission 1 Hideout</label>
                                 <input type="text" id="clue-1" class="clue-input" placeholder="LOOK IN THE FRIDGE" value="LOOK IN THE FRIDGE" required>
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-2"><i class="fa-solid fa-location-dot"></i> Mission 2 Hideout</label>
+                                <label for="clue-2" id="label-clue-2"><i class="fa-solid fa-location-dot"></i> Mission 2 Hideout</label>
                                 <input type="text" id="clue-2" class="clue-input" placeholder="CHECK UNDER YOUR PILLOW" value="CHECK UNDER YOUR PILLOW" required>
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-3"><i class="fa-solid fa-location-dot"></i> Mission 3 Hideout</label>
+                                <label for="clue-3" id="label-clue-3"><i class="fa-solid fa-location-dot"></i> Mission 3 Hideout</label>
                                 <input type="text" id="clue-3" class="clue-input" placeholder="LOOK BEHIND THE MIRROR" value="LOOK BEHIND THE MIRROR" required>
                             </div>
 
                             <div class="input-group clue-input-group hidden" id="clue-4-wrapper">
-                                <label for="clue-4"><i class="fa-solid fa-location-dot"></i> Mission 4 Hideout</label>
+                                <label for="clue-4" id="label-clue-4"><i class="fa-solid fa-location-dot"></i> Mission 4 Hideout</label>
                                 <input type="text" id="clue-4" class="clue-input" placeholder="CHECK INSIDE THE COUCH">
                             </div>
 
                             <div class="input-group clue-input-group hidden" id="clue-5-wrapper">
-                                <label for="clue-5"><i class="fa-solid fa-location-dot"></i> Mission 5 Hideout</label>
+                                <label for="clue-5" id="label-clue-5"><i class="fa-solid fa-location-dot"></i> Mission 5 Hideout</label>
                                 <input type="text" id="clue-5" class="clue-input" placeholder="LOOK INSIDE YOUR SHOE">
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-final"><i class="fa-solid fa-trophy"></i> Final Reward Message</label>
+                                <label for="clue-final" id="label-clue-final"><i class="fa-solid fa-trophy"></i> Final Reward Message</label>
                                 <input type="text" id="clue-final" class="clue-input" placeholder="MISSION COMPLETE GREAT JOB AGENT" value="MISSION COMPLETE GREAT JOB AGENT" required>
                             </div>
                         </fieldset>
                     </form>
                 </div>
 
-                <!-- RIGHT COLUMN: Real-Time Preview & PDF Generator -->
+                <!-- RIGHT COLUMN: Real-Time Encryption Preview & PDF Generator -->
                 <div class="preview-panel glass-panel">
-                    <h2><i class="fa-solid fa-eye"></i> LIVE ENCRYPTION PREVIEW</h2>
+                    <h2><i id="panel-preview-icon" class="fa-solid fa-eye"></i> <span id="panel-preview-title">LIVE ENCRYPTION PREVIEW</span></h2>
                     
                     <div class="dossier-preview-card">
-                        <div class="classified-stamp">TOP SECRET</div>
+                        <div id="preview-top-stamp" class="classified-stamp">TOP SECRET</div>
                         <div class="preview-header">
-                            <span class="label">TARGET AGENT:</span>
+                            <span id="preview-label-target" class="label">TARGET AGENT:</span>
                             <span id="preview-agent-name" class="value">AGENT 007½</span>
                         </div>
 
                         <div class="preview-body">
-                            <!-- Dynamic Encrypted Clues Container -->
+                            <!-- Dynamic Encrypted Clues List -->
                             <div id="preview-missions-list" class="preview-missions-list">
-                                <!-- Live mission previews will be injected here automatically by js/ui.js -->
+                                <!-- Generated dynamically by js/ui.js -->
                             </div>
                         </div>
 
-                        <div class="preview-footer">
+                        <div id="preview-footer-note" class="preview-footer">
                             <i class="fa-solid fa-lock"></i> AUTO-ENCODED VIA HIA ENCRYPTION ENGINE
                         </div>
                     </div>
 
                     <div class="action-area">
                         <button type="button" id="btn-generate-pdf" class="btn-primary btn-large">
-                            <i class="fa-solid fa-file-pdf"></i>
-                            <span>COMPILE & DOWNLOAD PDF PACK</span>
+                            <i id="btn-compile-icon" class="fa-solid fa-file-pdf"></i>
+                            <span id="btn-compile-text">COMPILE & DOWNLOAD ADVENTURE PACK</span>
                         </button>
                     </div>
                 </div>
@@ -251,12 +277,11 @@
     </main>
 
     <!-- Dependencies -->
-    <!-- jsPDF and html2canvas CDN libraries for client-side PDF compilation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Project Scripts -->
     <script src="js/sound.js"></script>
+    <script src="js/themeManager.js"></script>
     <script src="js/cipher.js"></script>
     <script src="js/login.js"></script>
     <script src="js/ui.js"></script>

@@ -1,27 +1,12 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // MULTI-CLUE LIVE PREVIEW & TEXT SCRAMBLER
+   MISSION CONTROL UI ENGINE // MULTI-THEME LIVE PREVIEW & TEXT SCRAMBLER
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
     initClueCountToggles();
     initLivePreview();
-    // Add theme switcher event listener
-const themeSwitcher = document.getElementById('theme-switcher');
-if (themeSwitcher) {
-    themeSwitcher.addEventListener('change', (e) => {
-        const chosenTheme = e.target.value;
-        document.body.className = chosenTheme;
-        
-        if (window.SoundEngine) {
-            window.SoundEngine.playBlip();
-        }
-    });
-}
 });
 
-/**
- * Handles 3, 4, or 5 clue toggle button logic
- */
 function initClueCountToggles() {
     const clueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
     const clue4Wrapper = document.getElementById('clue-4-wrapper');
@@ -62,11 +47,8 @@ function initClueCountToggles() {
     });
 }
 
-/**
- * Text Scrambler Effect for dynamic text decryption feel
- */
 function scrambleText(targetElement, finalString) {
-    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚';
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚✦✧⚔️⚓';
     let iterations = 0;
     const maxIterations = 8;
 
@@ -88,9 +70,6 @@ function scrambleText(targetElement, finalString) {
     }, 25);
 }
 
-/**
- * Listens for user input to keep ALL mission clues updated in real time
- */
 function initLivePreview() {
     const juniorAgentNameInput = document.getElementById('junior-agent-name');
     const juniorAgentCodeInput = document.getElementById('junior-agent-code');
@@ -99,9 +78,12 @@ function initLivePreview() {
     const previewMissionsContainer = document.getElementById('preview-missions-list');
 
     function updatePreview(isCipherChange = false) {
-        const name = juniorAgentNameInput.value.trim() || 'AGENT';
+        const currentTheme = window.ThemeManager ? window.ThemeManager.getCurrentTheme() : {};
+        const prefix = currentTheme.cluePrefix || 'Mission';
+
+        const name = juniorAgentNameInput.value.trim() || 'HERO';
         const code = juniorAgentCodeInput.value.trim() || '007';
-        previewAgentName.textContent = `${name.toUpperCase()} ${code}`;
+        previewAgentName.textContent = `${name.toUpperCase()} (${code})`;
 
         const activeClues = [];
         const clue1 = document.getElementById('clue-1');
@@ -111,21 +93,21 @@ function initLivePreview() {
         const clue5 = document.getElementById('clue-5');
         const clueFinal = document.getElementById('clue-final');
 
-        if (clue1) activeClues.push({ title: 'MISSION 1', element: clue1, defaultText: 'LOOK IN THE FRIDGE' });
-        if (clue2) activeClues.push({ title: 'MISSION 2', element: clue2, defaultText: 'CHECK UNDER YOUR PILLOW' });
-        if (clue3) activeClues.push({ title: 'MISSION 3', element: clue3, defaultText: 'LOOK BEHIND THE MIRROR' });
+        if (clue1) activeClues.push({ title: `${prefix.toUpperCase()} 1`, element: clue1, defaultText: 'LOOK IN THE FRIDGE' });
+        if (clue2) activeClues.push({ title: `${prefix.toUpperCase()} 2`, element: clue2, defaultText: 'CHECK UNDER YOUR PILLOW' });
+        if (clue3) activeClues.push({ title: `${prefix.toUpperCase()} 3`, element: clue3, defaultText: 'LOOK BEHIND THE MIRROR' });
 
         const clue4Wrapper = document.getElementById('clue-4-wrapper');
         if (clue4Wrapper && !clue4Wrapper.classList.contains('hidden') && clue4) {
-            activeClues.push({ title: 'MISSION 4', element: clue4, defaultText: 'CHECK INSIDE THE COUCH' });
+            activeClues.push({ title: `${prefix.toUpperCase()} 4`, element: clue4, defaultText: 'CHECK INSIDE THE COUCH' });
         }
 
         const clue5Wrapper = document.getElementById('clue-5-wrapper');
         if (clue5Wrapper && !clue5Wrapper.classList.contains('hidden') && clue5) {
-            activeClues.push({ title: 'MISSION 5', element: clue5, defaultText: 'LOOK INSIDE YOUR SHOE' });
+            activeClues.push({ title: `${prefix.toUpperCase()} 5`, element: clue5, defaultText: 'LOOK INSIDE YOUR SHOE' });
         }
 
-        if (clueFinal) activeClues.push({ title: 'FINAL MISSION', element: clueFinal, defaultText: 'MISSION COMPLETE GREAT JOB AGENT' });
+        if (clueFinal) activeClues.push({ title: 'FINAL REWARD', element: clueFinal, defaultText: 'MISSION COMPLETE GREAT JOB' });
 
         previewMissionsContainer.innerHTML = '';
         const selectedCipher = cipherTypeSelect.value;
