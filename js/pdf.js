@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA PDF GENERATOR ENGINE // DYNAMIC THEME MATCHING COMPILER
+   HIA PDF GENERATOR ENGINE // LOWER-THIRD WATERMARK COMPILER
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,7 +42,7 @@ function getThemePalette() {
             boxBorder: [180, 150, 110],
             textPrimary: [43, 37, 32],
             textEncrypted: [130, 40, 0],
-            fontFamily: 'courier' // Vintage typewriter style for entire document
+            fontFamily: 'courier' // Vintage typewriter style
         };
     }
 
@@ -138,16 +138,17 @@ async function generateMissionPackPDF() {
     }
 }
 
-/* Background Watermark Helper */
+/* Background Watermark Helper (Positioned in Lower Third) */
 function addTopSecretWatermark(doc, palette) {
     doc.saveGraphicsState();
     doc.setTextColor(...palette.watermarkColor);
     doc.setFont(palette.fontFamily, "bold");
-    doc.setFontSize(55);
+    doc.setFontSize(48);
     
-    doc.text("TOP SECRET", 105, 160, {
+    // Positioned at lower third (Y = 225mm) at a subtle 15-degree angle
+    doc.text("TOP SECRET", 105, 225, {
         align: "center",
-        angle: 35
+        angle: 15
     });
     doc.restoreGraphicsState();
 }
