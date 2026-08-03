@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, CHIPS & MODALS
+   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, TOGGLE CHIPS & MODALS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,42 +79,82 @@ function initCertToggle() {
 }
 
 /**
- * Hideout Helper Location Chips
- * Fills the currently focused input OR the first empty visible input starting from Clue 1
+ * Hideout Helper Location Chips (Toggleable)
+ * - Click once: Fills the active input or first empty visible input, highlights chip.
+ * - Click again: Removes that specific text from the input, unhighlights chip.
  */
 function initHideoutChips() {
     const chipButtons = document.querySelectorAll('.chip-btn');
     if (!chipButtons.length) return;
+
+    const getClueInputs = () => [
+        document.getElementById('clue-1'),
+        document.getElementById('clue-2'),
+        document.getElementById('clue-3'),
+        document.getElementById('clue-4'),
+        document.getElementById('clue-5')
+    ].filter(input => input && input.offsetParent !== null);
 
     chipButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const locationText = btn.getAttribute('data-location');
             if (!locationText) return;
 
-            const activeElem = document.activeElement;
-            if (activeElem && activeElem.classList.contains('clue-input')) {
-                activeElem.value = locationText;
-            } else {
-                const clueInputs = [
-                    document.getElementById('clue-1'),
-                    document.getElementById('clue-2'),
-                    document.getElementById('clue-3'),
-                    document.getElementById('clue-4'),
-                    document.getElementById('clue-5')
-                ].filter(input => input && input.offsetParent !== null);
+            const clueInputs = getClueInputs();
 
-                let targetInput = clueInputs.find(i => i.value.trim() === '') || clueInputs[0];
-                if (targetInput) {
-                    targetInput.value = locationText;
-                }
+            // Check if this location text is ALREADY in one of the clue inputs
+            const existingInput = clueInputs.find(i => i.value.trim() === locationText);
+
+            if (existingInput) {
+                // TOGGLE OFF: Clear the text from that input
+                existingInput.value = '';
+                btn.classList.remove('active');
+                if (window.SoundEngine) window.SoundEngine.playKeyClick();
+                if (window.refreshLivePreview) window.refreshLivePreview();
+                showToast(`Removed: "${locationText}"`, 'info');
+                return;
             }
 
-            if (window.SoundEngine) window.SoundEngine.playKeyClick();
-            if (window.refreshLivePreview) window.refreshLivePreview();
+            // TOGGLE ON: Insert into active element OR first empty clue input
+            const activeElem = document.activeElement;
+            let targetInput = null;
 
-            showToast(`Added: "${locationText}"`, 'info');
+            if (activeElem && activeElem.classList.contains('clue-input')) {
+                targetInput = activeElem;
+            } else {
+                targetInput = clueInputs.find(i => i.value.trim() === '') || clueInputs[0];
+            }
+
+            if (targetInput) {
+                targetInput.value = locationText;
+                btn.classList.add('active');
+                if (window.SoundEngine) window.SoundEngine.playKeyClick();
+                if (window.refreshLivePreview) window.refreshLivePreview();
+                showToast(`Added: "${locationText}"`, 'info');
+            }
         });
     });
+
+    // Sync chip active states whenever inputs change manually or via preset
+    const updateChipStates = () => {
+        const clueInputs = getClueInputs();
+        const currentValues = clueInputs.map(i => i.value.trim());
+
+        chipButtons.forEach(btn => {
+            const loc = btn.getAttribute('data-location');
+            if (currentValues.includes(loc)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    };
+
+    document.querySelectorAll('.clue-input').forEach(input => {
+        input.addEventListener('input', updateChipStates);
+    });
+
+    window.syncChipStates = updateChipStates;
 }
 
 /**
@@ -165,6 +205,10 @@ function initPresets() {
                 window.refreshLivePreview();
             }
 
+            if (window.syncChipStates) {
+                window.syncChipStates();
+            }
+
             showToast(`Loaded ${key.toUpperCase()} Preset Clues`, 'success');
         });
     });
@@ -212,6 +256,7 @@ function initRandomizers() {
 
             if (window.SoundEngine) window.SoundEngine.playKeyClick();
             if (window.refreshLivePreview) window.refreshLivePreview();
+            if (window.syncChipStates) window.syncChipStates();
 
             showToast("Shuffled Theme Clue", "info");
         });
@@ -323,6 +368,10 @@ function initClueCountToggles() {
             if (window.refreshLivePreview) {
                 window.refreshLivePreview();
             }
+
+            if (window.syncChipStates) {
+                window.syncChipStates();
+            }
         });
     });
 }
@@ -399,7 +448,6 @@ function initLivePreview() {
         const selectedCipher = cipherTypeSelect.value;
 
         activeClues.forEach(item => {
-            // Fall back to placeholder if field is currently blank
             const rawMessage = item.element.value.trim() || item.element.placeholder || item.defaultText;
             const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher) : rawMessage;
 
