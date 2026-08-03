@@ -80,7 +80,7 @@ function initCertToggle() {
 
 /**
  * Hideout Helper Location Chips
- * Fills the currently active clue input or first empty visible clue input
+ * Fills the currently focused input OR the first empty visible input starting from Clue 1
  */
 function initHideoutChips() {
     const chipButtons = document.querySelectorAll('.chip-btn');
@@ -399,7 +399,8 @@ function initLivePreview() {
         const selectedCipher = cipherTypeSelect.value;
 
         activeClues.forEach(item => {
-            const rawMessage = item.element.value.trim() || item.defaultText;
+            // Fall back to placeholder if field is currently blank
+            const rawMessage = item.element.value.trim() || item.element.placeholder || item.defaultText;
             const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher) : rawMessage;
 
             const box = document.createElement('div');
