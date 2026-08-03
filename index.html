@@ -52,12 +52,12 @@
                             <option value="theme-stealth">Stealth Black Ops</option>
                             <option value="theme-dossier">Vintage CIA Dossier</option>
                         </optgroup>
-                        <optgroup label="✨ Magical & Fantasy">
+                        <optgroup label="✨ Magical & Fantasy (Girl Favorites)">
                             <option value="theme-magic">Enchanted Academy & Spellbook</option>
                             <option value="theme-royal">Royal Cryptography & Secret Order</option>
                             <option value="theme-sleuth">Sleuth Society & Detective Club</option>
                         </optgroup>
-                        <optgroup label="⚔️ High Adventure">
+                        <optgroup label="⚔️ High Adventure (Boy Favorites)">
                             <option value="theme-pirate">Pirate Treasure Hunt & Sea Ciphers</option>
                             <option value="theme-galaxy">Galactic Space Fleet & Cosmic Code</option>
                         </optgroup>
@@ -220,19 +220,20 @@
                         <fieldset class="form-section step-card" id="clues-container">
                             <legend><span class="step-badge">2</span> HIDEOUT LOCATIONS</legend>
 
-                            <!-- One-Click Preset Bar -->
+                            <!-- One-Click Preset Bar with Clear All Button -->
                             <div class="preset-bar-wrapper">
                                 <label><i class="fa-solid fa-bolt"></i> Quick Auto-Fill Locations:</label>
                                 <div class="preset-buttons">
                                     <button type="button" class="btn-preset" data-preset="indoor"><i class="fa-solid fa-house"></i> Indoor</button>
                                     <button type="button" class="btn-preset" data-preset="bedtime"><i class="fa-solid fa-bed"></i> Bedtime</button>
                                     <button type="button" class="btn-preset" data-preset="backyard"><i class="fa-solid fa-tree"></i> Backyard</button>
+                                    <button type="button" class="btn-preset btn-clear-preset" id="btn-clear-clues"><i class="fa-solid fa-trash-can"></i> Clear</button>
                                 </div>
                             </div>
 
                             <!-- Quick Location Chips (Hideout Helper) -->
                             <div class="hideout-helper-wrapper">
-                                <label class="helper-label"><i class="fa-solid fa-hand-pointer"></i> Tap a spot to auto-fill next empty clue:</label>
+                                <label class="helper-label"><i class="fa-solid fa-hand-pointer"></i> Tap a spot to fill next empty clue:</label>
                                 <div class="hideout-chips">
                                     <button type="button" class="chip-btn" data-location="LOOK IN THE FRIDGE">🧊 Fridge</button>
                                     <button type="button" class="chip-btn" data-location="CHECK UNDER YOUR PILLOW">🛏️ Pillow</button>
