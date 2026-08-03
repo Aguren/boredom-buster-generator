@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, TOASTS & MODALS
+   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, CHIPS & MODALS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCopyCodesBtn();
     autoShowBriefingModal();
     initCertToggle();
+    initHideoutChips();
 });
 
 /**
@@ -53,7 +54,7 @@ function autoShowBriefingModal() {
 }
 
 /**
- * Toggles visibility of the Certificate customization controls
+ * Toggles visibility of Certificate customization controls inside Advanced Options
  */
 function initCertToggle() {
     const certCheckbox = document.getElementById('opt-include-cert');
@@ -75,6 +76,45 @@ function initCertToggle() {
     });
 
     updateCertVisibility();
+}
+
+/**
+ * Hideout Helper Location Chips
+ * Fills the currently active clue input or first empty visible clue input
+ */
+function initHideoutChips() {
+    const chipButtons = document.querySelectorAll('.chip-btn');
+    if (!chipButtons.length) return;
+
+    chipButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const locationText = btn.getAttribute('data-location');
+            if (!locationText) return;
+
+            const activeElem = document.activeElement;
+            if (activeElem && activeElem.classList.contains('clue-input')) {
+                activeElem.value = locationText;
+            } else {
+                const clueInputs = [
+                    document.getElementById('clue-1'),
+                    document.getElementById('clue-2'),
+                    document.getElementById('clue-3'),
+                    document.getElementById('clue-4'),
+                    document.getElementById('clue-5')
+                ].filter(input => input && input.offsetParent !== null);
+
+                let targetInput = clueInputs.find(i => i.value.trim() === '') || clueInputs[0];
+                if (targetInput) {
+                    targetInput.value = locationText;
+                }
+            }
+
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            if (window.refreshLivePreview) window.refreshLivePreview();
+
+            showToast(`Added: "${locationText}"`, 'info');
+        });
+    });
 }
 
 /**
