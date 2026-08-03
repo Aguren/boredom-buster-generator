@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // INK-SAVER COVER & LEGIT SEAL
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // POCKET CHEAT SHEET CHECKLIST
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -114,12 +114,7 @@ function addTopSecretWatermark(doc, theme) {
     doc.restoreGraphicsState();
 }
 
-/**
- * Ink-Saver Stylized Cover Page
- * Removes solid color fills and replaces with crisp geometric vector borders & agency metadata.
- */
 function buildCoverPage(doc, name, code, theme) {
-    // Outer Stylized Double Frame (Ink-Saver)
     doc.setDrawColor(40, 40, 40);
     doc.setLineWidth(1.5);
     doc.rect(12, 12, 186, 273, 'S');
@@ -127,23 +122,17 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setLineWidth(0.5);
     doc.rect(15, 15, 180, 267, 'S');
 
-    // Tactical Corner Accents
     const cornerSize = 8;
-    // Top-Left Corner Block
     doc.setFillColor(40, 40, 40);
     doc.rect(12, 12, cornerSize, 2, 'F');
     doc.rect(12, 12, 2, cornerSize, 'F');
-    // Top-Right Corner Block
     doc.rect(198 - cornerSize, 12, cornerSize, 2, 'F');
     doc.rect(196, 12, 2, cornerSize, 'F');
-    // Bottom-Left Corner Block
     doc.rect(12, 285 - 2, cornerSize, 2, 'F');
     doc.rect(12, 285 - cornerSize, 2, cornerSize, 'F');
-    // Bottom-Right Corner Block
     doc.rect(198 - cornerSize, 285 - 2, cornerSize, 2, 'F');
     doc.rect(196, 285 - cornerSize, 2, cornerSize, 'F');
 
-    // Header Agency Stamp Line
     doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(10);
     doc.setTextColor(120, 120, 120);
@@ -153,7 +142,6 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setDrawColor(180, 180, 180);
     doc.line(25, 30, 185, 30);
 
-    // Top Secret Classification Tag Box (Outline only)
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(0.8);
     doc.rect(130, 38, 55, 12, 'S');
@@ -161,7 +149,6 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setFontSize(10);
     doc.text(theme.stampText || "CLASSIFIED", 157.5, 46, { align: "center" });
 
-    // Center Hero Emblem Rings
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1.2);
     doc.circle(105, 100, 38, 'S');
@@ -180,7 +167,6 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setTextColor(...theme.pdfBadgeColor);
     doc.text(`* CLEARANCE LEVEL 7 *`, 105, 113, { align: "center" });
 
-    // Mission Title Block
     doc.setTextColor(30, 30, 30);
     doc.setFontSize(22);
     doc.setFont(theme.pdfFont, "bold");
@@ -191,7 +177,6 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setTextColor(100, 100, 100);
     doc.text(`OPERATIONAL THEME: ${theme.mainTitle || "HOME INTELLIGENCE AGENCY"}`, 105, 168, { align: "center" });
 
-    // Recipient Metadata Card Box (Outline)
     doc.setDrawColor(200, 200, 200);
     doc.rect(40, 190, 130, 45, 'S');
     
@@ -209,7 +194,6 @@ function buildCoverPage(doc, name, code, theme) {
     doc.setTextColor(120, 120, 120);
     doc.text("STATUS: ACTIVE // AUTHORIZED TO DECODE", 105, 226, { align: "center" });
 
-    // Footer Warning Bar
     doc.line(25, 265, 185, 265);
     doc.setFontSize(8);
     doc.setFont(theme.pdfFont, "bold");
@@ -286,7 +270,6 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 52, 190, 52);
 
-    // Encrypted Content Box
     const boxX = 20;
     const boxY = 62;
     const boxWidth = 170;
@@ -337,6 +320,9 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     }
 }
 
+/**
+ * Parent Instructions Page with Cut-Out Pocket Cheat Sheet Checklist
+ */
 function buildParentInstructionsPage(doc, clues, finalClue, theme) {
     addTopSecretWatermark(doc, theme);
 
@@ -355,7 +341,7 @@ function buildParentInstructionsPage(doc, clues, finalClue, theme) {
     doc.setFontSize(11);
     doc.setTextColor(40, 40, 40);
     doc.setFont(theme.pdfFont, "bold");
-    doc.text("How to run this adventure:", 20, 50);
+    doc.text("How to run this adventure:", 20, 48);
 
     doc.setFont(theme.pdfFont, "normal");
     doc.setFontSize(10);
@@ -365,25 +351,55 @@ function buildParentInstructionsPage(doc, clues, finalClue, theme) {
         "3. Each cracked clue reveals the hiding spot of the next clue.",
         "4. Place a small prize or treasure at the final location!"
     ];
-    let y = 60;
+    let y = 56;
     steps.forEach(step => {
         doc.text(step, 20, y);
-        y += 8;
+        y += 7;
     });
 
+    // Option 2: Cut-Out Pocket Cheat Sheet Box
     y += 10;
+    doc.setDrawColor(40, 40, 40);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.rect(20, y, 170, 125, 'S'); // Cutout dashed box
+    doc.setLineDashPattern([], 0);
+
     doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(11);
-    doc.text("Hideout Cheat Sheet:", 20, y);
+    doc.setTextColor(0, 0, 0);
+    doc.text("✂️ PARENT POCKET CHEAT SHEET (CUT OUT & KEEP WHILE HIDING)", 105, y + 12, { align: "center" });
 
-    y += 10;
+    doc.setDrawColor(200, 200, 200);
+    doc.line(30, y + 16, 180, y + 16);
+
+    let listY = y + 26;
     doc.setFont(theme.pdfFont, "normal");
     doc.setFontSize(10);
+
+    // Clue 1 starts with the parent
+    doc.rect(30, listY - 3, 4, 4, 'S'); // Checkbox square
+    doc.setFont(theme.pdfFont, "bold");
+    doc.text("Start / Hand to Player:", 38, listY);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.text(`Decoder Key + ${theme.cluePrefix} 1 Sheet`, 90, listY);
+    listY += 12;
+
+    // Subsequent Clues
     clues.forEach((c, idx) => {
-        doc.text(`• ${theme.cluePrefix} ${idx + 1}: ${c}`, 25, y);
-        y += 8;
+        doc.rect(30, listY - 3, 4, 4, 'S');
+        doc.setFont(theme.pdfFont, "bold");
+        doc.text(`Hide ${theme.cluePrefix} ${idx + 1} AT:`, 38, listY);
+        doc.setFont(theme.pdfFont, "normal");
+        doc.text(`${c}`, 90, listY);
+        listY += 12;
     });
-    doc.text(`• Final Reward: ${finalClue}`, 25, y);
+
+    // Final Reward Location
+    doc.rect(30, listY - 3, 4, 4, 'S');
+    doc.setFont(theme.pdfFont, "bold");
+    doc.text("Hide Final Reward AT:", 38, listY);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.text(`${finalClue}`, 90, listY);
 }
 
 function buildNotebookPage(doc, pageNum, theme) {
@@ -412,9 +428,6 @@ function buildNotebookPage(doc, pageNum, theme) {
     doc.rect(20, 130, 170, 130, 'S');
 }
 
-/**
- * Multi-Rings Official Victory Certificate Seal
- */
 function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', sealMark = 'PASSED') {
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(2);
@@ -451,7 +464,6 @@ function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', s
     doc.setFont(theme.pdfFont, "bold");
     doc.text(`${theme.mainTitle}`, 105, 122, { align: "center" });
 
-    // Multi-Ring Official Medal Seal
     const sealCenterX = 105;
     const sealCenterY = 172;
 
@@ -476,7 +488,6 @@ function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', s
     doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("VERIFIED & GRANTED", sealCenterX, sealCenterY + 13, { align: "center" });
 
-    // Signature Lines
     doc.setDrawColor(180, 180, 180);
     doc.setLineWidth(0.5);
     doc.line(40, 235, 90, 235);
