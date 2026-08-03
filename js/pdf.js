@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // CLEAN COVER & LEGIT SEAL
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // INK-SAVER COVER & LEGIT SEAL
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -115,50 +115,106 @@ function addTopSecretWatermark(doc, theme) {
 }
 
 /**
- * Clean Cover Page (Photo frame box removed)
+ * Ink-Saver Stylized Cover Page
+ * Removes solid color fills and replaces with crisp geometric vector borders & agency metadata.
  */
 function buildCoverPage(doc, name, code, theme) {
-    doc.setFillColor(...theme.pdfCoverBg);
-    doc.rect(0, 0, 210, 297, 'F');
-
-    // Classification Badge
-    doc.setDrawColor(...theme.pdfBadgeColor);
-    doc.setLineWidth(1);
-    doc.rect(130, 18, 60, 15);
-    doc.setTextColor(...theme.pdfBadgeColor);
-    doc.setFont(theme.pdfFont, "bold");
-    doc.setFontSize(11);
-    doc.text(theme.stampText || "CLASSIFIED", 160, 28, { align: "center" });
-
-    // Hero Codename Emblem
-    doc.setDrawColor(...theme.pdfBadgeColor);
+    // Outer Stylized Double Frame (Ink-Saver)
+    doc.setDrawColor(40, 40, 40);
     doc.setLineWidth(1.5);
-    doc.circle(105, 95, 42, 'S');
+    doc.rect(12, 12, 186, 273, 'S');
+
     doc.setLineWidth(0.5);
-    doc.circle(105, 95, 40, 'S');
+    doc.rect(15, 15, 180, 267, 'S');
 
-    doc.setTextColor(255, 183, 0);
-    doc.setFontSize(14);
-    doc.text("IDENTIFICATION", 105, 87, { align: "center" });
-    doc.setFontSize(28);
-    doc.text(`${code}`, 105, 100, { align: "center" });
-    doc.setFontSize(9);
-    doc.setTextColor(...theme.pdfBadgeColor);
-    doc.text(`* ${theme.stampText || "CONFIDENTIAL"} *`, 105, 109, { align: "center" });
+    // Tactical Corner Accents
+    const cornerSize = 8;
+    // Top-Left Corner Block
+    doc.setFillColor(40, 40, 40);
+    doc.rect(12, 12, cornerSize, 2, 'F');
+    doc.rect(12, 12, 2, cornerSize, 'F');
+    // Top-Right Corner Block
+    doc.rect(198 - cornerSize, 12, cornerSize, 2, 'F');
+    doc.rect(196, 12, 2, cornerSize, 'F');
+    // Bottom-Left Corner Block
+    doc.rect(12, 285 - 2, cornerSize, 2, 'F');
+    doc.rect(12, 285 - cornerSize, 2, cornerSize, 'F');
+    // Bottom-Right Corner Block
+    doc.rect(198 - cornerSize, 285 - 2, cornerSize, 2, 'F');
+    doc.rect(196, 285 - cornerSize, 2, cornerSize, 'F');
 
-    // Main Title
-    doc.setTextColor(...theme.pdfCoverText);
-    doc.setFontSize(20);
-    doc.text(theme.pdfTitleText || "ADVENTURE MISSION PACK", 105, 160, { align: "center" });
-
-    // Target Name Block
+    // Header Agency Stamp Line
     doc.setFont(theme.pdfFont, "bold");
-    doc.setFontSize(16);
-    doc.setTextColor(...theme.pdfCoverText);
-    doc.text(`ISSUED TO: ${name.toUpperCase()}`, 105, 185, { align: "center" });
+    doc.setFontSize(10);
+    doc.setTextColor(120, 120, 120);
+    doc.text(`OFFICIAL DOSSIER // REVISION 4.0`, 25, 27);
+    
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(180, 180, 180);
+    doc.line(25, 30, 185, 30);
+
+    // Top Secret Classification Tag Box (Outline only)
+    doc.setDrawColor(...theme.pdfBadgeColor);
+    doc.setLineWidth(0.8);
+    doc.rect(130, 38, 55, 12, 'S');
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.setFontSize(10);
+    doc.text(theme.stampText || "CLASSIFIED", 157.5, 46, { align: "center" });
+
+    // Center Hero Emblem Rings
+    doc.setDrawColor(...theme.pdfBadgeColor);
+    doc.setLineWidth(1.2);
+    doc.circle(105, 100, 38, 'S');
+    doc.setLineWidth(0.4);
+    doc.circle(105, 100, 35, 'S');
+
+    doc.setTextColor(180, 130, 0);
+    doc.setFontSize(11);
+    doc.text("IDENTIFICATION CODE", 105, 92, { align: "center" });
+    doc.setFontSize(26);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setTextColor(30, 30, 30);
+    doc.text(`${code}`, 105, 105, { align: "center" });
     
     doc.setFontSize(8);
-    doc.text(`PROPERTY OF ${theme.mainTitle} // FOR YOUR EYES ONLY`, 105, 275, { align: "center" });
+    doc.setTextColor(...theme.pdfBadgeColor);
+    doc.text(`* CLEARANCE LEVEL 7 *`, 105, 113, { align: "center" });
+
+    // Mission Title Block
+    doc.setTextColor(30, 30, 30);
+    doc.setFontSize(22);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.text(theme.pdfTitleText || "ADVENTURE MISSION PACK", 105, 160, { align: "center" });
+
+    doc.setFontSize(10);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text(`OPERATIONAL THEME: ${theme.mainTitle || "HOME INTELLIGENCE AGENCY"}`, 105, 168, { align: "center" });
+
+    // Recipient Metadata Card Box (Outline)
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(40, 190, 130, 45, 'S');
+    
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(50, 50, 50);
+    doc.text("FIELD AGENT ASSIGNED:", 105, 202, { align: "center" });
+
+    doc.setFontSize(18);
+    doc.setTextColor(...theme.pdfTextEncrypted);
+    doc.text(name.toUpperCase(), 105, 215, { align: "center" });
+
+    doc.setFontSize(8);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.setTextColor(120, 120, 120);
+    doc.text("STATUS: ACTIVE // AUTHORIZED TO DECODE", 105, 226, { align: "center" });
+
+    // Footer Warning Bar
+    doc.line(25, 265, 185, 265);
+    doc.setFontSize(8);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setTextColor(120, 120, 120);
+    doc.text(`STRICTLY CONFIDENTIAL // PROPERTY OF ${theme.mainTitle}`, 105, 272, { align: "center" });
 }
 
 function buildDecoderKeyPage(doc, cipherType, theme) {
@@ -357,7 +413,7 @@ function buildNotebookPage(doc, pageNum, theme) {
 }
 
 /**
- * Legitimate Multi-Rings Official Victory Certificate Seal
+ * Multi-Rings Official Victory Certificate Seal
  */
 function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', sealMark = 'PASSED') {
     doc.setDrawColor(...theme.pdfBadgeColor);
@@ -401,11 +457,11 @@ function buildCertificatePage(doc, name, theme, awardTitle = 'MASTER DECODER', s
 
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(1.8);
-    doc.circle(sealCenterX, sealCenterY, 26, 'S'); // Outer thick ring
+    doc.circle(sealCenterX, sealCenterY, 26, 'S');
     
     doc.setLineWidth(0.6);
-    doc.circle(sealCenterX, sealCenterY, 23.5, 'S'); // Inner thin ring
-    doc.circle(sealCenterX, sealCenterY, 21, 'S'); // Core ring
+    doc.circle(sealCenterX, sealCenterY, 23.5, 'S');
+    doc.circle(sealCenterX, sealCenterY, 21, 'S');
 
     doc.setFontSize(7.5);
     doc.setFont(theme.pdfFont, "bold");
