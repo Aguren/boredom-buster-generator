@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // DYNAMIC PALETTE & TEXT MATCHING
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // WITH CERTIFICATE & HINTS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +28,10 @@ async function generateMissionPackPDF() {
     const agentCode = document.getElementById('junior-agent-code').value.trim() || '007';
     const cipherType = document.getElementById('cipher-type').value;
     
+    // Checkbox Options
+    const includeHints = document.getElementById('opt-include-hints')?.checked ?? true;
+    const includeCert = document.getElementById('opt-include-cert')?.checked ?? true;
+
     const clues = [];
     const clue1 = document.getElementById('clue-1').value.trim() || 'LOOK IN THE FRIDGE';
     const clue2 = document.getElementById('clue-2').value.trim() || 'CHECK UNDER YOUR PILLOW';
@@ -52,7 +56,7 @@ async function generateMissionPackPDF() {
     const btnGenerate = document.getElementById('btn-generate-pdf');
     const originalText = btnGenerate.innerHTML;
     btnGenerate.disabled = true;
-    btnGenerate.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> GENERATING PACK...`;
+    btnGenerate.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> COMPILING DOSSIER...`;
 
     try {
         buildCoverPage(doc, agentName, agentCode, currentTheme);
@@ -62,11 +66,11 @@ async function generateMissionPackPDF() {
 
         clues.forEach((clueText, idx) => {
             doc.addPage();
-            buildMissionPage(doc, idx + 1, clueText, cipherType, currentTheme);
+            buildMissionPage(doc, idx + 1, clueText, cipherType, currentTheme, includeHints);
         });
 
         doc.addPage();
-        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, currentTheme);
+        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, currentTheme, includeHints);
 
         doc.addPage();
         buildParentInstructionsPage(doc, clues, finalRewardClue, currentTheme);
@@ -74,8 +78,17 @@ async function generateMissionPackPDF() {
         doc.addPage();
         buildNotebookPage(doc, 1, currentTheme);
 
+        if (includeCert) {
+            doc.addPage();
+            buildCertificatePage(doc, agentName, currentTheme);
+        }
+
         const filename = `${currentTheme.id}_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
         doc.save(filename);
+
+        if (window.showToast) {
+            window.showToast("PDF Mission Pack Downloaded!", "success");
+        }
 
     } catch (error) {
         console.error("PDF Compilation Failed:", error);
@@ -189,7 +202,7 @@ function buildDecoderKeyPage(doc, cipherType, theme) {
     doc.text("TIP: Use '/' to mark spaces between encoded words.", 105, 265, { align: "center" });
 }
 
-function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme) {
+function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includeHints) {
     const isFinal = missionNum === 'FINAL';
 
     addTopSecretWatermark(doc, theme);
@@ -236,9 +249,20 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme) {
     doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("MY DECODED MESSAGE:", 20, 155);
 
-    doc.setDrawColor(160, 160, 160);
-    doc.line(20, 175, 190, 175);
-    doc.line(20, 200, 190, 200);
+    // Dynamic Letter Hint blanks
+    if (includeHints) {
+        doc.setFont("courier", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(140, 140, 140);
+
+        let hintPattern = rawMessage.split('').map(c => c === ' ' ? '   ' : '_ ').join('');
+        doc.text(hintPattern, 20, 172);
+        doc.line(20, 195, 190, 195);
+    } else {
+        doc.setDrawColor(160, 160, 160);
+        doc.line(20, 175, 190, 175);
+        doc.line(20, 200, 190, 200);
+    }
 }
 
 function buildParentInstructionsPage(doc, clues, finalClue, theme) {
@@ -314,4 +338,48 @@ function buildNotebookPage(doc, pageNum, theme) {
 
     doc.text("Draw a picture of your secret hideout, treasure, or magical gadget below:", 20, 120);
     doc.rect(20, 130, 170, 130, 'S');
+}
+
+/* Bonus Printable Certificate Page */
+function buildCertificatePage(doc, name, theme) {
+    doc.setDrawColor(...theme.pdfBadgeColor);
+    doc.setLineWidth(2);
+    doc.rect(15, 15, 180, 267, 'S');
+
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.rect(18, 18, 174, 261, 'S');
+
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setFontSize(26);
+    doc.setTextColor(...theme.pdfTextPrimary);
+    doc.text("CERTIFICATE OF VICTORY", 105, 55, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.text("THIS CERTIFIES THAT MASTER DECODER", 105, 75, { align: "center" });
+
+    doc.setFontSize(24);
+    doc.setFont(theme.pdfFont, "bold");
+    doc.setTextColor(...theme.pdfTextEncrypted);
+    doc.text(name.toUpperCase(), 105, 95, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setFont(theme.pdfFont, "normal");
+    doc.setTextColor(60, 60, 60);
+    doc.text(`HAS SUCCESSFULLY CRACKED ALL CIPHERS AND COMPLETED THE`, 105, 115, { align: "center" });
+    doc.setFont(theme.pdfFont, "bold");
+    doc.text(`${theme.mainTitle}`, 105, 125, { align: "center" });
+
+    doc.setDrawColor(...theme.pdfBadgeColor);
+    doc.circle(105, 175, 25, 'S');
+    doc.setFontSize(10);
+    doc.text("OFFICIAL SEAL", 105, 173, { align: "center" });
+    doc.text("★ PASSED ★", 105, 180, { align: "center" });
+
+    doc.line(40, 235, 90, 235);
+    doc.text("Parent Signature", 65, 242, { align: "center" });
+
+    doc.line(120, 235, 170, 235);
+    doc.text("Date Completed", 145, 242, { align: "center" });
 }
