@@ -1,233 +1,373 @@
 /* ==========================================================================
-   SAAS POLISH // PRESETS, TOASTS & MODALS
+   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, TOASTS & MODALS
    ========================================================================== */
 
-/* Toast Container */
-.toast-container {
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    pointer-events: none;
+document.addEventListener('DOMContentLoaded', () => {
+    initClueCountToggles();
+    initLivePreview();
+    initPresets();
+    initRandomizers();
+    initHeaderModal();
+    initCopyCodesBtn();
+});
+
+/**
+ * Toast Notification System
+ */
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-item ${type} animate-in`;
+    
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    if (type === 'warn') icon = 'fa-triangle-exclamation';
+
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 2800);
 }
 
-.toast-item {
-    background: rgba(18, 24, 36, 0.95);
-    border: 1px solid var(--accent-cyan);
-    color: var(--text-main);
-    padding: 0.75rem 1.25rem;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    transition: all 0.3s ease;
-    pointer-events: auto;
+window.showToast = showToast;
+
+/**
+ * 1-Click Preset Templates
+ */
+function initPresets() {
+    const presetButtons = document.querySelectorAll('.btn-preset');
+    
+    const presets = {
+        indoor: [
+            'LOOK IN THE FRIDGE',
+            'CHECK UNDER YOUR PILLOW',
+            'LOOK BEHIND THE MIRROR',
+            'CHECK INSIDE THE COUCH',
+            'LOOK INSIDE YOUR SHOE'
+        ],
+        bedtime: [
+            'CHECK INSIDE YOUR PJ DRAWER',
+            'LOOK BEHIND YOUR BEDLAMP',
+            'CHECK NEAR YOUR TOOTHBRUSH',
+            'LOOK UNDER YOUR BLANKET',
+            'CHECK YOUR NIGHTSTAND'
+        ],
+        backyard: [
+            'LOOK INSIDE THE MAILBOX',
+            'CHECK UNDER THE PATIO CHAIR',
+            'LOOK BEHIND THE FLOWER POT',
+            'CHECK NEAR THE GARDEN HOSE',
+            'LOOK UNDER THE BACK DOOR MAT'
+        ]
+    };
+
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-preset');
+            const list = presets[key];
+            if (!list) return;
+
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+
+            document.getElementById('clue-1').value = list[0];
+            document.getElementById('clue-2').value = list[1];
+            document.getElementById('clue-3').value = list[2];
+            document.getElementById('clue-4').value = list[3];
+            document.getElementById('clue-5').value = list[4];
+
+            if (window.refreshLivePreview) {
+                window.refreshLivePreview();
+            }
+
+            showToast(`Loaded ${key.toUpperCase()} Preset Clues`, 'success');
+        });
+    });
 }
 
-.toast-item.success {
-    border-color: #00ff66;
-    color: #e0ffe6;
+/**
+ * Randomize / Shuffle Clue Button logic
+ */
+function initRandomizers() {
+    const themeCluePools = {
+        'theme-spy': [
+            'CHECK UNDER THE SOFA CUSHION', 'LOOK IN THE REFRIGERATOR', 'SEARCH BEHIND THE MIRROR',
+            'INSPECT INSIDE YOUR SHOE', 'EXAMINE THE MAILBOX', 'LOOK INSIDE THE TOOTHBRUSH CUP'
+        ],
+        'theme-magic': [
+            'SEEK THE ENCHANTED MIRROR', 'SEARCH THE POTION CABINET', 'LOOK INSIDE YOUR SPELL SATCHEL',
+            'CHECK BENEATH THE MAGIC BED', 'EXAMINE THE CRYSTAL SHELF', 'SEARCH THE GARDEN FLOWER POT'
+        ],
+        'theme-royal': [
+            'SEEK THE PALACE THRONE', 'CHECK INSIDE THE JEWELRY BOX', 'SEARCH THE ROYAL GARDEN HOSE',
+            'LOOK BEHIND THE VELVET DRESSER', 'CHECK UNDER THE CROWN PILLOW', 'EXAMINE THE KINGDOM MAILBOX'
+        ],
+        'theme-pirate': [
+            'SEEK THE LOOKING GLASS MIRROR', 'CHECK THE GALLEY FRIDGE', 'LOOK INSIDE THE CAPTAIN COUCH',
+            'SEARCH THE BUCCANEER SHOE', 'CHECK BENEATH THE DECK MAT', 'LOOK INSIDE THE SEA MAILBOX'
+        ],
+        'theme-galaxy': [
+            'SCAN SECTOR REFRIGERATOR', 'CHECK SUB-SPACE PILLOW', 'LOOK BEHIND OPTICAL MIRROR',
+            'INSPECT STARSHIP COUCH', 'SCAN FLEET MAILBOX POD', 'CHECK OXYGEN SHOE CHAMBER'
+        ]
+    };
+
+    const buttons = document.querySelectorAll('.btn-random-clue');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            const currentThemeId = window.ThemeManager ? window.ThemeManager.currentThemeId : 'theme-spy';
+            const pool = themeCluePools[currentThemeId] || themeCluePools['theme-spy'];
+
+            const randomClue = pool[Math.floor(Math.random() * pool.length)];
+            input.value = randomClue;
+
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            if (window.refreshLivePreview) window.refreshLivePreview();
+
+            showToast("Shuffled Theme Clue", "info");
+        });
+    });
 }
 
-/* Preset Bar */
-.preset-bar-wrapper {
-    margin-bottom: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+/**
+ * Copy Codes to Clipboard Button
+ */
+function initCopyCodesBtn() {
+    const btn = document.getElementById('btn-copy-code');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+        const listContainer = document.getElementById('preview-missions-list');
+        if (!listContainer) return;
+
+        const boxes = listContainer.querySelectorAll('.preview-mission-box');
+        let textOutput = "=== ADVENTURE CODES ===\n";
+
+        boxes.forEach(b => {
+            const tag = b.querySelector('.mission-tag')?.textContent || '';
+            const enc = b.querySelector('.cipher-text')?.textContent || '';
+            textOutput += `${tag}: ${enc}\n`;
+        });
+
+        navigator.clipboard.writeText(textOutput).then(() => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            showToast("Copied Encrypted Codes to Clipboard!", "success");
+        }).catch(() => {
+            showToast("Failed to copy codes", "warn");
+        });
+    });
 }
 
-.preset-bar-wrapper label {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--accent-cyan);
-    font-weight: 600;
+/**
+ * Parent Briefing Modal Logic (Bulletproof Handler)
+ */
+function initHeaderModal() {
+    const btnOpen = document.getElementById('btn-open-briefing');
+    const modal = document.getElementById('briefing-modal');
+    const btnClose = document.getElementById('btn-close-modal');
+    const btnDismiss = document.getElementById('btn-dismiss-modal');
+
+    if (!modal) return;
+
+    function openModal(e) {
+        if (e) e.preventDefault();
+        modal.classList.remove('hidden');
+        if (window.SoundEngine) window.SoundEngine.playKeyClick();
+    }
+
+    function closeModal(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        modal.classList.add('hidden');
+        if (window.SoundEngine) window.SoundEngine.playKeyClick();
+    }
+
+    if (btnOpen) {
+        btnOpen.onclick = openModal;
+    }
+
+    if (btnClose) {
+        btnClose.onclick = closeModal;
+    }
+
+    if (btnDismiss) {
+        btnDismiss.onclick = closeModal;
+    }
+
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            closeModal(e);
+        }
+    };
 }
 
-.preset-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+/**
+ * Handles 3, 4, or 5 clue toggle button logic
+ */
+function initClueCountToggles() {
+    const clueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
+    const clue4Wrapper = document.getElementById('clue-4-wrapper');
+    const clue5Wrapper = document.getElementById('clue-5-wrapper');
+    const clue4Input = document.getElementById('clue-4');
+    const clue5Input = document.getElementById('clue-5');
+
+    clueButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            
+            clueButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const count = parseInt(btn.getAttribute('data-clues'), 10);
+
+            if (count === 3) {
+                clue4Wrapper.classList.add('hidden');
+                clue5Wrapper.classList.add('hidden');
+                clue4Input.required = false;
+                clue5Input.required = false;
+            } else if (count === 4) {
+                clue4Wrapper.classList.remove('hidden');
+                clue5Wrapper.classList.add('hidden');
+                clue4Input.required = true;
+                clue5Input.required = false;
+            } else if (count === 5) {
+                clue4Wrapper.classList.remove('hidden');
+                clue5Wrapper.classList.remove('hidden');
+                clue4Input.required = true;
+                clue5Input.required = true;
+            }
+
+            if (window.refreshLivePreview) {
+                window.refreshLivePreview();
+            }
+        });
+    });
 }
 
-.btn-preset {
-    padding: 0.45rem 0.85rem;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid var(--panel-border);
-    color: var(--text-main);
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    transition: all var(--transition-fast);
+/**
+ * Text Scrambler Effect for dynamic cipher feedback
+ */
+function scrambleText(targetElement, finalString) {
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚✦✧⚔️⚓';
+    let iterations = 0;
+    const maxIterations = 8;
+
+    const interval = setInterval(() => {
+        targetElement.textContent = finalString
+            .split('')
+            .map((char, idx) => {
+                if (char === ' ' || char === '/') return char;
+                if (idx < iterations) return finalString[idx];
+                return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join('');
+
+        if (iterations >= finalString.length || iterations >= maxIterations) {
+            targetElement.textContent = finalString;
+            clearInterval(interval);
+        }
+        iterations++;
+    }, 25);
 }
 
-.btn-preset:hover {
-    border-color: var(--accent-cyan);
-    background: rgba(0, 240, 255, 0.1);
-}
+/**
+ * Listens for user input to keep ALL mission clues updated in real time
+ */
+function initLivePreview() {
+    const juniorAgentNameInput = document.getElementById('junior-agent-name');
+    const juniorAgentCodeInput = document.getElementById('junior-agent-code');
+    const cipherTypeSelect = document.getElementById('cipher-type');
+    const previewAgentName = document.getElementById('preview-agent-name');
+    const previewMissionsContainer = document.getElementById('preview-missions-list');
 
-/* Randomizer Shuffle Buttons */
-.label-with-tool {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    function updatePreview(isCipherChange = false) {
+        const currentTheme = window.ThemeManager ? window.ThemeManager.getCurrentTheme() : {};
+        const prefix = currentTheme.cluePrefix || 'Mission';
 
-.btn-random-clue {
-    background: none;
-    border: none;
-    color: var(--accent-cyan);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    opacity: 0.85;
-    transition: opacity var(--transition-fast);
-}
+        const name = juniorAgentNameInput.value.trim() || 'HERO';
+        const code = juniorAgentCodeInput.value.trim() || '007';
+        previewAgentName.textContent = `${name.toUpperCase()} (${code})`;
 
-.btn-random-clue:hover {
-    opacity: 1;
-}
+        const activeClues = [];
+        const clue1 = document.getElementById('clue-1');
+        const clue2 = document.getElementById('clue-2');
+        const clue3 = document.getElementById('clue-3');
+        const clue4 = document.getElementById('clue-4');
+        const clue5 = document.getElementById('clue-5');
+        const clueFinal = document.getElementById('clue-final');
 
-/* Checkbox Options Row */
-.pdf-options-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
+        if (clue1) activeClues.push({ title: `${prefix.toUpperCase()} 1`, element: clue1, defaultText: 'LOOK IN THE FRIDGE' });
+        if (clue2) activeClues.push({ title: `${prefix.toUpperCase()} 2`, element: clue2, defaultText: 'CHECK UNDER YOUR PILLOW' });
+        if (clue3) activeClues.push({ title: `${prefix.toUpperCase()} 3`, element: clue3, defaultText: 'LOOK BEHIND THE MIRROR' });
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    cursor: pointer;
-}
+        const clue4Wrapper = document.getElementById('clue-4-wrapper');
+        if (clue4Wrapper && !clue4Wrapper.classList.contains('hidden') && clue4) {
+            activeClues.push({ title: `${prefix.toUpperCase()} 4`, element: clue4, defaultText: 'CHECK INSIDE THE COUCH' });
+        }
 
-.checkbox-label input {
-    accent-color: var(--accent-cyan);
-}
+        const clue5Wrapper = document.getElementById('clue-5-wrapper');
+        if (clue5Wrapper && !clue5Wrapper.classList.contains('hidden') && clue5) {
+            activeClues.push({ title: `${prefix.toUpperCase()} 5`, element: clue5, defaultText: 'LOOK INSIDE YOUR SHOE' });
+        }
 
-/* Header Tools & Modal */
-.header-right-tools {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+        if (clueFinal) activeClues.push({ title: 'FINAL REWARD', element: clueFinal, defaultText: 'MISSION COMPLETE GREAT JOB' });
 
-.btn-header-tool {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--panel-border);
-    color: var(--accent-cyan);
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
+        previewMissionsContainer.innerHTML = '';
+        const selectedCipher = cipherTypeSelect.value;
 
-.preview-title-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+        activeClues.forEach(item => {
+            const rawMessage = item.element.value.trim() || item.defaultText;
+            const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher) : rawMessage;
 
-.btn-secondary-sm {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--panel-border);
-    color: var(--text-main);
-    padding: 0.35rem 0.65rem;
-    font-size: 0.7rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-family: var(--font-mono);
-}
+            const box = document.createElement('div');
+            box.className = 'preview-mission-box';
+            
+            const cipherDiv = document.createElement('div');
+            cipherDiv.className = 'cipher-text';
+            
+            box.innerHTML = `
+                <span class="mission-tag">${item.title}</span>
+                <div class="raw-text">${rawMessage}</div>
+            `;
+            box.appendChild(cipherDiv);
 
-/* Parent Briefing Modal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
+            if (isCipherChange) {
+                scrambleText(cipherDiv, encrypted || '---');
+            } else {
+                cipherDiv.textContent = encrypted || '---';
+            }
 
-.modal-card {
-    width: 100%;
-    max-width: 650px;
-    padding: 2rem;
-}
+            previewMissionsContainer.appendChild(box);
+        });
+    }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
+    window.refreshLivePreview = updatePreview;
 
-.btn-close-modal {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.5rem;
-    cursor: pointer;
-}
+    const allInputs = document.querySelectorAll('.config-panel input');
+    allInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            if (window.SoundEngine && e.inputType !== 'deleteContentBackward') {
+                window.SoundEngine.playKeyClick();
+            }
+            updatePreview(false);
+        });
+    });
 
-.step-guide {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
+    cipherTypeSelect.addEventListener('change', () => {
+        if (window.SoundEngine) window.SoundEngine.playBlip();
+        updatePreview(true);
+    });
 
-.step-card {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--panel-border);
-}
-
-.step-num {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--accent-cyan);
-    color: #000;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-}
-
-.step-card h4 {
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
-}
-
-.step-card p {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    updatePreview(false);
 }
