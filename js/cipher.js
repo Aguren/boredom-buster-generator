@@ -1,89 +1,95 @@
 /* ==========================================================================
-   HIA ENCRYPTION ENGINE // CIPHER ALGORITHMS
+   HIA CRYPTOGRAPHY ENGINE // EXPANDED CIPHER COLLECTION
    ========================================================================== */
 
 const CipherEngine = {
-    // 1. Symbol Lookup Table
+    // Standard A=1 Mapping
+    numberMap: {
+        'A':'1', 'B':'2', 'C':'3', 'D':'4', 'E':'5', 'F':'6', 'G':'7', 'H':'8',
+        'I':'9', 'J':'10', 'K':'11', 'L':'12', 'M':'13', 'N':'14', 'O':'15',
+        'P':'16', 'Q':'17', 'R':'18', 'S':'19', 'T':'20', 'U':'21', 'V':'22',
+        'W':'23', 'X':'24', 'Y':'25', 'Z':'26'
+    },
+
+    // Symbol / Rune Mapping
     symbolMap: {
-        'A': '★',  'B': '●',  'C': '■',  'D': '✖',  'E': '▲',
-        'F': '♦',  'G': '✿',  'H': '♣',  'I': '♠',  'J': '☺',
-        'K': '▲',  'L': '◆',  'M': '▼',  'N': '◉',  'O': '✪',
-        'P': '✚',  'Q': '✦',  'R': '❤',  'S': '✈',  'T': '☁',
-        'U': '☾',  'V': '☀',  'W': '☂',  'X': '✂',  'Y': '✎',
-        'Z': '☯'
+        'A':'★', 'B':'♦', 'C':'▲', 'D':'✚', 'E':'✦', 'F':'✧', 'G':'⚔', 'H':'⚓',
+        'I':'♠', 'J':'♣', 'K':'♥', 'L':'🌙', 'M':'☀', 'N':'⚡', 'O':'🌀',
+        'P':'❄', 'Q':'🔥', 'R':'🎯', 'S':'🔮', 'T':'🗝', 'U':'👑', 'V':'🛡',
+        'W':'🌌', 'X':'☣', 'Y':'💎', 'Z':'🪐'
+    },
+
+    // Pigpen / Grid Symbol Map
+    pigpenMap: {
+        'A':'╍', 'B':'╏', 'C':'═', 'D':'║', 'E':'╬', 'F':'┼', 'G':'┿', 'H':'╂',
+        'I':'├', 'J':'┤', 'K':'┬', 'L':'┴', 'M':'┌', 'N':'┐', 'O':'└', 'P':'┘',
+        'Q':'░', 'R':'▒', 'S':'▓', 'T':'█', 'U':'▲', 'V':'▼', 'W':'◀', 'X':'►',
+        'Y':'◆', 'Z':'◈'
     },
 
     /**
-     * Main encode entry point
-     * @param {string} text - Raw message typed by parent
-     * @param {string} cipherType - 'number' | 'symbol' | 'caesar'
-     * @returns {string} Encrypted string output
+     * Master Encode Function
+     * @param {string} text - Raw plain text
+     * @param {string} type - 'number', 'symbol', 'caesar', 'reverse', or 'pigpen'
+     * @param {number} shiftAmount - Used for Caesar Shift (1 to 5)
      */
-    encode(text, cipherType = 'number') {
+    encode(text, type = 'number', shiftAmount = 1) {
         if (!text) return '';
-        const sanitized = text.toUpperCase().trim();
+        const cleanText = text.toUpperCase();
 
-        switch (cipherType) {
-            case 'symbol':
-                return this.encodeSymbol(sanitized);
-            case 'caesar':
-                return this.encodeCaesar(sanitized, 1);
+        switch (type) {
             case 'number':
+                return this.encodeNumber(cleanText);
+            case 'symbol':
+                return this.encodeSymbol(cleanText);
+            case 'pigpen':
+                return this.encodePigpen(cleanText);
+            case 'caesar':
+                return this.encodeCaesar(cleanText, parseInt(shiftAmount, 10) || 1);
+            case 'reverse':
+                return this.encodeReverse(cleanText);
             default:
-                return this.encodeNumber(sanitized);
+                return this.encodeNumber(cleanText);
         }
     },
 
-    /**
-     * Number Cipher: A=1, B=2 ... Z=26
-     * Word spaces separated by ' / '
-     */
     encodeNumber(text) {
-        const words = text.split(/\s+/);
-        
-        return words.map(word => {
-            return word
-                .split('')
-                .filter(char => /[A-Z]/.test(char))
-                .map(char => char.charCodeAt(0) - 64)
-                .join('-');
-        }).filter(w => w.length > 0).join(' / ');
+        return text.split('').map(char => {
+            if (char === ' ') return ' / ';
+            return this.numberMap[char] ? this.numberMap[char] + ' ' : char;
+        }).join('').trim();
     },
 
-    /**
-     * Symbol Cipher: Converts letters to agent symbols
-     */
     encodeSymbol(text) {
-        const words = text.split(/\s+/);
-
-        return words.map(word => {
-            return word
-                .split('')
-                .filter(char => /[A-Z]/.test(char))
-                .map(char => this.symbolMap[char] || char)
-                .join('');
-        }).filter(w => w.length > 0).join('   ');
+        return text.split('').map(char => {
+            if (char === ' ') return ' / ';
+            return this.symbolMap[char] ? this.symbolMap[char] + ' ' : char;
+        }).join('').trim();
     },
 
-    /**
-     * Caesar Shift Cipher (+1 Shift default)
-     */
-    encodeCaesar(text, shift = 1) {
-        const words = text.split(/\s+/);
+    encodePigpen(text) {
+        return text.split('').map(char => {
+            if (char === ' ') return ' / ';
+            return this.pigpenMap[char] ? this.pigpenMap[char] + ' ' : char;
+        }).join('').trim();
+    },
 
-        return words.map(word => {
-            return word
-                .split('')
-                .filter(char => /[A-Z]/.test(char))
-                .map(char => {
-                    const code = char.charCodeAt(0) - 65;
-                    const shifted = (code + shift) % 26;
-                    return String.fromCharCode(shifted + 65);
-                })
-                .join('');
-        }).filter(w => w.length > 0).join(' ');
+    encodeCaesar(text, shift) {
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return text.split('').map(char => {
+            if (char === ' ') return ' / ';
+            const idx = alphabet.indexOf(char);
+            if (idx === -1) return char;
+            const shiftedIdx = (idx + shift) % 26;
+            return alphabet[shiftedIdx] + ' ';
+        }).join('').trim();
+    },
+
+    encodeReverse(text) {
+        return text.split(' ').map(word => {
+            return word.split('').reverse().join('');
+        }).join(' / ');
     }
 };
 
-// Global export
 window.CipherEngine = CipherEngine;
