@@ -267,3 +267,56 @@ select:focus {
     overflow-y: auto;
     padding-right: 0.35rem;
 }
+
+/* ==========================================================================
+   VISUAL POLISH // FINGERPRINT BUTTON & RADAR WIDGET
+   ========================================================================== */
+
+/* Fingerprint Button Polish */
+.btn-fingerprint {
+    width: 100%;
+    padding: 1rem;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.fingerprint-icon {
+    font-size: 1.3rem;
+    color: var(--accent-cyan);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-fingerprint:hover .fingerprint-icon {
+    transform: scale(1.15);
+    color: #ffffff;
+}
+
+/* Radar Scan Widget */
+.radar-widget {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+    margin-left: 0.5rem;
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.radar-sweep {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.6) 0deg, transparent 60deg);
+    transform-origin: 0% 0%;
+    animation: radarScan 3s linear infinite;
+    border-radius: 50%;
+}
+
+@keyframes radarScan {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // MULTI-CLUE LIVE PREVIEW & FORM CONTROLS
+   MISSION CONTROL UI ENGINE // MULTI-CLUE LIVE PREVIEW & TEXT SCRAMBLER
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +51,32 @@ function initClueCountToggles() {
 }
 
 /**
+ * Text Scrambler Effect for dynamic text decryption feel
+ */
+function scrambleText(targetElement, finalString) {
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚';
+    let iterations = 0;
+    const maxIterations = 8;
+
+    const interval = setInterval(() => {
+        targetElement.textContent = finalString
+            .split('')
+            .map((char, idx) => {
+                if (char === ' ' || char === '/') return char;
+                if (idx < iterations) return finalString[idx];
+                return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join('');
+
+        if (iterations >= finalString.length || iterations >= maxIterations) {
+            targetElement.textContent = finalString;
+            clearInterval(interval);
+        }
+        iterations++;
+    }, 25);
+}
+
+/**
  * Listens for user input to keep ALL mission clues updated in real time
  */
 function initLivePreview() {
@@ -60,7 +86,7 @@ function initLivePreview() {
     const previewAgentName = document.getElementById('preview-agent-name');
     const previewMissionsContainer = document.getElementById('preview-missions-list');
 
-    function updatePreview() {
+    function updatePreview(isCipherChange = false) {
         const name = juniorAgentNameInput.value.trim() || 'AGENT';
         const code = juniorAgentCodeInput.value.trim() || '007';
         previewAgentName.textContent = `${name.toUpperCase()} ${code}`;
@@ -98,11 +124,21 @@ function initLivePreview() {
 
             const box = document.createElement('div');
             box.className = 'preview-mission-box';
+            
+            const cipherDiv = document.createElement('div');
+            cipherDiv.className = 'cipher-text';
+            
             box.innerHTML = `
                 <span class="mission-tag">${item.title}</span>
                 <div class="raw-text">${rawMessage}</div>
-                <div class="cipher-text">${encrypted || '---'}</div>
             `;
+            box.appendChild(cipherDiv);
+
+            if (isCipherChange) {
+                scrambleText(cipherDiv, encrypted || '---');
+            } else {
+                cipherDiv.textContent = encrypted || '---';
+            }
 
             previewMissionsContainer.appendChild(box);
         });
@@ -110,16 +146,20 @@ function initLivePreview() {
 
     window.refreshLivePreview = updatePreview;
 
-    const allInputs = document.querySelectorAll('.config-panel input, .config-panel select');
+    const allInputs = document.querySelectorAll('.config-panel input');
     allInputs.forEach(input => {
         input.addEventListener('input', (e) => {
             if (window.SoundEngine && e.inputType !== 'deleteContentBackward') {
                 window.SoundEngine.playKeyClick();
             }
-            updatePreview();
+            updatePreview(false);
         });
-        input.addEventListener('change', updatePreview);
     });
 
-    updatePreview();
+    cipherTypeSelect.addEventListener('change', () => {
+        if (window.SoundEngine) window.SoundEngine.playBlip();
+        updatePreview(true);
+    });
+
+    updatePreview(false);
 }
