@@ -258,3 +258,12 @@ select:focus {
     padding: 1.1rem;
     font-size: 1rem;
 }
+
+.preview-missions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 0.35rem;
+}
