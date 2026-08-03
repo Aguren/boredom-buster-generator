@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MISSION CONTROL DASHBOARD STYLES // STREAMLINED STEPS & HELPER CHIPS
+   MISSION CONTROL DASHBOARD STYLES // FULL MOBILE-FIRST & DESKTOP SUITE
    ========================================================================== */
 
 #dashboard-screen {
@@ -128,7 +128,7 @@
     color: var(--accent-cyan);
 }
 
-/* Dashboard 2-Column Grid Layout */
+/* Dashboard Grid Layout */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -692,4 +692,63 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE OVERRIDES (MAX-WIDTH: 868PX)
+   ========================================================================== */
+
+@media (max-width: 868px) {
+    /* Allow natural vertical page scrolling on phones */
+    #dashboard-screen {
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: auto !important;
+        padding: 0.75rem;
+    }
+
+    /* Header stacking for mobile screens */
+    .app-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .header-right-tools {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Stack Form (Left) and Live Preview (Right) into a single vertical column */
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    .config-panel, 
+    .preview-panel {
+        overflow-y: visible !important;
+    }
+
+    /* Stack side-by-side inputs on small mobile screens */
+    .form-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Increase touch targets for easy finger tapping */
+    .btn-preset, 
+    .chip-btn, 
+    .btn-toggle {
+        min-height: 38px;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .dossier-preview-card {
+        min-height: 250px;
+    }
 }
