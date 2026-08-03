@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MULTI-THEME MANAGER ENGINE // DICTIONARY & UI ADAPTER
+   MULTI-THEME MANAGER ENGINE // REAL-TIME LOGIN & UI ADAPTER
    ========================================================================== */
 
 const ThemeManager = {
@@ -449,7 +449,7 @@ const ThemeManager = {
             });
         }
 
-        // Set default theme
+        // Set initial default theme
         this.applyTheme('theme-spy');
     },
 
@@ -467,7 +467,7 @@ const ThemeManager = {
         if (masterSelect) masterSelect.value = theme.id;
         if (headerSelect) headerSelect.value = theme.id;
 
-        // 3. Update DOM Labels & Icons across Auth Screen
+        // 3. Update DOM Labels & Icons across Auth Screen (INSTANT LOGIN SCREEN TRANSFORM)
         const mainTitle = document.getElementById('theme-main-title');
         const subTitle = document.getElementById('theme-sub-title');
         const badgeIcon = document.getElementById('theme-badge-icon');
@@ -549,7 +549,7 @@ const ThemeManager = {
             window.refreshLivePreview();
         }
 
-        // Sound trigger
+        // Audio Feedback on Theme Change
         if (window.SoundEngine) {
             window.SoundEngine.playBlip();
         }
