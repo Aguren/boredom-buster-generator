@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, TOGGLE CHIPS & MODALS
+   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, CHIPS & MODALS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,43 +79,26 @@ function initCertToggle() {
 }
 
 /**
- * Hideout Helper Location Chips (Toggleable)
- * - Click once: Fills the active input or first empty visible input, highlights chip.
- * - Click again: Removes that specific text from the input, unhighlights chip.
+ * Hideout Helper Location Chips
+ * Fills currently active clue input or next empty visible clue field
  */
 function initHideoutChips() {
     const chipButtons = document.querySelectorAll('.chip-btn');
     if (!chipButtons.length) return;
-
-    const getClueInputs = () => [
-        document.getElementById('clue-1'),
-        document.getElementById('clue-2'),
-        document.getElementById('clue-3'),
-        document.getElementById('clue-4'),
-        document.getElementById('clue-5')
-    ].filter(input => input && input.offsetParent !== null);
 
     chipButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const locationText = btn.getAttribute('data-location');
             if (!locationText) return;
 
-            const clueInputs = getClueInputs();
+            const clueInputs = [
+                document.getElementById('clue-1'),
+                document.getElementById('clue-2'),
+                document.getElementById('clue-3'),
+                document.getElementById('clue-4'),
+                document.getElementById('clue-5')
+            ].filter(input => input && input.offsetParent !== null);
 
-            // Check if this location text is ALREADY in one of the clue inputs
-            const existingInput = clueInputs.find(i => i.value.trim() === locationText);
-
-            if (existingInput) {
-                // TOGGLE OFF: Clear the text from that input
-                existingInput.value = '';
-                btn.classList.remove('active');
-                if (window.SoundEngine) window.SoundEngine.playKeyClick();
-                if (window.refreshLivePreview) window.refreshLivePreview();
-                showToast(`Removed: "${locationText}"`, 'info');
-                return;
-            }
-
-            // TOGGLE ON: Insert into active element OR first empty clue input
             const activeElem = document.activeElement;
             let targetInput = null;
 
@@ -127,41 +110,20 @@ function initHideoutChips() {
 
             if (targetInput) {
                 targetInput.value = locationText;
-                btn.classList.add('active');
                 if (window.SoundEngine) window.SoundEngine.playKeyClick();
                 if (window.refreshLivePreview) window.refreshLivePreview();
-                showToast(`Added: "${locationText}"`, 'info');
+                showToast(`Filled: "${locationText}"`, 'info');
             }
         });
     });
-
-    // Sync chip active states whenever inputs change manually or via preset
-    const updateChipStates = () => {
-        const clueInputs = getClueInputs();
-        const currentValues = clueInputs.map(i => i.value.trim());
-
-        chipButtons.forEach(btn => {
-            const loc = btn.getAttribute('data-location');
-            if (currentValues.includes(loc)) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    };
-
-    document.querySelectorAll('.clue-input').forEach(input => {
-        input.addEventListener('input', updateChipStates);
-    });
-
-    window.syncChipStates = updateChipStates;
 }
 
 /**
- * 1-Click Preset Templates
+ * 1-Click Preset Templates & Clear All Button
  */
 function initPresets() {
     const presetButtons = document.querySelectorAll('.btn-preset');
+    const btnClear = document.getElementById('btn-clear-clues');
     
     const presets = {
         indoor: [
@@ -190,6 +152,8 @@ function initPresets() {
     presetButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const key = btn.getAttribute('data-preset');
+            if (!key) return; // Handled by Clear button below if key is missing
+
             const list = presets[key];
             if (!list) return;
 
@@ -201,17 +165,26 @@ function initPresets() {
             document.getElementById('clue-4').value = list[3];
             document.getElementById('clue-5').value = list[4];
 
-            if (window.refreshLivePreview) {
-                window.refreshLivePreview();
-            }
-
-            if (window.syncChipStates) {
-                window.syncChipStates();
-            }
-
+            if (window.refreshLivePreview) window.refreshLivePreview();
             showToast(`Loaded ${key.toUpperCase()} Preset Clues`, 'success');
         });
     });
+
+    // Clear All Clues Handler
+    if (btnClear) {
+        btnClear.addEventListener('click', () => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+
+            document.getElementById('clue-1').value = '';
+            document.getElementById('clue-2').value = '';
+            document.getElementById('clue-3').value = '';
+            document.getElementById('clue-4').value = '';
+            document.getElementById('clue-5').value = '';
+
+            if (window.refreshLivePreview) window.refreshLivePreview();
+            showToast("Cleared All Clue Locations", "info");
+        });
+    }
 }
 
 /**
@@ -256,7 +229,6 @@ function initRandomizers() {
 
             if (window.SoundEngine) window.SoundEngine.playKeyClick();
             if (window.refreshLivePreview) window.refreshLivePreview();
-            if (window.syncChipStates) window.syncChipStates();
 
             showToast("Shuffled Theme Clue", "info");
         });
@@ -367,10 +339,6 @@ function initClueCountToggles() {
 
             if (window.refreshLivePreview) {
                 window.refreshLivePreview();
-            }
-
-            if (window.syncChipStates) {
-                window.syncChipStates();
             }
         });
     });
