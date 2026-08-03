@@ -1,88 +1,114 @@
 /* ==========================================================================
-   AUTHENTICATION & TERMINAL BOOT SEQUENCE
+   AUTHENTICATION & BOOT TERMINAL ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initAuthEngine();
+});
+
+function initAuthEngine() {
     const loginForm = document.getElementById('login-form');
-    const agentInput = document.getElementById('agent-id');
-    const displayAgentId = document.getElementById('display-agent-id');
-    
     const authScreen = document.getElementById('auth-screen');
     const bootScreen = document.getElementById('boot-screen');
     const dashboardScreen = document.getElementById('dashboard-screen');
-    
     const terminalLogs = document.getElementById('terminal-logs');
     const bootProgress = document.getElementById('boot-progress');
-
-    // Boot terminal sequence messages
-    const bootSequenceSteps = [
-        { text: "SECURE CONNECTION ESTABLISHED", delay: 300 },
-        { text: "Verifying Parent Clearance Credentials...", delay: 700 },
-        { text: "Loading Agent Database & Cipher Engines", delay: 1100 },
-        { text: "Decrypting Classified Mission Archives", delay: 1500 },
-        { text: "Establishing HIA Headquarters Link", delay: 1900 },
-        { text: "ACCESS GRANTED // WELCOME AGENT", delay: 2300, isSuccess: true }
-    ];
+    const displayAgentId = document.getElementById('display-agent-id');
 
     if (!loginForm) return;
 
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // 1. Capture Parent Agent Codename
-        const agentName = agentInput.value.trim() || 'AGENT PARENT';
-        if (displayAgentId) {
-            displayAgentId.textContent = agentName.toUpperCase();
+        const agentIdInput = document.getElementById('agent-id').value.trim() || 'AGENT COMMANDER';
+        
+        if (window.SoundEngine) {
+            window.SoundEngine.playBlip();
         }
 
-        // 2. Transition from Auth Card to Boot Terminal
+        // Update Dashboard Display Name
+        if (displayAgentId) {
+            displayAgentId.textContent = agentIdInput.toUpperCase();
+        }
+
+        // 1. Hide Auth Screen, Show Centered Boot Screen
         authScreen.classList.remove('active');
         authScreen.classList.add('hidden');
+        
         bootScreen.classList.remove('hidden');
         bootScreen.classList.add('active');
+        bootScreen.style.display = 'flex'; // Centered layout fix
 
-        // 3. Trigger Boot Sequence Animation
-        runBootSequence();
+        // 2. Start the Terminal Logs Animation
+        runBootSequence(() => {
+            // Callback when boot sequence completes:
+            // 3. Transition from Boot Screen to Mission Control Dashboard
+            setTimeout(() => {
+                bootScreen.classList.remove('active');
+                bootScreen.classList.add('hidden');
+                bootScreen.style.display = 'none';
+
+                dashboardScreen.classList.remove('hidden');
+                dashboardScreen.classList.add('active');
+
+                if (window.refreshLivePreview) {
+                    window.refreshLivePreview();
+                }
+
+                if (window.SoundEngine) {
+                    window.SoundEngine.playCompileSound();
+                }
+
+                if (window.showToast) {
+                    window.showToast("Mission Control Station Online", "success");
+                }
+            }, 500); // Half-second pause on ACCESS GRANTED before transition
+        });
     });
 
-    function runBootSequence() {
+    /**
+     * Simulates terminal boot diagnostic logs
+     */
+    function runBootSequence(onComplete) {
+        if (!terminalLogs || !bootProgress) {
+            if (onComplete) onComplete();
+            return;
+        }
+
         terminalLogs.innerHTML = '';
         bootProgress.style.width = '0%';
 
-        const totalSteps = bootSequenceSteps.length;
+        const logs = [
+            { text: "INITIALIZING HIA SECURITY PROTOCOLS...", delay: 200, progress: 20 },
+            { text: "CONNECTING TO ENCRYPTION ENGINE (AES-256)...", delay: 500, progress: 45 },
+            { text: "VERIFYING PARENT CLEARANCE KEY...", delay: 800, progress: 70 },
+            { text: "LOADING MULTI-THEME ASSETS & CIPHERS...", delay: 1100, progress: 88 },
+            { text: "ACCESS GRANTED // WELCOME AGENT", delay: 1400, progress: 100, isSuccess: true }
+        ];
 
-        bootSequenceSteps.forEach((step, index) => {
+        logs.forEach((log) => {
             setTimeout(() => {
-                // Play audio blip for each line
-                if (window.SoundEngine) window.SoundEngine.playBlip();
-
                 const line = document.createElement('div');
-                line.className = `terminal-line animate-in ${step.isSuccess ? 'success' : ''}`;
+                line.className = `terminal-line animate-in ${log.isSuccess ? 'success' : ''}`;
                 
-                if (step.isSuccess) {
-                    line.innerHTML = `<span class="prefix">❯</span> <span>${step.text}</span>`;
+                if (log.isSuccess) {
+                    line.innerHTML = `<span class="check"><i class="fa-solid fa-circle-check"></i></span> <span>${log.text}</span>`;
                 } else {
-                    line.innerHTML = `<i class="fa-solid fa-check check"></i> <span>${step.text}</span>`;
+                    line.innerHTML = `<span class="prefix">&gt;</span> <span>${log.text}</span>`;
                 }
 
                 terminalLogs.appendChild(line);
+                bootProgress.style.width = `${log.progress}%`;
 
-                // Update progress bar percentage
-                const progressPct = Math.round(((index + 1) / totalSteps) * 100);
-                bootProgress.style.width = `${progressPct}%`;
-
-                // Final transition to Dashboard when sequence finishes
-                if (index === totalSteps - 1) {
-                    if (window.SoundEngine) window.SoundEngine.playAccessGranted();
-
-                    setTimeout(() => {
-                        bootScreen.classList.remove('active');
-                        bootScreen.classList.add('hidden');
-                        dashboardScreen.classList.remove('hidden');
-                        dashboardScreen.classList.add('active');
-                    }, 800);
+                if (window.SoundEngine) {
+                    window.SoundEngine.playKeyClick();
                 }
-            }, step.delay);
+
+                // Execute complete callback on the final log line
+                if (log.isSuccess && onComplete) {
+                    onComplete();
+                }
+            }, log.delay);
         });
     }
-});
+}
