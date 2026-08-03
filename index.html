@@ -26,6 +26,9 @@
     <div class="bg-grid-overlay"></div>
     <div class="ambient-glow"></div>
 
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
     <!-- MAIN APP CONTAINER -->
     <main id="app">
 
@@ -49,12 +52,12 @@
                             <option value="theme-stealth">Stealth Black Ops</option>
                             <option value="theme-dossier">Vintage CIA Dossier</option>
                         </optgroup>
-                        <optgroup label="✨ Magical & Fantasy">
+                        <optgroup label="✨ Magical & Fantasy (Girl Favorites)">
                             <option value="theme-magic">Enchanted Academy & Spellbook</option>
                             <option value="theme-royal">Royal Cryptography & Secret Order</option>
                             <option value="theme-sleuth">Sleuth Society & Detective Club</option>
                         </optgroup>
-                        <optgroup label="⚔️ High Adventure">
+                        <optgroup label="⚔️ High Adventure (Boy Favorites)">
                             <option value="theme-pirate">Pirate Treasure Hunt & Sea Ciphers</option>
                             <option value="theme-galaxy">Galactic Space Fleet & Cosmic Code</option>
                         </optgroup>
@@ -110,7 +113,7 @@
                 </div>
 
                 <div class="terminal-body" id="terminal-logs">
-                    <!-- Dynamic theme boot logs injected by login.js -->
+                    <!-- Dynamic boot logs -->
                 </div>
 
                 <div class="terminal-progress-bar">
@@ -132,30 +135,37 @@
                     </div>
                 </div>
 
-                <!-- On-the-fly Header Theme Switcher -->
-                <div class="theme-selector-wrapper">
-                    <i class="fa-solid fa-palette"></i>
-                    <select id="theme-switcher">
-                        <optgroup label="Secret Agent">
-                            <option value="theme-spy">CIA Cyan</option>
-                            <option value="theme-stealth">Stealth Ops</option>
-                            <option value="theme-dossier">Vintage Dossier</option>
-                        </optgroup>
-                        <optgroup label="Magical & Girl Themes">
-                            <option value="theme-magic">Enchanted Academy</option>
-                            <option value="theme-royal">Royal Secret Order</option>
-                            <option value="theme-sleuth">Sleuth Society</option>
-                        </optgroup>
-                        <optgroup label="Boy & Adventure Themes">
-                            <option value="theme-pirate">Pirate Treasure</option>
-                            <option value="theme-galaxy">Space Fleet</option>
-                        </optgroup>
-                    </select>
-                </div>
+                <!-- Header Actions -->
+                <div class="header-right-tools">
+                    <button type="button" id="btn-open-briefing" class="btn-header-tool" title="Parent Briefing Guide">
+                        <i class="fa-solid fa-circle-question"></i>
+                        <span>GUIDE</span>
+                    </button>
 
-                <div class="user-profile">
-                    <span id="display-agent-id">PARENT COMMANDER</span>
-                    <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+                    <div class="theme-selector-wrapper">
+                        <i class="fa-solid fa-palette"></i>
+                        <select id="theme-switcher">
+                            <optgroup label="Secret Agent">
+                                <option value="theme-spy">CIA Cyan</option>
+                                <option value="theme-stealth">Stealth Ops</option>
+                                <option value="theme-dossier">Vintage Dossier</option>
+                            </optgroup>
+                            <optgroup label="Magical & Girl Themes">
+                                <option value="theme-magic">Enchanted Academy</option>
+                                <option value="theme-royal">Royal Secret Order</option>
+                                <option value="theme-sleuth">Sleuth Society</option>
+                            </optgroup>
+                            <optgroup label="Boy & Adventure Themes">
+                                <option value="theme-pirate">Pirate Treasure</option>
+                                <option value="theme-galaxy">Space Fleet</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="user-profile">
+                        <span id="display-agent-id">PARENT COMMANDER</span>
+                        <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+                    </div>
                 </div>
             </header>
 
@@ -164,6 +174,16 @@
                 <!-- LEFT COLUMN: Configurations & Clues Form -->
                 <div class="config-panel glass-panel">
                     <h2><i id="panel-spec-icon" class="fa-solid fa-sliders"></i> <span id="panel-spec-title">MISSION SPECIFICATIONS</span></h2>
+
+                    <!-- PRESET TEMPLATE BAR -->
+                    <div class="preset-bar-wrapper">
+                        <label><i class="fa-solid fa-bolt"></i> ONE-CLICK PRESETS:</label>
+                        <div class="preset-buttons">
+                            <button type="button" class="btn-preset" data-preset="indoor"><i class="fa-solid fa-house"></i> Rainy Indoor</button>
+                            <button type="button" class="btn-preset" data-preset="bedtime"><i class="fa-solid fa-bed"></i> Bedtime Quest</button>
+                            <button type="button" class="btn-preset" data-preset="backyard"><i class="fa-solid fa-tree"></i> Backyard Hunt</button>
+                        </div>
+                    </div>
 
                     <form id="mission-form">
                         <!-- Hero Details -->
@@ -181,59 +201,91 @@
                             </div>
                         </fieldset>
 
-                        <!-- Cipher & Clue Count -->
+                        <!-- Cipher & Settings -->
                         <fieldset class="form-section">
-                            <legend id="legend-encryption">ENCRYPTION SETTINGS</legend>
-                            <div class="input-group">
-                                <label for="cipher-type" id="label-cipher-protocol">Cipher Protocol</label>
-                                <select id="cipher-type">
-                                    <option value="number" selected>A=1 Number Cipher (Default)</option>
-                                    <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
-                                    <option value="caesar">Caesar Shift (+1 Shift)</option>
-                                </select>
+                            <legend id="legend-encryption">ENCRYPTION & OPTIONS</legend>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="cipher-type" id="label-cipher-protocol">Cipher Protocol</label>
+                                    <select id="cipher-type">
+                                        <option value="number" selected>A=1 Number Cipher (Default)</option>
+                                        <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
+                                        <option value="caesar">Caesar Shift (+1 Shift)</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="clue-count" id="label-clue-count">Number of Clues</label>
+                                    <div class="radio-group" id="clue-count-selector">
+                                        <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
+                                        <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
+                                        <button type="button" class="btn-toggle" data-clues="5">5 Clues</button>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="input-group">
-                                <label for="clue-count" id="label-clue-count">Number of Clues</label>
-                                <div class="radio-group" id="clue-count-selector">
-                                    <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
-                                    <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
-                                    <button type="button" class="btn-toggle" data-clues="5">5 Clues</button>
-                                </div>
+                            <!-- Fine-Tuning PDF Switches -->
+                            <div class="pdf-options-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="opt-include-hints" checked>
+                                    <span>Include Letter Hints in Answer Line</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="opt-include-cert" checked>
+                                    <span>Include Completion Certificate Page</span>
+                                </label>
                             </div>
                         </fieldset>
 
-                        <!-- Clues Input Area -->
+                        <!-- Clues Input Area with Randomizer Buttons -->
                         <fieldset class="form-section" id="clues-container">
                             <legend id="legend-clues-header">CLUE LOCATIONS (MESSAGES TO DECODE)</legend>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-1" id="label-clue-1"><i class="fa-solid fa-location-dot"></i> Mission 1 Hideout</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-1" id="label-clue-1"><i class="fa-solid fa-location-dot"></i> Mission 1 Hideout</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-1" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-1" class="clue-input" placeholder="LOOK IN THE FRIDGE" value="LOOK IN THE FRIDGE" required>
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-2" id="label-clue-2"><i class="fa-solid fa-location-dot"></i> Mission 2 Hideout</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-2" id="label-clue-2"><i class="fa-solid fa-location-dot"></i> Mission 2 Hideout</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-2" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-2" class="clue-input" placeholder="CHECK UNDER YOUR PILLOW" value="CHECK UNDER YOUR PILLOW" required>
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-3" id="label-clue-3"><i class="fa-solid fa-location-dot"></i> Mission 3 Hideout</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-3" id="label-clue-3"><i class="fa-solid fa-location-dot"></i> Mission 3 Hideout</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-3" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-3" class="clue-input" placeholder="LOOK BEHIND THE MIRROR" value="LOOK BEHIND THE MIRROR" required>
                             </div>
 
                             <div class="input-group clue-input-group hidden" id="clue-4-wrapper">
-                                <label for="clue-4" id="label-clue-4"><i class="fa-solid fa-location-dot"></i> Mission 4 Hideout</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-4" id="label-clue-4"><i class="fa-solid fa-location-dot"></i> Mission 4 Hideout</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-4" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-4" class="clue-input" placeholder="CHECK INSIDE THE COUCH">
                             </div>
 
                             <div class="input-group clue-input-group hidden" id="clue-5-wrapper">
-                                <label for="clue-5" id="label-clue-5"><i class="fa-solid fa-location-dot"></i> Mission 5 Hideout</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-5" id="label-clue-5"><i class="fa-solid fa-location-dot"></i> Mission 5 Hideout</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-5" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-5" class="clue-input" placeholder="LOOK INSIDE YOUR SHOE">
                             </div>
 
                             <div class="input-group clue-input-group">
-                                <label for="clue-final" id="label-clue-final"><i class="fa-solid fa-trophy"></i> Final Reward Message</label>
+                                <div class="label-with-tool">
+                                    <label for="clue-final" id="label-clue-final"><i class="fa-solid fa-trophy"></i> Final Reward Message</label>
+                                    <button type="button" class="btn-random-clue" data-target="clue-final" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
+                                </div>
                                 <input type="text" id="clue-final" class="clue-input" placeholder="MISSION COMPLETE GREAT JOB AGENT" value="MISSION COMPLETE GREAT JOB AGENT" required>
                             </div>
                         </fieldset>
@@ -242,7 +294,12 @@
 
                 <!-- RIGHT COLUMN: Real-Time Encryption Preview & PDF Generator -->
                 <div class="preview-panel glass-panel">
-                    <h2><i id="panel-preview-icon" class="fa-solid fa-eye"></i> <span id="panel-preview-title">LIVE ENCRYPTION PREVIEW</span></h2>
+                    <div class="preview-title-bar">
+                        <h2><i id="panel-preview-icon" class="fa-solid fa-eye"></i> <span id="panel-preview-title">LIVE ENCRYPTION PREVIEW</span></h2>
+                        <button type="button" id="btn-copy-code" class="btn-secondary-sm" title="Copy Encrypted Text to Clipboard">
+                            <i class="fa-solid fa-copy"></i> Copy Codes
+                        </button>
+                    </div>
                     
                     <div class="dossier-preview-card">
                         <div id="preview-top-stamp" class="classified-stamp">TOP SECRET</div>
@@ -254,7 +311,7 @@
                         <div class="preview-body">
                             <!-- Dynamic Encrypted Clues List -->
                             <div id="preview-missions-list" class="preview-missions-list">
-                                <!-- Generated dynamically by js/ui.js -->
+                                <!-- Generated dynamically -->
                             </div>
                         </div>
 
@@ -275,6 +332,38 @@
         </section>
 
     </main>
+
+    <!-- PARENT BRIEFING MODAL -->
+    <div id="briefing-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-book-bookmark"></i> PARENT COMMAND BRIEFING</h3>
+                <button type="button" id="btn-close-modal" class="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="step-guide">
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <h4>Configure & Encode</h4>
+                        <p>Pick a theme, type out hideouts around your home, or click a 1-Click Preset to auto-fill.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <h4>Print & Hide</h4>
+                        <p>Print the PDF pack. Cut out the clue sheets, fold along the dotted line, and hide them in the designated spots.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <h4>Hand Off Key & Play</h4>
+                        <p>Give your child the Decoder Key page. Each cracked code reveals the hiding spot of the next clue!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dismiss-modal" class="btn-primary">UNDERSTOOD // GOT IT</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
