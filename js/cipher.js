@@ -1,9 +1,8 @@
 /* ==========================================================================
-   HIA CRYPTOGRAPHY ENGINE // EXPANDED CIPHER COLLECTION
+   HIA CRYPTOGRAPHY ENGINE // SIMPLIFIED CIPHER COLLECTION
    ========================================================================== */
 
 const CipherEngine = {
-    // Standard A=1 Mapping
     numberMap: {
         'A':'1', 'B':'2', 'C':'3', 'D':'4', 'E':'5', 'F':'6', 'G':'7', 'H':'8',
         'I':'9', 'J':'10', 'K':'11', 'L':'12', 'M':'13', 'N':'14', 'O':'15',
@@ -11,7 +10,6 @@ const CipherEngine = {
         'W':'23', 'X':'24', 'Y':'25', 'Z':'26'
     },
 
-    // Symbol / Rune Mapping
     symbolMap: {
         'A':'★', 'B':'♦', 'C':'▲', 'D':'✚', 'E':'✦', 'F':'✧', 'G':'⚔', 'H':'⚓',
         'I':'♠', 'J':'♣', 'K':'♥', 'L':'🌙', 'M':'☀', 'N':'⚡', 'O':'🌀',
@@ -19,7 +17,6 @@ const CipherEngine = {
         'W':'🌌', 'X':'☣', 'Y':'💎', 'Z':'🪐'
     },
 
-    // Pigpen / Grid Symbol Map
     pigpenMap: {
         'A':'╍', 'B':'╏', 'C':'═', 'D':'║', 'E':'╬', 'F':'┼', 'G':'┿', 'H':'╂',
         'I':'├', 'J':'┤', 'K':'┬', 'L':'┴', 'M':'┌', 'N':'┐', 'O':'└', 'P':'┘',
@@ -27,13 +24,7 @@ const CipherEngine = {
         'Y':'◆', 'Z':'◈'
     },
 
-    /**
-     * Master Encode Function
-     * @param {string} text - Raw plain text
-     * @param {string} type - 'number', 'symbol', 'caesar', 'reverse', or 'pigpen'
-     * @param {number} shiftAmount - Used for Caesar Shift (1 to 5)
-     */
-    encode(text, type = 'number', shiftAmount = 1) {
+    encode(text, type = 'number') {
         if (!text) return '';
         const cleanText = text.toUpperCase();
 
@@ -44,10 +35,10 @@ const CipherEngine = {
                 return this.encodeSymbol(cleanText);
             case 'pigpen':
                 return this.encodePigpen(cleanText);
-            case 'caesar':
-                return this.encodeCaesar(cleanText, parseInt(shiftAmount, 10) || 1);
             case 'reverse':
                 return this.encodeReverse(cleanText);
+            case 'caesar':
+                return this.encodeCaesar(cleanText, 1);
             default:
                 return this.encodeNumber(cleanText);
         }
@@ -74,7 +65,7 @@ const CipherEngine = {
         }).join('').trim();
     },
 
-    encodeCaesar(text, shift) {
+    encodeCaesar(text, shift = 1) {
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         return text.split('').map(char => {
             if (char === ' ') return ' / ';
