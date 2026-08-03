@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRandomizers();
     initHeaderModal();
     initCopyCodesBtn();
+    autoShowBriefingModal(); // Show briefing modal automatically on load
 });
 
 /**
@@ -36,6 +37,19 @@ function showToast(message, type = 'info') {
 }
 
 window.showToast = showToast;
+
+/**
+ * Auto-Open Briefing Modal on Page Load
+ */
+function autoShowBriefingModal() {
+    const modal = document.getElementById('briefing-modal');
+    if (modal) {
+        setTimeout(() => {
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        }, 400); // Slight delay for smooth fade-in entry
+    }
+}
 
 /**
  * 1-Click Preset Templates
@@ -181,6 +195,7 @@ function initHeaderModal() {
     function openModal(e) {
         if (e) e.preventDefault();
         modal.classList.remove('hidden');
+        modal.style.display = 'flex';
         if (window.SoundEngine) window.SoundEngine.playKeyClick();
     }
 
@@ -190,6 +205,7 @@ function initHeaderModal() {
             e.stopPropagation();
         }
         modal.classList.add('hidden');
+        modal.style.display = 'none';
         if (window.SoundEngine) window.SoundEngine.playKeyClick();
     }
 
