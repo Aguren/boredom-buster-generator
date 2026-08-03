@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA PDF GENERATOR ENGINE // CLIENT-SIDE COMPILER
+   HIA PDF GENERATOR ENGINE // PRO-PROPS STYLING
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -87,44 +87,79 @@ async function generateMissionPackPDF() {
     }
 }
 
+/* Background Watermark Helper */
+function addTopSecretWatermark(doc) {
+    doc.saveGraphicsState();
+    doc.setTextColor(240, 210, 215); // Subtle translucent red tint
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(55);
+    
+    // Angled background stamp across center page
+    doc.text("TOP SECRET", 105, 160, {
+        align: "center",
+        angle: 35
+    });
+    doc.restoreGraphicsState();
+}
+
 function buildCoverPage(doc, name, code) {
     doc.setFillColor(18, 24, 36);
     doc.rect(0, 0, 210, 297, 'F');
 
+    // Header Stamp
     doc.setDrawColor(255, 51, 102);
     doc.setLineWidth(1);
-    doc.rect(140, 20, 50, 15);
+    doc.rect(140, 18, 50, 15);
     doc.setTextColor(255, 51, 102);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text("TOP SECRET", 165, 30, { align: "center" });
+    doc.setFontSize(13);
+    doc.text("TOP SECRET", 165, 28, { align: "center" });
 
+    // Agency Badge Ring
     doc.setDrawColor(0, 240, 255);
     doc.setLineWidth(1.5);
-    doc.circle(105, 110, 45, 'S');
+    doc.circle(105, 85, 38, 'S');
 
     doc.setTextColor(255, 183, 0);
-    doc.setFontSize(20);
-    doc.text("AGENT", 105, 100, { align: "center" });
-    doc.setFontSize(32);
-    doc.text(`${code}`, 105, 115, { align: "center" });
-    doc.setFontSize(10);
-    doc.setTextColor(0, 240, 255);
-    doc.text("* CLASSIFIED *", 105, 126, { align: "center" });
-
-    doc.setTextColor(240, 244, 248);
-    doc.setFontSize(22);
-    doc.text("SECRET AGENT MISSION PACK", 105, 180, { align: "center" });
-
-    doc.setFontSize(12);
-    doc.setTextColor(138, 153, 173);
-    doc.text(`IDENTIFICATION: AGENT ${name.toUpperCase()}`, 105, 195, { align: "center" });
-    
+    doc.setFontSize(16);
+    doc.text("AGENT", 105, 78, { align: "center" });
+    doc.setFontSize(28);
+    doc.text(`${code}`, 105, 90, { align: "center" });
     doc.setFontSize(9);
-    doc.text("PROPERTY OF THE HOME INTELLIGENCE AGENCY // FOR AGENT'S EYES ONLY", 105, 270, { align: "center" });
+    doc.setTextColor(0, 240, 255);
+    doc.text("* CLASSIFIED *", 105, 99, { align: "center" });
+
+    // Document Title
+    doc.setTextColor(240, 244, 248);
+    doc.setFontSize(20);
+    doc.text("SECRET AGENT MISSION PACK", 105, 140, { align: "center" });
+
+    // Printable Agent ID Photo Frame
+    doc.setDrawColor(0, 240, 255);
+    doc.setLineWidth(0.8);
+    doc.rect(75, 155, 60, 70, 'S');
+    doc.setDrawColor(100, 100, 100);
+    doc.rect(78, 158, 54, 64, 'S');
+    
+    doc.setTextColor(138, 153, 173);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.text("[ ATTACH AGENT PHOTO HERE ]", 105, 192, { align: "center" });
+
+    // Agent Details Footer
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.text(`AGENT NAME: ${name.toUpperCase()}`, 105, 240, { align: "center" });
+    
+    doc.setFontSize(8);
+    doc.setTextColor(138, 153, 173);
+    doc.text("PROPERTY OF THE HOME INTELLIGENCE AGENCY // FOR AGENT'S EYES ONLY", 105, 275, { align: "center" });
 }
 
 function buildDecoderKeyPage(doc, cipherType) {
+    addTopSecretWatermark(doc);
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(10, 13, 18);
@@ -160,28 +195,44 @@ function buildDecoderKeyPage(doc, cipherType) {
 
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
-    doc.text("TIP: Use '/' to mark spaces between encoded words.", 105, 260, { align: "center" });
+    doc.text("TIP: Use '/' to mark spaces between encoded words.", 105, 265, { align: "center" });
 }
 
 function buildMissionPage(doc, missionNum, rawMessage, cipherType) {
     const isFinal = missionNum === 'FINAL';
 
+    addTopSecretWatermark(doc);
+
+    // Foldable Seal Banner Header
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineDashPattern([2, 2], 0);
+    doc.line(20, 20, 190, 20);
+    doc.setLineDashPattern([], 0);
+
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(120, 120, 120);
+    doc.text(`[ FOLD AND TAPE HERE — DO NOT OPEN UNTIL ${isFinal ? "FINAL MISSION" : "MISSION " + missionNum} ]`, 105, 16, { align: "center" });
+
+    // Mission Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(10, 13, 18);
-    doc.text(isFinal ? "FINAL MISSION" : `MISSION ${missionNum}`, 20, 30);
+    doc.text(isFinal ? "FINAL MISSION" : `MISSION ${missionNum}`, 20, 38);
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(100, 100, 100);
-    doc.text(isFinal ? "You've cracked every code. One last message awaits..." : "Report to headquarters and decode your next assignment.", 20, 38);
+    doc.text(isFinal ? "You've cracked every code. One last message awaits..." : "Report to headquarters and decode your next assignment.", 20, 46);
 
-    doc.line(20, 44, 190, 44);
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 52, 190, 52);
 
-    doc.setFillColor(245, 247, 250);
-    doc.rect(20, 55, 170, 70, 'F');
+    // Encrypted Box
+    doc.setFillColor(248, 249, 252);
+    doc.rect(20, 62, 170, 70, 'F');
     doc.setDrawColor(210, 215, 220);
-    doc.rect(20, 55, 170, 70, 'S');
+    doc.rect(20, 62, 170, 70, 'S');
 
     const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType) : rawMessage;
 
@@ -190,19 +241,22 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType) {
     doc.setTextColor(0, 100, 200);
     
     const splitLines = doc.splitTextToSize(encrypted, 150);
-    doc.text(splitLines, 105, 85, { align: "center" });
+    doc.text(splitLines, 105, 92, { align: "center" });
 
+    // Agent Answer Fill-in Area
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(10, 13, 18);
-    doc.text("MY DECODED MESSAGE:", 20, 150);
+    doc.text("MY DECODED MESSAGE:", 20, 155);
 
-    doc.setDrawColor(150, 150, 150);
-    doc.line(20, 170, 190, 170);
-    doc.line(20, 195, 190, 195);
+    doc.setDrawColor(160, 160, 160);
+    doc.line(20, 175, 190, 175);
+    doc.line(20, 200, 190, 200);
 }
 
 function buildParentInstructionsPage(doc, clues, finalClue) {
+    addTopSecretWatermark(doc);
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(10, 13, 18);
@@ -250,6 +304,8 @@ function buildParentInstructionsPage(doc, clues, finalClue) {
 }
 
 function buildNotebookPage(doc, pageNum) {
+    addTopSecretWatermark(doc);
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
     doc.setTextColor(10, 13, 18);
