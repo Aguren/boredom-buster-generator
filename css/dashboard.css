@@ -743,6 +743,14 @@
     /* Increase touch targets for easy finger tapping */
     .btn-preset, 
     .chip-btn, 
+    /* Active / Selected state for location chips */
+    .chip-btn.active {
+        background: var(--accent-cyan);
+        color: #000;
+        font-weight: 700;
+        border-color: var(--accent-cyan);
+        box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
     .btn-toggle {
         min-height: 38px;
         padding: 0.5rem 0.75rem;
