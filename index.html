@@ -210,10 +210,22 @@
                                     <select id="cipher-type">
                                         <option value="number" selected>A=1 Number Cipher (Default)</option>
                                         <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
+                                        <option value="pigpen">Pigpen Grid Cipher (╍ ║ ╬ ░)</option>
+                                        <option value="reverse">Reverse Mirror Text (KOOL NI)</option>
                                         <option value="caesar">Caesar Shift (+1 Shift)</option>
                                     </select>
                                 </div>
-
+                            <!-- Shift Amount Control (Visible when Caesar is selected) -->
+                                 <div class="input-group hidden" id="caesar-shift-wrapper">
+                                    <label for="caesar-shift-val"><i class="fa-solid fa-arrows-rotate"></i> Shift Amount</label>
+                                    <select id="caesar-shift-val">
+                                        <option value="1" selected>+1 Shift (A ➔ B)</option>
+                                        <option value="2">+2 Shift (A ➔ C)</option>
+                                        <option value="3">+3 Shift (A ➔ D)</option>
+                                        <option value="4">+4 Shift (A ➔ E)</option>
+                                        <option value="5">+5 Shift (A ➔ F)</option>
+                                    </select>
+                                </div>
                                 <div class="input-group">
                                     <label for="clue-count" id="label-clue-count">Number of Clues</label>
                                     <div class="radio-group" id="clue-count-selector">
