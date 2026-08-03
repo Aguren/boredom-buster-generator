@@ -14,7 +14,7 @@
     
     /* Text Contrast Fixes */
     --text-main: #f9f3e6;               /* Crisp Bright Parchment */
-    --text-muted: #d4c4ad;              /* Warm Readable Bone-Cream (Fixes muted labels like INVESTIGATOR) */
+    --text-muted: #e5d3b8;              /* Warm Readable Bone-Cream */
     
     /* Typography */
     --font-heading: 'Special Elite', 'Courier New', monospace;
@@ -26,31 +26,31 @@
     --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
 }
 
-/* Specific contrast tweaks for Dossier elements */
-.theme-dossier .subtitle,
-.theme-dossier .label,
-.theme-dossier .helper-label,
-.theme-dossier .preview-header .label,
-.theme-dossier .input-group label {
-    color: #e5d3b8 !important;        /* Ensures all secondary labels stand out clearly */
+/* STRICTLY SCOPED CONTRAST OVERRIDES FOR VINTAGE DOSSIER ONLY */
+body.theme-dossier .subtitle,
+body.theme-dossier .label,
+body.theme-dossier .helper-label,
+body.theme-dossier .preview-header .label,
+body.theme-dossier .input-group label {
+    color: #e5d3b8 !important;        /* Brightens labels like INVESTIGATOR exclusively in Dossier mode */
     font-weight: 700;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-.theme-dossier .preview-header .value,
-.theme-dossier .cipher-text {
-    color: #ffca68 !important;        /* Bright Golden Amber for player names & encrypted codes */
+body.theme-dossier .preview-header .value,
+body.theme-dossier .cipher-text {
+    color: #ffca68 !important;        /* Golden Amber text exclusively in Dossier mode */
     text-shadow: 0 0 6px rgba(255, 180, 0, 0.3);
 }
 
-.theme-dossier .chip-btn {
+body.theme-dossier .chip-btn {
     background: rgba(190, 150, 90, 0.15);
     border-color: rgba(223, 170, 82, 0.4);
     color: #f9f3e6;
 }
 
-.theme-dossier .chip-btn:hover,
-.theme-dossier .chip-btn.active {
+body.theme-dossier .chip-btn:hover,
+body.theme-dossier .chip-btn.active {
     background: #dfaa52;
     color: #14110e;
     font-weight: 800;
