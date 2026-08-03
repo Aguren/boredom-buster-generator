@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE
+   HIA & MULTI-THEME PDF GENERATOR ENGINE // SAFE WRAPPING & ENCODING
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -191,7 +191,7 @@ function buildDecoderKeyPage(doc, cipherType, theme) {
             encodedChar = window.CipherEngine.encode(letter, cipherType);
         }
 
-        doc.setFontSize(14);
+        doc.setFontSize(13);
         doc.setFont(theme.pdfFont, "bold");
         doc.text(`${letter} = ${encodedChar}`, x, y);
     });
@@ -229,19 +229,37 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 52, 190, 52);
 
+    // Encrypted Content Box
+    const boxX = 20;
+    const boxY = 62;
+    const boxWidth = 170;
+    const boxHeight = 70;
+
     doc.setFillColor(...theme.pdfBoxBg);
-    doc.rect(20, 62, 170, 70, 'F');
+    doc.rect(boxX, boxY, boxWidth, boxHeight, 'F');
     doc.setDrawColor(...theme.pdfBoxBorder);
-    doc.rect(20, 62, 170, 70, 'S');
+    doc.rect(boxX, boxY, boxWidth, boxHeight, 'S');
 
     const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType) : rawMessage;
 
+    // Responsive font scaling & safe wrapping
     doc.setFont("courier", "bold");
-    doc.setFontSize(16);
+    let fontSize = 14;
+    if (encrypted.length > 50) fontSize = 12;
+    if (encrypted.length > 90) fontSize = 10;
+    
+    doc.setFontSize(fontSize);
     doc.setTextColor(...theme.pdfTextEncrypted);
     
-    const splitLines = doc.splitTextToSize(encrypted, 150);
-    doc.text(splitLines, 105, 92, { align: "center" });
+    const maxTextWidth = boxWidth - 20; // 150mm printable width inside box
+    const splitLines = doc.splitTextToSize(encrypted, maxTextWidth);
+
+    // Vertically center lines inside box
+    const lineHeight = fontSize * 0.45;
+    const totalTextHeight = splitLines.length * lineHeight;
+    const startY = boxY + (boxHeight / 2) - (totalTextHeight / 2) + (lineHeight / 2);
+
+    doc.text(splitLines, 105, startY, { align: "center" });
 
     doc.setFont(theme.pdfFont, "bold");
     doc.setFontSize(11);
@@ -254,8 +272,9 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
         doc.setTextColor(140, 140, 140);
 
         let hintPattern = rawMessage.split('').map(c => c === ' ' ? '   ' : '_ ').join('');
-        doc.text(hintPattern, 20, 172);
-        doc.line(20, 195, 190, 195);
+        const splitHints = doc.splitTextToSize(hintPattern, 170);
+        doc.text(splitHints, 20, 170);
+        doc.line(20, 200, 190, 200);
     } else {
         doc.setDrawColor(160, 160, 160);
         doc.line(20, 175, 190, 175);
@@ -372,7 +391,7 @@ function buildCertificatePage(doc, name, theme) {
     doc.circle(105, 175, 25, 'S');
     doc.setFontSize(10);
     doc.text("OFFICIAL SEAL", 105, 173, { align: "center" });
-    doc.text("★ PASSED ★", 105, 180, { align: "center" });
+    doc.text("PASSED", 105, 180, { align: "center" });
 
     doc.line(40, 235, 90, 235);
     doc.text("Parent Signature", 65, 242, { align: "center" });
