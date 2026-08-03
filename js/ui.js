@@ -304,6 +304,8 @@ function initLivePreview() {
     const juniorAgentNameInput = document.getElementById('junior-agent-name');
     const juniorAgentCodeInput = document.getElementById('junior-agent-code');
     const cipherTypeSelect = document.getElementById('cipher-type');
+    const shiftValSelect = document.getElementById('caesar-shift-val');
+    const shiftWrapper = document.getElementById('caesar-shift-wrapper');
     const previewAgentName = document.getElementById('preview-agent-name');
     const previewMissionsContainer = document.getElementById('preview-missions-list');
 
@@ -314,6 +316,13 @@ function initLivePreview() {
         const name = juniorAgentNameInput.value.trim() || 'HERO';
         const code = juniorAgentCodeInput.value.trim() || '007';
         previewAgentName.textContent = `${name.toUpperCase()} (${code})`;
+
+        // Toggle Caesar Shift Selector Visibility
+        if (cipherTypeSelect.value === 'caesar') {
+            if (shiftWrapper) shiftWrapper.classList.remove('hidden');
+        } else {
+            if (shiftWrapper) shiftWrapper.classList.add('hidden');
+        }
 
         const activeClues = [];
         const clue1 = document.getElementById('clue-1');
@@ -341,10 +350,11 @@ function initLivePreview() {
 
         previewMissionsContainer.innerHTML = '';
         const selectedCipher = cipherTypeSelect.value;
+        const shiftAmount = shiftValSelect ? shiftValSelect.value : 1;
 
         activeClues.forEach(item => {
             const rawMessage = item.element.value.trim() || item.defaultText;
-            const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher) : rawMessage;
+            const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher, shiftAmount) : rawMessage;
 
             const box = document.createElement('div');
             box.className = 'preview-mission-box';
@@ -384,6 +394,13 @@ function initLivePreview() {
         if (window.SoundEngine) window.SoundEngine.playBlip();
         updatePreview(true);
     });
+
+    if (shiftValSelect) {
+        shiftValSelect.addEventListener('change', () => {
+            if (window.SoundEngine) window.SoundEngine.playBlip();
+            updatePreview(true);
+        });
+    }
 
     updatePreview(false);
 }
