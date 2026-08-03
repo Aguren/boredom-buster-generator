@@ -5,6 +5,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     initClueCountToggles();
     initLivePreview();
+    // Add theme switcher event listener
+const themeSwitcher = document.getElementById('theme-switcher');
+if (themeSwitcher) {
+    themeSwitcher.addEventListener('change', (e) => {
+        const chosenTheme = e.target.value;
+        document.body.className = chosenTheme;
+        
+        if (window.SoundEngine) {
+            window.SoundEngine.playBlip();
+        }
+    });
+}
 });
 
 /**

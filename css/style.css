@@ -36,6 +36,69 @@
     --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ==========================================================================
+   THEME VARIATIONS // SPY, STEALTH & VINTAGE DOSSIER
+   ========================================================================== */
+
+/* 1. Default CIA Cyan (Active via body.theme-spy) */
+body.theme-spy {
+    --bg-dark: #0a0d12;
+    --panel-bg: rgba(18, 24, 36, 0.65);
+    --panel-border: rgba(0, 240, 255, 0.18);
+    --accent-cyan: #00f0ff;
+    --accent-cyan-glow: rgba(0, 240, 255, 0.35);
+    --text-main: #f0f4f8;
+}
+
+/* 2. Stealth Ops (Red & Matte Black) */
+body.theme-stealth {
+    --bg-dark: #080506;
+    --panel-bg: rgba(26, 12, 16, 0.7);
+    --panel-border: rgba(255, 51, 102, 0.3);
+    --accent-cyan: #ff3366;
+    --accent-cyan-glow: rgba(255, 51, 102, 0.4);
+    --text-main: #fff0f3;
+}
+
+/* 3. Vintage Dossier (Classified Manila Folder Paper Aesthetic) */
+body.theme-dossier {
+    --bg-dark: #1e1b18;
+    --panel-bg: rgba(245, 238, 220, 0.9);
+    --panel-border: rgba(180, 140, 90, 0.4);
+    --accent-cyan: #993300;
+    --accent-cyan-glow: rgba(153, 51, 0, 0.2);
+    --text-main: #2b2520;
+    --text-muted: #5c5248;
+}
+
+body.theme-dossier .glass-panel {
+    color: var(--text-main);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.theme-dossier input,
+body.theme-dossier select {
+    background: #eae1cb;
+    color: #2b2520;
+    border-color: #b8a686;
+}
+
+/* Header Theme Selector Styling */
+.theme-selector-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-cyan);
+}
+
+.theme-selector-wrapper select {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
 /* Base Reset */
 * {
     box-sizing: border-box;
