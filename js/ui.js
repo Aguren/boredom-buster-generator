@@ -9,12 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initRandomizers();
     initHeaderModal();
     initCopyCodesBtn();
-    autoShowBriefingModal(); // Show briefing modal automatically on load
+    autoShowBriefingModal();
 });
 
-/**
- * Toast Notification System
- */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -38,22 +35,16 @@ function showToast(message, type = 'info') {
 
 window.showToast = showToast;
 
-/**
- * Auto-Open Briefing Modal on Page Load
- */
 function autoShowBriefingModal() {
     const modal = document.getElementById('briefing-modal');
     if (modal) {
         setTimeout(() => {
             modal.classList.remove('hidden');
             modal.style.display = 'flex';
-        }, 400); // Slight delay for smooth fade-in entry
+        }, 400);
     }
 }
 
-/**
- * 1-Click Preset Templates
- */
 function initPresets() {
     const presetButtons = document.querySelectorAll('.btn-preset');
     
@@ -104,9 +95,6 @@ function initPresets() {
     });
 }
 
-/**
- * Randomize / Shuffle Clue Button logic
- */
 function initRandomizers() {
     const themeCluePools = {
         'theme-spy': [
@@ -152,9 +140,6 @@ function initRandomizers() {
     });
 }
 
-/**
- * Copy Codes to Clipboard Button
- */
 function initCopyCodesBtn() {
     const btn = document.getElementById('btn-copy-code');
     if (!btn) return;
@@ -181,9 +166,6 @@ function initCopyCodesBtn() {
     });
 }
 
-/**
- * Parent Briefing Modal Logic (Bulletproof Handler)
- */
 function initHeaderModal() {
     const btnOpen = document.getElementById('btn-open-briefing');
     const modal = document.getElementById('briefing-modal');
@@ -209,28 +191,15 @@ function initHeaderModal() {
         if (window.SoundEngine) window.SoundEngine.playKeyClick();
     }
 
-    if (btnOpen) {
-        btnOpen.onclick = openModal;
-    }
-
-    if (btnClose) {
-        btnClose.onclick = closeModal;
-    }
-
-    if (btnDismiss) {
-        btnDismiss.onclick = closeModal;
-    }
+    if (btnOpen) btnOpen.onclick = openModal;
+    if (btnClose) btnClose.onclick = closeModal;
+    if (btnDismiss) btnDismiss.onclick = closeModal;
 
     modal.onclick = (e) => {
-        if (e.target === modal) {
-            closeModal(e);
-        }
+        if (e.target === modal) closeModal(e);
     };
 }
 
-/**
- * Handles 3, 4, or 5 clue toggle button logic
- */
 function initClueCountToggles() {
     const clueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
     const clue4Wrapper = document.getElementById('clue-4-wrapper');
@@ -271,9 +240,6 @@ function initClueCountToggles() {
     });
 }
 
-/**
- * Text Scrambler Effect for dynamic cipher feedback
- */
 function scrambleText(targetElement, finalString) {
     const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚✦✧⚔️⚓';
     let iterations = 0;
@@ -297,15 +263,10 @@ function scrambleText(targetElement, finalString) {
     }, 25);
 }
 
-/**
- * Listens for user input to keep ALL mission clues updated in real time
- */
 function initLivePreview() {
     const juniorAgentNameInput = document.getElementById('junior-agent-name');
     const juniorAgentCodeInput = document.getElementById('junior-agent-code');
     const cipherTypeSelect = document.getElementById('cipher-type');
-    const shiftValSelect = document.getElementById('caesar-shift-val');
-    const shiftWrapper = document.getElementById('caesar-shift-wrapper');
     const previewAgentName = document.getElementById('preview-agent-name');
     const previewMissionsContainer = document.getElementById('preview-missions-list');
 
@@ -316,13 +277,6 @@ function initLivePreview() {
         const name = juniorAgentNameInput.value.trim() || 'HERO';
         const code = juniorAgentCodeInput.value.trim() || '007';
         previewAgentName.textContent = `${name.toUpperCase()} (${code})`;
-
-        // Toggle Caesar Shift Selector Visibility
-        if (cipherTypeSelect.value === 'caesar') {
-            if (shiftWrapper) shiftWrapper.classList.remove('hidden');
-        } else {
-            if (shiftWrapper) shiftWrapper.classList.add('hidden');
-        }
 
         const activeClues = [];
         const clue1 = document.getElementById('clue-1');
@@ -350,11 +304,10 @@ function initLivePreview() {
 
         previewMissionsContainer.innerHTML = '';
         const selectedCipher = cipherTypeSelect.value;
-        const shiftAmount = shiftValSelect ? shiftValSelect.value : 1;
 
         activeClues.forEach(item => {
             const rawMessage = item.element.value.trim() || item.defaultText;
-            const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher, shiftAmount) : rawMessage;
+            const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, selectedCipher) : rawMessage;
 
             const box = document.createElement('div');
             box.className = 'preview-mission-box';
@@ -394,13 +347,6 @@ function initLivePreview() {
         if (window.SoundEngine) window.SoundEngine.playBlip();
         updatePreview(true);
     });
-
-    if (shiftValSelect) {
-        shiftValSelect.addEventListener('change', () => {
-            if (window.SoundEngine) window.SoundEngine.playBlip();
-            updatePreview(true);
-        });
-    }
 
     updatePreview(false);
 }
