@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA & MULTI-THEME PDF GENERATOR ENGINE // FULL EXPANDED CIPHER SUPPORT
+   HIA & MULTI-THEME PDF GENERATOR ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,9 +27,7 @@ async function generateMissionPackPDF() {
     const agentName = document.getElementById('junior-agent-name').value.trim() || 'HERO';
     const agentCode = document.getElementById('junior-agent-code').value.trim() || '007';
     const cipherType = document.getElementById('cipher-type').value;
-    const shiftAmount = document.getElementById('caesar-shift-val')?.value || 1;
     
-    // Checkbox Options
     const includeHints = document.getElementById('opt-include-hints')?.checked ?? true;
     const includeCert = document.getElementById('opt-include-cert')?.checked ?? true;
 
@@ -63,15 +61,15 @@ async function generateMissionPackPDF() {
         buildCoverPage(doc, agentName, agentCode, currentTheme);
 
         doc.addPage();
-        buildDecoderKeyPage(doc, cipherType, currentTheme, shiftAmount);
+        buildDecoderKeyPage(doc, cipherType, currentTheme);
 
         clues.forEach((clueText, idx) => {
             doc.addPage();
-            buildMissionPage(doc, idx + 1, clueText, cipherType, currentTheme, includeHints, shiftAmount);
+            buildMissionPage(doc, idx + 1, clueText, cipherType, currentTheme, includeHints);
         });
 
         doc.addPage();
-        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, currentTheme, includeHints, shiftAmount);
+        buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType, currentTheme, includeHints);
 
         doc.addPage();
         buildParentInstructionsPage(doc, clues, finalRewardClue, currentTheme);
@@ -162,7 +160,7 @@ function buildCoverPage(doc, name, code, theme) {
     doc.text(`PROPERTY OF ${theme.mainTitle} // FOR YOUR EYES ONLY`, 105, 275, { align: "center" });
 }
 
-function buildDecoderKeyPage(doc, cipherType, theme, shiftAmount = 1) {
+function buildDecoderKeyPage(doc, cipherType, theme) {
     addTopSecretWatermark(doc, theme);
 
     doc.setFont(theme.pdfFont, "bold");
@@ -190,7 +188,7 @@ function buildDecoderKeyPage(doc, cipherType, theme, shiftAmount = 1) {
 
         let encodedChar = '';
         if (window.CipherEngine) {
-            encodedChar = window.CipherEngine.encode(letter, cipherType, shiftAmount);
+            encodedChar = window.CipherEngine.encode(letter, cipherType);
         }
 
         doc.setFontSize(14);
@@ -203,7 +201,7 @@ function buildDecoderKeyPage(doc, cipherType, theme, shiftAmount = 1) {
     doc.text("TIP: Use '/' to mark spaces between encoded words.", 105, 265, { align: "center" });
 }
 
-function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includeHints, shiftAmount = 1) {
+function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includeHints) {
     const isFinal = missionNum === 'FINAL';
 
     addTopSecretWatermark(doc, theme);
@@ -236,7 +234,7 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     doc.setDrawColor(...theme.pdfBoxBorder);
     doc.rect(20, 62, 170, 70, 'S');
 
-    const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType, shiftAmount) : rawMessage;
+    const encrypted = window.CipherEngine ? window.CipherEngine.encode(rawMessage, cipherType) : rawMessage;
 
     doc.setFont("courier", "bold");
     doc.setFontSize(16);
@@ -250,7 +248,6 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType, theme, includ
     doc.setTextColor(...theme.pdfTextPrimary);
     doc.text("MY DECODED MESSAGE:", 20, 155);
 
-    // Dynamic Letter Hint blanks
     if (includeHints) {
         doc.setFont("courier", "normal");
         doc.setFontSize(10);
@@ -341,7 +338,6 @@ function buildNotebookPage(doc, pageNum, theme) {
     doc.rect(20, 130, 170, 130, 'S');
 }
 
-/* Bonus Printable Certificate Page */
 function buildCertificatePage(doc, name, theme) {
     doc.setDrawColor(...theme.pdfBadgeColor);
     doc.setLineWidth(2);
