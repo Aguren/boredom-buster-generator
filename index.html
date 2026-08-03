@@ -112,17 +112,24 @@
                 <div class="brand">
                     <i class="fa-solid fa-shield-cat"></i>
                     <span>HIA // MISSION CONTROL</span>
-                </div>
-                <div class="user-profile">
-                    <span id="display-agent-id">AGENT PARENT</span>
-                    <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
-                </div>
-                <div class="brand">
-                    <i class="fa-solid fa-shield-cat"></i>
-                    <span>HIA // MISSION CONTROL</span>
                     <div class="radar-widget">
                         <div class="radar-sweep"></div>
                     </div>
+                </div>
+
+                <!-- Theme Switcher Selector -->
+                <div class="theme-selector-wrapper">
+                    <i class="fa-solid fa-palette"></i>
+                    <select id="theme-switcher">
+                        <option value="theme-spy" selected>CIA CYAN</option>
+                        <option value="theme-stealth">STEALTH OPS</option>
+                        <option value="theme-dossier">VINTAGE DOSSIER</option>
+                    </select>
+                </div>
+
+                <div class="user-profile">
+                    <span id="display-agent-id">AGENT PARENT</span>
+                    <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
                 </div>
             </header>
 
@@ -220,9 +227,9 @@
 
                         <div class="preview-body">
                             <!-- Dynamic Encrypted Clues Container -->
-                                <div id="preview-missions-list" class="preview-missions-list">
+                            <div id="preview-missions-list" class="preview-missions-list">
                                 <!-- Live mission previews will be injected here automatically by js/ui.js -->
-                                </div>
+                            </div>
                         </div>
 
                         <div class="preview-footer">
