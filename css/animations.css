@@ -1,0 +1,81 @@
+/* ==========================================================================
+   KEYFRAMES & SCREEN TRANSITION ANIMATIONS
+   ========================================================================== */
+
+/* View Transition Fade/Slide */
+.view-screen.active {
+    animation: screenFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes screenFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Auth Card Subtle Pulse Glow */
+.auth-card {
+    animation: cardGlowPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes cardGlowPulse {
+    0% {
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(0, 240, 255, 0.05);
+    }
+    100% {
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 240, 255, 0.15);
+    }
+}
+
+/* Pulsing Online Badge Dot */
+.status-indicator.online {
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+    }
+}
+
+/* Terminal Line Slide-In */
+.terminal-line.animate-in {
+    animation: lineReveal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes lineReveal {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Classified Stamp Slam Effect */
+.classified-stamp {
+    animation: stampSlam 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes stampSlam {
+    from {
+        opacity: 0;
+        transform: scale(2) rotate(25deg);
+    }
+    to {
+        opacity: 0.85;
+        transform: scale(1) rotate(8deg);
+    }
+}
