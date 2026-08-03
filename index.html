@@ -220,7 +220,7 @@
                                 </div>
                                 <select id="cipher-type">
                                     <option value="number" selected>A=1 Number Cipher (Default)</option>
-                                    <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
+                                    <option value="symbol">Symbol / Rune Cipher (# @ $ %)</option>
                                     <option value="pigpen">Pigpen Grid Cipher (|1 +2 #3)</option>
                                     <option value="reverse">Reverse Mirror Text (KOOL NI)</option>
                                     <option value="caesar">Caesar Shift (+1 Shift)</option>
@@ -246,6 +246,25 @@
                                     <input type="checkbox" id="opt-include-cert" checked>
                                     <span>Include Completion Certificate Page</span>
                                 </label>
+                            </div>
+
+                            <!-- Certificate Customizer Controls -->
+                            <div class="form-row cert-customizer-row" id="cert-customizer-wrapper">
+                                <div class="input-group">
+                                    <label for="cert-award-title"><i class="fa-solid fa-award"></i> Custom Award Title</label>
+                                    <input type="text" id="cert-award-title" placeholder="e.g. MASTER DECODER / GRAND MAGE" value="MASTER DECODER">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="cert-stamp-seal"><i class="fa-solid fa-stamp"></i> Official Seal Mark</label>
+                                    <select id="cert-stamp-seal">
+                                        <option value="PASSED" selected>★ PASSED ★</option>
+                                        <option value="APPROVED">✔ APPROVED ✔</option>
+                                        <option value="TOP SECRET">🔒 TOP SECRET 🔒</option>
+                                        <option value="ROYAL SEAL">👑 ROYAL SEAL 👑</option>
+                                        <option value="CLEARED">⚡ CLEARED ⚡</option>
+                                    </select>
+                                </div>
                             </div>
                         </fieldset>
 
