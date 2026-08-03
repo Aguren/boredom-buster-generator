@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderModal();
     initCopyCodesBtn();
     autoShowBriefingModal();
+    initCertToggle();
 });
 
+/**
+ * Toast Notification System
+ */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -35,6 +39,9 @@ function showToast(message, type = 'info') {
 
 window.showToast = showToast;
 
+/**
+ * Auto-Open Briefing Modal on Page Load
+ */
 function autoShowBriefingModal() {
     const modal = document.getElementById('briefing-modal');
     if (modal) {
@@ -45,6 +52,34 @@ function autoShowBriefingModal() {
     }
 }
 
+/**
+ * Toggles visibility of the Certificate customization controls
+ */
+function initCertToggle() {
+    const certCheckbox = document.getElementById('opt-include-cert');
+    const certWrapper = document.getElementById('cert-customizer-wrapper');
+
+    if (!certCheckbox || !certWrapper) return;
+
+    const updateCertVisibility = () => {
+        if (certCheckbox.checked) {
+            certWrapper.classList.remove('hidden');
+        } else {
+            certWrapper.classList.add('hidden');
+        }
+    };
+
+    certCheckbox.addEventListener('change', () => {
+        if (window.SoundEngine) window.SoundEngine.playKeyClick();
+        updateCertVisibility();
+    });
+
+    updateCertVisibility();
+}
+
+/**
+ * 1-Click Preset Templates
+ */
 function initPresets() {
     const presetButtons = document.querySelectorAll('.btn-preset');
     
@@ -95,6 +130,9 @@ function initPresets() {
     });
 }
 
+/**
+ * Randomize / Shuffle Clue Button logic
+ */
 function initRandomizers() {
     const themeCluePools = {
         'theme-spy': [
@@ -140,6 +178,9 @@ function initRandomizers() {
     });
 }
 
+/**
+ * Copy Codes to Clipboard Button
+ */
 function initCopyCodesBtn() {
     const btn = document.getElementById('btn-copy-code');
     if (!btn) return;
@@ -166,6 +207,9 @@ function initCopyCodesBtn() {
     });
 }
 
+/**
+ * Parent Briefing Modal Logic
+ */
 function initHeaderModal() {
     const btnOpen = document.getElementById('btn-open-briefing');
     const modal = document.getElementById('briefing-modal');
@@ -200,6 +244,9 @@ function initHeaderModal() {
     };
 }
 
+/**
+ * Handles 3, 4, or 5 clue toggle button logic
+ */
 function initClueCountToggles() {
     const clueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
     const clue4Wrapper = document.getElementById('clue-4-wrapper');
@@ -240,6 +287,9 @@ function initClueCountToggles() {
     });
 }
 
+/**
+ * Text Scrambler Effect for dynamic cipher feedback
+ */
 function scrambleText(targetElement, finalString) {
     const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/★♦▲✚✦✧⚔️⚓';
     let iterations = 0;
@@ -263,6 +313,9 @@ function scrambleText(targetElement, finalString) {
     }, 25);
 }
 
+/**
+ * Listens for user input to keep ALL mission clues updated in real time
+ */
 function initLivePreview() {
     const juniorAgentNameInput = document.getElementById('junior-agent-name');
     const juniorAgentCodeInput = document.getElementById('junior-agent-code');
