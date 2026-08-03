@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MULTI-THEME MANAGER ENGINE // REAL-TIME LOGIN & UI ADAPTER
+   MULTI-THEME MANAGER ENGINE // DICTIONARY & REAL-TIME ADAPTER
    ========================================================================== */
 
 const ThemeManager = {
@@ -43,7 +43,6 @@ const ThemeManager = {
             targetLabel: 'TARGET AGENT:',
             previewFooter: 'AUTO-ENCODED VIA HIA ENCRYPTION ENGINE',
             btnCompileText: 'COMPILE & DOWNLOAD MISSION PACK',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [18, 24, 36],
             pdfCoverText: [240, 244, 248],
@@ -96,7 +95,6 @@ const ThemeManager = {
             targetLabel: 'OPERATIVE:',
             previewFooter: 'ENCRYPTED VIA TACTICAL COMM MATRIX',
             btnCompileText: 'COMPILE TACTICAL DOSSIER PDF',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [8, 5, 6],
             pdfCoverText: [255, 240, 243],
@@ -149,7 +147,6 @@ const ThemeManager = {
             targetLabel: 'INVESTIGATOR:',
             previewFooter: 'STAMPED & FILED VIA AGENCY ARCHIVES',
             btnCompileText: 'PRINT CLASSIFIED DOSSIER PACK',
-            // PDF Styles
             pdfFont: 'courier',
             pdfCoverBg: [235, 224, 200],
             pdfCoverText: [43, 37, 32],
@@ -202,7 +199,6 @@ const ThemeManager = {
             targetLabel: 'APPRENTICE:',
             previewFooter: 'ENCHANTED VIA ACADEMY SPELLBOOK',
             btnCompileText: 'PRINT MAGIC SPELLBOOK PDF',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [30, 15, 45],
             pdfCoverText: [250, 230, 255],
@@ -255,7 +251,6 @@ const ThemeManager = {
             targetLabel: 'ROYAL HERO:',
             previewFooter: 'AUTHENTICATED BY ROYAL COURT SEAL',
             btnCompileText: 'PRINT ROYAL QUEST PACK PDF',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [45, 10, 25],
             pdfCoverText: [255, 235, 242],
@@ -308,7 +303,6 @@ const ThemeManager = {
             targetLabel: 'LEAD SLEUTH:',
             previewFooter: 'VERIFIED BY SLEUTH CLUB DETECTIVES',
             btnCompileText: 'PRINT SLEUTH CASE FILE PDF',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [15, 35, 40],
             pdfCoverText: [230, 250, 250],
@@ -328,7 +322,7 @@ const ThemeManager = {
             mainTitle: 'PIRATE TREASURE HUNT',
             subTitle: 'HIGH SEAS MAP & CIPHER DECODER',
             badgeIcon: 'fa-solid fa-skull-crossbones',
-            secLabel: 'CAPTAIN\'S LOG // SECRET TREASURE',
+            secLabel: "CAPTAIN'S LOG // SECRET TREASURE",
             parentIdLabel: 'CAPTAIN CALLSIGN',
             parentIdIcon: 'fa-solid fa-anchor',
             authBtnText: 'UNLOCK TREASURE CHEST',
@@ -344,7 +338,7 @@ const ThemeManager = {
                 "Marking X on the Treasure Spot...",
                 "MAP UNLOCKED // AHOY CAPTAIN"
             ],
-            brandText: 'BLACK SAIL // CAPTAIN\'S QUARTERS',
+            brandText: "BLACK SAIL // CAPTAIN'S QUARTERS",
             brandIcon: 'fa-solid fa-ship',
             specTitle: 'TREASURE VOYAGE PARAMETERS',
             heroLegend: 'BUCCANEER PROFILE',
@@ -361,7 +355,6 @@ const ThemeManager = {
             targetLabel: 'CAPTAIN:',
             previewFooter: 'ENCODED VIA PIRATE CODE WHEEL',
             btnCompileText: 'PRINT TREASURE MAP PACK PDF',
-            // PDF Styles
             pdfFont: 'courier',
             pdfCoverBg: [35, 22, 10],
             pdfCoverText: [250, 235, 210],
@@ -372,7 +365,7 @@ const ThemeManager = {
             pdfTextPrimary: [35, 22, 10],
             pdfTextEncrypted: [160, 60, 0],
             pdfTitleText: "PIRATE TREASURE HUNT MAP PACK",
-            pdfInstructionsTitle: "CAPTAIN\'S GUIDE // PARENT CHEAT SHEET",
+            pdfInstructionsTitle: "CAPTAIN'S GUIDE // PARENT CHEAT SHEET",
             pdfNotebookTitle: "BUCCANEER VOYAGE LOG"
         },
         'theme-galaxy': {
@@ -414,7 +407,6 @@ const ThemeManager = {
             targetLabel: 'COMMANDER:',
             previewFooter: 'TRANSMITTED VIA GALACTIC STAR COMM',
             btnCompileText: 'PRINT SPACE MISSION PACK PDF',
-            // PDF Styles
             pdfFont: 'helvetica',
             pdfCoverBg: [10, 15, 35],
             pdfCoverText: [230, 245, 255],
@@ -433,7 +425,6 @@ const ThemeManager = {
     currentThemeId: 'theme-spy',
 
     init() {
-        // Sync master theme dropdowns
         const masterSelect = document.getElementById('master-theme-select');
         const headerSelect = document.getElementById('theme-switcher');
 
@@ -449,7 +440,7 @@ const ThemeManager = {
             });
         }
 
-        // Set initial default theme
+        // Apply default theme on page load
         this.applyTheme('theme-spy');
     },
 
@@ -458,16 +449,16 @@ const ThemeManager = {
         const theme = this.themes[themeId];
         this.currentThemeId = themeId;
 
-        // 1. Update Body Class for CSS Overrides
+        // Apply body class for visual styling
         document.body.className = theme.id;
 
-        // 2. Sync both dropdown selectors
+        // Sync both dropdown elements
         const masterSelect = document.getElementById('master-theme-select');
         const headerSelect = document.getElementById('theme-switcher');
         if (masterSelect) masterSelect.value = theme.id;
         if (headerSelect) headerSelect.value = theme.id;
 
-        // 3. Update DOM Labels & Icons across Auth Screen (INSTANT LOGIN SCREEN TRANSFORM)
+        // Update Login Card UI elements
         const mainTitle = document.getElementById('theme-main-title');
         const subTitle = document.getElementById('theme-sub-title');
         const badgeIcon = document.getElementById('theme-badge-icon');
@@ -490,11 +481,11 @@ const ThemeManager = {
         if (footerLeft) footerLeft.textContent = theme.authFooterLeft;
         if (footerRight) footerRight.textContent = theme.authFooterRight;
 
-        // 4. Update Terminal Title
+        // Update Terminal Title
         const termTitle = document.getElementById('terminal-title');
         if (termTitle) termTitle.textContent = theme.bootTitle;
 
-        // 5. Update Navigation & Dashboard Panel Header
+        // Update Navigation & Dashboard Header
         const brandText = document.getElementById('header-brand-text');
         const brandIcon = document.getElementById('header-brand-icon');
         const specTitle = document.getElementById('panel-spec-title');
@@ -529,7 +520,7 @@ const ThemeManager = {
             finalClueLabel.innerHTML = `<i class="fa-solid fa-trophy"></i> ${theme.finalClueLabel}`;
         }
 
-        // 6. Update Preview Panel Labels
+        // Update Preview Panel Labels
         const previewTitle = document.getElementById('panel-preview-title');
         const stampText = document.getElementById('preview-top-stamp');
         const targetLabel = document.getElementById('preview-label-target');
@@ -544,12 +535,10 @@ const ThemeManager = {
         }
         if (btnCompileText) btnCompileText.textContent = theme.btnCompileText;
 
-        // 7. Refresh Live Encryption Preview
         if (window.refreshLivePreview) {
             window.refreshLivePreview();
         }
 
-        // Audio Feedback on Theme Change
         if (window.SoundEngine) {
             window.SoundEngine.playBlip();
         }
@@ -561,3 +550,10 @@ const ThemeManager = {
 };
 
 window.ThemeManager = ThemeManager;
+
+// Self-initializing listener trigger
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ThemeManager.init());
+} else {
+    ThemeManager.init();
+}
