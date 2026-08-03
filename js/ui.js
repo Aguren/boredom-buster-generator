@@ -1,11 +1,201 @@
 /* ==========================================================================
-   MISSION CONTROL UI ENGINE // MULTI-THEME LIVE PREVIEW & TEXT SCRAMBLER
+   MISSION CONTROL UI ENGINE // PRESETS, RANDOMIZER, TOASTS & MODALS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
     initClueCountToggles();
     initLivePreview();
+    initPresets();
+    initRandomizers();
+    initHeaderModal();
+    initCopyCodesBtn();
 });
+
+/**
+ * Toast Notification System
+ */
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-item ${type} animate-in`;
+    
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    if (type === 'warn') icon = 'fa-triangle-exclamation';
+
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 2800);
+}
+
+window.showToast = showToast;
+
+/**
+ * 1-Click Preset Templates
+ */
+function initPresets() {
+    const presetButtons = document.querySelectorAll('.btn-preset');
+    
+    const presets = {
+        indoor: [
+            'LOOK IN THE FRIDGE',
+            'CHECK UNDER YOUR PILLOW',
+            'LOOK BEHIND THE MIRROR',
+            'CHECK INSIDE THE COUCH',
+            'LOOK INSIDE YOUR SHOE'
+        ],
+        bedtime: [
+            'CHECK INSIDE YOUR PJ DRAWER',
+            'LOOK BEHIND YOUR BEDLAMP',
+            'CHECK NEAR YOUR TOOTHBRUSH',
+            'LOOK UNDER YOUR BLANKET',
+            'CHECK YOUR NIGHTSTAND'
+        ],
+        backyard: [
+            'LOOK INSIDE THE MAILBOX',
+            'CHECK UNDER THE PATIO CHAIR',
+            'LOOK BEHIND THE FLOWER POT',
+            'CHECK NEAR THE GARDEN HOSE',
+            'LOOK UNDER THE BACK DOOR MAT'
+        ]
+    };
+
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-preset');
+            const list = presets[key];
+            if (!list) return;
+
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+
+            document.getElementById('clue-1').value = list[0];
+            document.getElementById('clue-2').value = list[1];
+            document.getElementById('clue-3').value = list[2];
+            document.getElementById('clue-4').value = list[3];
+            document.getElementById('clue-5').value = list[4];
+
+            if (window.refreshLivePreview) {
+                window.refreshLivePreview();
+            }
+
+            showToast(`Loaded ${key.toUpperCase()} Preset Clues`, 'success');
+        });
+    });
+}
+
+/**
+ * Randomize / Shuffle Clue Button logic
+ */
+function initRandomizers() {
+    const themeCluePools = {
+        'theme-spy': [
+            'CHECK UNDER THE SOFA CUSHION', 'LOOK IN THE REFRIGERATOR', 'SEARCH BEHIND THE MIRROR',
+            'INSPECT INSIDE YOUR SHOE', 'EXAMINE THE MAILBOX', 'LOOK INSIDE THE TOOTHBRUSH CUP'
+        ],
+        'theme-magic': [
+            'SEEK THE ENCHANTED MIRROR', 'SEARCH THE POTION CABINET', 'LOOK INSIDE YOUR SPELL SATCHEL',
+            'CHECK BENEATH THE MAGIC BED', 'EXAMINE THE CRYSTAL SHELF', 'SEARCH THE GARDEN FLOWER POT'
+        ],
+        'theme-royal': [
+            'SEEK THE PALACE THRONE', 'CHECK INSIDE THE JEWELRY BOX', 'SEARCH THE ROYAL GARDEN HOSE',
+            'LOOK BEHIND THE VELVET DRESSER', 'CHECK UNDER THE CROWN PILLOW', 'EXAMINE THE KINGDOM MAILBOX'
+        ],
+        'theme-pirate': [
+            'SEEK THE LOOKING GLASS MIRROR', 'CHECK THE GALLEY FRIDGE', 'LOOK INSIDE THE CAPTAIN COUCH',
+            'SEARCH THE BUCCANEER SHOE', 'CHECK BENEATH THE DECK MAT', 'LOOK INSIDE THE SEA MAILBOX'
+        ],
+        'theme-galaxy': [
+            'SCAN SECTOR REFRIGERATOR', 'CHECK SUB-SPACE PILLOW', 'LOOK BEHIND OPTICAL MIRROR',
+            'INSPECT STARSHIP COUCH', 'SCAN FLEET MAILBOX POD', 'CHECK OXYGEN SHOE CHAMBER'
+        ]
+    };
+
+    const buttons = document.querySelectorAll('.btn-random-clue');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            const currentThemeId = window.ThemeManager ? window.ThemeManager.currentThemeId : 'theme-spy';
+            const pool = themeCluePools[currentThemeId] || themeCluePools['theme-spy'];
+
+            const randomClue = pool[Math.floor(Math.random() * pool.length)];
+            input.value = randomClue;
+
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            if (window.refreshLivePreview) window.refreshLivePreview();
+
+            showToast("Shuffled Theme Clue", "info");
+        });
+    });
+}
+
+/**
+ * Copy Codes to Clipboard Button
+ */
+function initCopyCodesBtn() {
+    const btn = document.getElementById('btn-copy-code');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+        const listContainer = document.getElementById('preview-missions-list');
+        if (!listContainer) return;
+
+        const boxes = listContainer.querySelectorAll('.preview-mission-box');
+        let textOutput = "=== ADVENTURE CODES ===\n";
+
+        boxes.forEach(b => {
+            const tag = b.querySelector('.mission-tag')?.textContent || '';
+            const enc = b.querySelector('.cipher-text')?.textContent || '';
+            textOutput += `${tag}: ${enc}\n`;
+        });
+
+        navigator.clipboard.writeText(textOutput).then(() => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            showToast("Copied Encrypted Codes to Clipboard!", "success");
+        }).catch(() => {
+            showToast("Failed to copy codes", "warn");
+        });
+    });
+}
+
+/**
+ * Parent Briefing Modal logic
+ */
+function initHeaderModal() {
+    const btnOpen = document.getElementById('btn-open-briefing');
+    const modal = document.getElementById('briefing-modal');
+    const btnClose = document.getElementById('btn-close-modal');
+    const btnDismiss = document.getElementById('btn-dismiss-modal');
+
+    if (!modal) return;
+
+    const openModal = () => {
+        if (window.SoundEngine) window.SoundEngine.playKeyClick();
+        modal.classList.remove('hidden');
+    };
+
+    const closeModal = () => {
+        if (window.SoundEngine) window.SoundEngine.playKeyClick();
+        modal.classList.add('hidden');
+    };
+
+    if (btnOpen) btnOpen.addEventListener('click', openModal);
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (btnDismiss) btnDismiss.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+}
 
 function initClueCountToggles() {
     const clueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
