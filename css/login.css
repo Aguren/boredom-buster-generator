@@ -219,3 +219,24 @@
     color: var(--accent-cyan);
     font-weight: 600;
 }
+
+/* Fix text overlap with wrapper icons */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 1rem;
+    color: var(--accent-cyan);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding-left: 2.8rem !important; /* Pushes typed text to the right of the icon */
+    box-sizing: border-box;
+}
