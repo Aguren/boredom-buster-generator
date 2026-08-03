@@ -19,6 +19,8 @@ function initClueCountToggles() {
 
     clueButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+            
             clueButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -41,7 +43,6 @@ function initClueCountToggles() {
                 clue5Input.required = true;
             }
 
-            // Trigger preview refresh to add/remove preview slots
             if (window.refreshLivePreview) {
                 window.refreshLivePreview();
             }
@@ -60,12 +61,10 @@ function initLivePreview() {
     const previewMissionsContainer = document.getElementById('preview-missions-list');
 
     function updatePreview() {
-        // 1. Update Agent Dossier Header
         const name = juniorAgentNameInput.value.trim() || 'AGENT';
         const code = juniorAgentCodeInput.value.trim() || '007';
         previewAgentName.textContent = `${name.toUpperCase()} ${code}`;
 
-        // 2. Identify active clue inputs
         const activeClues = [];
         const clue1 = document.getElementById('clue-1');
         const clue2 = document.getElementById('clue-2');
@@ -90,7 +89,6 @@ function initLivePreview() {
 
         if (clueFinal) activeClues.push({ title: 'FINAL MISSION', element: clueFinal, defaultText: 'MISSION COMPLETE GREAT JOB AGENT' });
 
-        // 3. Clear existing list and build preview cards
         previewMissionsContainer.innerHTML = '';
         const selectedCipher = cipherTypeSelect.value;
 
@@ -110,16 +108,18 @@ function initLivePreview() {
         });
     }
 
-    // Export function globally so clue toggles can re-trigger it
     window.refreshLivePreview = updatePreview;
 
-    // Attach input listeners
     const allInputs = document.querySelectorAll('.config-panel input, .config-panel select');
     allInputs.forEach(input => {
-        input.addEventListener('input', updatePreview);
+        input.addEventListener('input', (e) => {
+            if (window.SoundEngine && e.inputType !== 'deleteContentBackward') {
+                window.SoundEngine.playKeyClick();
+            }
+            updatePreview();
+        });
         input.addEventListener('change', updatePreview);
     });
 
-    // Run initial calculation
     updatePreview();
 }

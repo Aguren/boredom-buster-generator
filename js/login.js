@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bootSequenceSteps.forEach((step, index) => {
             setTimeout(() => {
+                // Play audio blip for each line
+                if (window.SoundEngine) window.SoundEngine.playBlip();
+
                 const line = document.createElement('div');
                 line.className = `terminal-line animate-in ${step.isSuccess ? 'success' : ''}`;
                 
@@ -70,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Final transition to Dashboard when sequence finishes
                 if (index === totalSteps - 1) {
+                    if (window.SoundEngine) window.SoundEngine.playAccessGranted();
+
                     setTimeout(() => {
                         bootScreen.classList.remove('active');
                         bootScreen.classList.add('hidden');

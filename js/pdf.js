@@ -10,10 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/**
- * Main PDF Generation Pipeline
- */
 async function generateMissionPackPDF() {
+    if (window.SoundEngine) {
+        window.SoundEngine.playCompileSound();
+    }
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -21,64 +22,59 @@ async function generateMissionPackPDF() {
         format: 'a4'
     });
 
-    // 1. Collect Form Data
     const agentName = document.getElementById('junior-agent-name').value.trim() || 'AGENT';
     const agentCode = document.getElementById('junior-agent-code').value.trim() || '007½';
     const cipherType = document.getElementById('cipher-type').value;
     
-    // Get Active Clues
-    const activeClueButtons = document.querySelectorAll('#clue-count-selector .btn-toggle');
-    let clueCount = 3;
-    activeClueButtons.forEach(btn => {
-        if (btn.classList.contains('active')) {
-            clueCount = parseInt(btn.getAttribute('data-clues'), 10);
-        }
-    });
-
     const clues = [];
-    for (let i = 1; i <= clueCount; i++) {
-        const clueVal = document.getElementById(`clue-${i}`).value.trim();
-        clues.push(clueVal || `HIDE OUT LOCATION ${i}`);
+    const clue1 = document.getElementById('clue-1').value.trim() || 'LOOK IN THE FRIDGE';
+    const clue2 = document.getElementById('clue-2').value.trim() || 'CHECK UNDER YOUR PILLOW';
+    const clue3 = document.getElementById('clue-3').value.trim() || 'LOOK BEHIND THE MIRROR';
+    
+    clues.push(clue1, clue2, clue3);
+
+    const clue4Wrapper = document.getElementById('clue-4-wrapper');
+    if (clue4Wrapper && !clue4Wrapper.classList.contains('hidden')) {
+        const clue4 = document.getElementById('clue-4').value.trim() || 'CHECK INSIDE THE COUCH';
+        clues.push(clue4);
     }
+
+    const clue5Wrapper = document.getElementById('clue-5-wrapper');
+    if (clue5Wrapper && !clue5Wrapper.classList.contains('hidden')) {
+        const clue5 = document.getElementById('clue-5').value.trim() || 'LOOK INSIDE YOUR SHOE';
+        clues.push(clue5);
+    }
+
     const finalRewardClue = document.getElementById('clue-final').value.trim() || 'MISSION COMPLETE GREAT JOB AGENT';
 
-    // UI Feedback: Button Loading State
     const btnGenerate = document.getElementById('btn-generate-pdf');
     const originalText = btnGenerate.innerHTML;
     btnGenerate.disabled = true;
     btnGenerate.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> GENERATING DOSSIER...`;
 
     try {
-        // Page 1: Cover / Agent Dossier
         buildCoverPage(doc, agentName, agentCode);
 
-        // Page 2: Decoder Key
         doc.addPage();
         buildDecoderKeyPage(doc, cipherType);
 
-        // Page 3+: Mission Clues
         clues.forEach((clueText, idx) => {
             doc.addPage();
             buildMissionPage(doc, idx + 1, clueText, cipherType);
         });
 
-        // Final Mission Page
         doc.addPage();
         buildMissionPage(doc, 'FINAL', finalRewardClue, cipherType);
 
-        // Parent Instructions Page
         doc.addPage();
         buildParentInstructionsPage(doc, clues, finalRewardClue);
 
-        // Notebook Page 1
         doc.addPage();
         buildNotebookPage(doc, 1);
 
-        // Notebook Page 2
         doc.addPage();
         buildNotebookPage(doc, 2);
 
-        // Download Trigger
         const filename = `HIA_Mission_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
         doc.save(filename);
 
@@ -91,15 +87,10 @@ async function generateMissionPackPDF() {
     }
 }
 
-/* ==========================================================================
-   PAGE COMPOSERS
-   ========================================================================== */
-
 function buildCoverPage(doc, name, code) {
     doc.setFillColor(18, 24, 36);
     doc.rect(0, 0, 210, 297, 'F');
 
-    // Classified Header Stamp
     doc.setDrawColor(255, 51, 102);
     doc.setLineWidth(1);
     doc.rect(140, 20, 50, 15);
@@ -108,7 +99,6 @@ function buildCoverPage(doc, name, code) {
     doc.setFontSize(14);
     doc.text("TOP SECRET", 165, 30, { align: "center" });
 
-    // Main Badge Graphic Ring
     doc.setDrawColor(0, 240, 255);
     doc.setLineWidth(1.5);
     doc.circle(105, 110, 45, 'S');
@@ -122,7 +112,6 @@ function buildCoverPage(doc, name, code) {
     doc.setTextColor(0, 240, 255);
     doc.text("* CLASSIFIED *", 105, 126, { align: "center" });
 
-    // Document Titles
     doc.setTextColor(240, 244, 248);
     doc.setFontSize(22);
     doc.text("SECRET AGENT MISSION PACK", 105, 180, { align: "center" });
@@ -152,7 +141,6 @@ function buildDecoderKeyPage(doc, cipherType) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
     let yStart = 50;
     
-    // 2-column key grid
     alphabet.forEach((letter, index) => {
         let col = index < 13 ? 0 : 1;
         let row = index % 13;
@@ -190,7 +178,6 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType) {
 
     doc.line(20, 44, 190, 44);
 
-    // Encrypted Box
     doc.setFillColor(245, 247, 250);
     doc.rect(20, 55, 170, 70, 'F');
     doc.setDrawColor(210, 215, 220);
@@ -202,11 +189,9 @@ function buildMissionPage(doc, missionNum, rawMessage, cipherType) {
     doc.setFontSize(16);
     doc.setTextColor(0, 100, 200);
     
-    // Split long encrypted strings into printable wrapped lines
     const splitLines = doc.splitTextToSize(encrypted, 150);
     doc.text(splitLines, 105, 85, { align: "center" });
 
-    // Answer Line Area for Agent
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor(10, 13, 18);
