@@ -206,18 +206,43 @@
                             <legend id="legend-encryption">ENCRYPTION & OPTIONS</legend>
                             <div class="form-row">
                                 <div class="input-group">
-                                    <label for="cipher-type" id="label-cipher-protocol">Cipher Protocol</label>
+                                    <div class="label-with-help">
+                                        <label for="cipher-type" id="label-cipher-protocol">Cipher Protocol</label>
+                                        <div class="help-tooltip-wrapper">
+                                            <button type="button" class="btn-help-icon" aria-label="Cipher Help"><i class="fa-solid fa-circle-question"></i></button>
+                                            <div class="tooltip-card">
+                                                <strong>Cipher Protocol Guide:</strong>
+                                                <p>• <strong>A=1 Number:</strong> Beginner level. A=1, B=2, etc.</p>
+                                                <p>• <strong>Symbols/Pigpen:</strong> Visual puzzle matching symbols or grid lines to letters.</p>
+                                                <p>• <strong>Reverse:</strong> Words are spelled backward.</p>
+                                                <p>• <strong>Caesar Shift:</strong> Alphabet offset cipher for older kids.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <select id="cipher-type">
                                         <option value="number" selected>A=1 Number Cipher (Default)</option>
                                         <option value="symbol">Symbol / Rune Cipher (★ ♦ ▲ ✚)</option>
                                         <option value="pigpen">Pigpen Grid Cipher (╍ ║ ╬ ░)</option>
                                         <option value="reverse">Reverse Mirror Text (KOOL NI)</option>
-                                        <option value="caesar">Caesar Shift (+1 Shift)</option>
+                                        <option value="caesar">Caesar Alphabet Shift</option>
                                     </select>
                                 </div>
-                            <!-- Shift Amount Control (Visible when Caesar is selected) -->
-                                 <div class="input-group hidden" id="caesar-shift-wrapper">
-                                    <label for="caesar-shift-val"><i class="fa-solid fa-arrows-rotate"></i> Shift Amount</label>
+
+                                <!-- Shift Amount Control (Visible when Caesar is selected) -->
+                                <div class="input-group hidden" id="caesar-shift-wrapper">
+                                    <div class="label-with-help">
+                                        <label for="caesar-shift-val"><i class="fa-solid fa-arrows-rotate"></i> Shift Amount</label>
+                                        <div class="help-tooltip-wrapper">
+                                            <button type="button" class="btn-help-icon" aria-label="Shift Amount Help"><i class="fa-solid fa-circle-question"></i></button>
+                                            <div class="tooltip-card">
+                                                <strong>What is Shift Amount?</strong>
+                                                <p>A Caesar Cipher shifts every letter down the alphabet by a set number of steps.</p>
+                                                <p>• <strong>+1 Shift:</strong> A becomes B, B becomes C, Z becomes A.</p>
+                                                <p>• <strong>+3 Shift:</strong> A becomes D, B becomes E, etc.</p>
+                                                <p>Higher shifts make the puzzle slightly harder for older kids!</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <select id="caesar-shift-val">
                                         <option value="1" selected>+1 Shift (A ➔ B)</option>
                                         <option value="2">+2 Shift (A ➔ C)</option>
@@ -226,13 +251,14 @@
                                         <option value="5">+5 Shift (A ➔ F)</option>
                                     </select>
                                 </div>
-                                <div class="input-group">
-                                    <label for="clue-count" id="label-clue-count">Number of Clues</label>
-                                    <div class="radio-group" id="clue-count-selector">
-                                        <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
-                                        <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
-                                        <button type="button" class="btn-toggle" data-clues="5">5 Clues</button>
-                                    </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="clue-count" id="label-clue-count">Number of Clues</label>
+                                <div class="radio-group" id="clue-count-selector">
+                                    <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
+                                    <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
+                                    <button type="button" class="btn-toggle" data-clues="5">5 Clues</button>
                                 </div>
                             </div>
 
