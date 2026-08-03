@@ -80,7 +80,6 @@ function initCertToggle() {
 
 /**
  * Hideout Helper Location Chips
- * Fills currently active clue input or next empty visible clue field
  */
 function initHideoutChips() {
     const chipButtons = document.querySelectorAll('.chip-btn');
@@ -119,11 +118,12 @@ function initHideoutChips() {
 }
 
 /**
- * 1-Click Preset Templates & Clear All Button
+ * 1-Click Preset Templates, 1-Tap Auto-Randomizer & Clear All Button
  */
 function initPresets() {
     const presetButtons = document.querySelectorAll('.btn-preset');
     const btnClear = document.getElementById('btn-clear-clues');
+    const btnRandomAll = document.getElementById('btn-random-all-spots');
     
     const presets = {
         indoor: [
@@ -149,10 +149,17 @@ function initPresets() {
         ]
     };
 
+    const globalRandomSpots = [
+        'LOOK IN THE FRIDGE', 'CHECK UNDER YOUR PILLOW', 'LOOK BEHIND THE MIRROR',
+        'CHECK INSIDE THE COUCH', 'LOOK INSIDE YOUR SHOE', 'LOOK INSIDE THE MAILBOX',
+        'CHECK UNDER THE BATHROOM SINK', 'SEARCH INSIDE THE BOOKSHELF', 'CHECK UNDER THE BACK DOOR MAT',
+        'LOOK BEHIND YOUR BEDLAMP', 'CHECK INSIDE YOUR PJ DRAWER', 'SEARCH BEHIND THE TV'
+    ];
+
     presetButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const key = btn.getAttribute('data-preset');
-            if (!key) return; // Handled by Clear button below if key is missing
+            if (!key) return;
 
             const list = presets[key];
             if (!list) return;
@@ -169,6 +176,25 @@ function initPresets() {
             showToast(`Loaded ${key.toUpperCase()} Preset Clues`, 'success');
         });
     });
+
+    // 1-Tap Auto-Randomizer Handler
+    if (btnRandomAll) {
+        btnRandomAll.addEventListener('click', () => {
+            if (window.SoundEngine) window.SoundEngine.playKeyClick();
+
+            // Shuffle array copy to get unique random spots
+            const shuffled = [...globalRandomSpots].sort(() => 0.5 - Math.random());
+
+            document.getElementById('clue-1').value = shuffled[0];
+            document.getElementById('clue-2').value = shuffled[1];
+            document.getElementById('clue-3').value = shuffled[2];
+            document.getElementById('clue-4').value = shuffled[3];
+            document.getElementById('clue-5').value = shuffled[4];
+
+            if (window.refreshLivePreview) window.refreshLivePreview();
+            showToast("🎲 Auto-Filled Random Household Hunt!", "success");
+        });
+    }
 
     // Clear All Clues Handler
     if (btnClear) {
@@ -188,7 +214,7 @@ function initPresets() {
 }
 
 /**
- * Randomize / Shuffle Clue Button logic
+ * Randomize / Shuffle Single Clue Button logic
  */
 function initRandomizers() {
     const themeCluePools = {
