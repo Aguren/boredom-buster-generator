@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HIA PDF GENERATOR ENGINE // PRO-PROPS STYLING
+   HIA PDF GENERATOR ENGINE // PRO-PROPS STYLING (SINGLE NOTEBOOK PAGE)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -69,11 +69,9 @@ async function generateMissionPackPDF() {
         doc.addPage();
         buildParentInstructionsPage(doc, clues, finalRewardClue);
 
+        // Notebook Page (Single Case File Page)
         doc.addPage();
         buildNotebookPage(doc, 1);
-
-        doc.addPage();
-        buildNotebookPage(doc, 2);
 
         const filename = `HIA_Mission_Pack_${agentName.replace(/\s+/g, '_')}.pdf`;
         doc.save(filename);
@@ -309,7 +307,7 @@ function buildNotebookPage(doc, pageNum) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
     doc.setTextColor(10, 13, 18);
-    doc.text(`AGENT NOTEBOOK // CASE FILE PAGE ${pageNum}`, 20, 25);
+    doc.text(`AGENT NOTEBOOK // CASE FILE`, 20, 25);
     
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 30, 190, 30);
