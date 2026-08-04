@@ -1,441 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNIFIED ADVENTURE GENERATOR // MULTI-THEME DECODER</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&family=Special+Elite&family=Pirata+One&family=Press+Start+2P&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- CSS Modules -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/terminal.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/animations.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Boredom Buster Generator</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+  <link rel="stylesheet" href="css/terminal.css"/>
 </head>
-<body class="theme-spy">
+<body class="theme-playful">
 
-    <!-- Dynamic Overlay Backgrounds -->
-    <div class="bg-grid-overlay"></div>
-    <div class="ambient-glow"></div>
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toast-container" class="toast-container"></div>
+  <!-- MAIN APP CONTAINER -->
+  <main id="app">
 
-    <!-- MAIN APP CONTAINER -->
-    <main id="app">
+    <!-- HEADER & THEME PICKER -->
+    <header class="app-header">
+      <div class="logo-area">
+        <i class="fa-solid fa-bolt logo-icon"></i>
+        <h1>BOREDOM BUSTER</h1>
+        <p class="subtitle">FAST ACTIVITIES FOR BUSY PARENTS</p>
+      </div>
 
-        <!-- STAGE 1: AUTHENTICATION & MASTER THEME PICKER -->
-        <section id="auth-screen" class="view-screen active">
-            <div class="auth-card glass-panel">
-                <div class="agency-header">
-                    <div class="agency-badge">
-                        <i id="theme-badge-icon" class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h1 id="theme-main-title">HOME INTELLIGENCE AGENCY</h1>
-                    <p id="theme-sub-title" class="subtitle">CLASSIFIED MISSION GENERATOR</p>
-                </div>
+      <!-- MASTER THEME SELECTOR -->
+      <div class="master-theme-picker">
+        <label for="master-theme-select">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> SELECT THEME:
+        </label>
+        <select id="master-theme-select" class="theme-tab-dropdown">
+          <option value="theme-playful" selected>🎨 Playful Arcade</option>
+          <option value="theme-detective">🕵️ Secret Agent</option>
+          <option value="theme-space">🚀 Space Explorer</option>
+        </select>
+      </div>
+    </header>
 
-                <!-- MASTER THEME SELECTOR HUB -->
-                <div class="master-theme-picker">
-                    <label for="master-theme-select"><i class="fa-solid fa-wand-magic-sparkles"></i> SELECT ADVENTURE THEME:</label>
-                    <select id="master-theme-select" class="theme-hub-dropdown">
-                        <optgroup label="🕵️ Secret Agent & Tactical">
-                            <option value="theme-spy" selected>Top Secret HIA Agent</option>
-                            <option value="theme-stealth">Stealth Black Ops</option>
-                            <option value="theme-dossier">Vintage CIA Dossier</option>
-                        </optgroup>
-                        <optgroup label="✨ Magical & Fantasy">
-                            <option value="theme-magic">Enchanted Academy & Spellbook</option>
-                            <option value="theme-royal">Royal Cryptography & Secret Order</option>
-                            <option value="theme-sleuth">Sleuth Society & Detective Club</option>
-                        </optgroup>
-                        <optgroup label="⚔️ High Adventure">
-                            <option value="theme-pirate">Pirate Treasure Hunt & Sea Ciphers</option>
-                            <option value="theme-galaxy">Galactic Space Fleet & Cosmic Code</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div class="security-status">
-                    <div class="status-indicator online"></div>
-                    <span id="theme-security-label">SECURITY LEVEL 7 // PARENTS ONLY</span>
-                </div>
-
-                <form id="login-form" autocomplete="off">
-                    <div class="input-group">
-                        <label for="agent-id" id="label-parent-id">PARENT AGENT CODE</label>
-                        <div class="input-wrapper">
-                            <i id="icon-parent-id" class="fa-solid fa-user-secret"></i>
-                            <input type="text" id="agent-id" placeholder="e.g. AGENT-MOM" required>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="clearance-key">CLEARANCE KEY</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-key"></i>
-                            <input type="password" id="clearance-key" placeholder="••••••••" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="btn-login" class="btn-primary btn-fingerprint">
-                        <i id="btn-auth-icon" class="fa-solid fa-fingerprint fingerprint-icon"></i>
-                        <span id="btn-auth-text">SCAN FINGERPRINT & ACCESS</span>
-                    </button>
-                </form>
-
-                <div class="card-footer">
-                    <span id="footer-auth-left">AUTHORIZED PERSONNEL ONLY</span>
-                    <span id="footer-auth-right" class="enc-tag">AES-256 ENCRYPTED</span>
-                </div>
+    <!-- STAGE 1: INPUT FORM -->
+    <section id="view-generator" class="view-screen active">
+      <div class="card glass-panel">
+        <form id="generator-form" autocomplete="off">
+          
+          <!-- ITEM CHIPS SELECTOR -->
+          <div class="input-group">
+            <label class="section-label">
+              <i class="fa-solid fa-box-open"></i> 1. WHAT DO YOU HAVE NEARBY?
+            </label>
+            <p class="help-text">Tap all the items available in your room right now:</p>
+            <div id="item-chips-container" class="chips-grid">
+              <!-- Rendered dynamically by ui.js -->
             </div>
-        </section>
+          </div>
 
-
-        <!-- STAGE 2: BOOT TERMINAL / TRANSITION LOGS -->
-        <section id="boot-screen" class="view-screen hidden">
-            <div class="terminal-card glass-panel">
-                <div class="terminal-header">
-                    <div class="terminal-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                    </div>
-                    <div id="terminal-title" class="terminal-title">INITIALIZING_ADVENTURE_ENGINE.SH</div>
-                </div>
-
-                <div class="terminal-body" id="terminal-logs">
-                    <!-- Dynamic boot logs -->
-                </div>
-
-                <div class="terminal-progress-bar">
-                    <div class="progress-fill" id="boot-progress"></div>
-                </div>
+          <!-- ENERGY LEVEL SELECTOR -->
+          <div class="input-group">
+            <label for="energy-select" class="section-label">
+              <i class="fa-solid fa-battery-charging"></i> 2. ENERGY NEEDED:
+            </label>
+            <div class="input-wrapper">
+              <select id="energy-select" class="custom-select">
+                <option value="all">⚡ Any Energy Level</option>
+                <option value="high">🔥 High Energy (Burn Steam / Physical)</option>
+                <option value="low">🧘 Low Energy (Quiet / Focus Time)</option>
+              </select>
             </div>
-        </section>
+          </div>
 
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" id="btn-generate" class="btn-primary">
+            <i class="fa-solid fa-dice"></i>
+            <span id="btn-text">BUST BOREDOM!</span>
+          </button>
+        </form>
+      </div>
+    </section>
 
-        <!-- STAGE 3: MISSION CONTROL WORKSTATION -->
-        <section id="dashboard-screen" class="view-screen hidden">
-            <!-- Navigation Bar -->
-            <header class="app-header glass-panel">
-                <div class="brand">
-                    <i id="header-brand-icon" class="fa-solid fa-shield-cat"></i>
-                    <span id="header-brand-text">HIA // MISSION CONTROL</span>
-                    <div class="radar-widget">
-                        <div class="radar-sweep"></div>
-                    </div>
-                </div>
-
-                <!-- Header Actions -->
-                <div class="header-right-tools">
-                    <button type="button" id="btn-open-briefing" class="btn-header-tool" title="Parent Briefing Guide">
-                        <i class="fa-solid fa-circle-question"></i>
-                        <span>GUIDE</span>
-                    </button>
-
-                    <div class="theme-selector-wrapper">
-                        <i class="fa-solid fa-palette"></i>
-                        <select id="theme-switcher">
-                            <optgroup label="Secret Agent">
-                                <option value="theme-spy">CIA Cyan</option>
-                                <option value="theme-stealth">Stealth Ops</option>
-                                <option value="theme-dossier">Vintage Dossier</option>
-                            </optgroup>
-                            <optgroup label="Magical & Girl Themes">
-                                <option value="theme-magic">Enchanted Academy</option>
-                                <option value="theme-royal">Royal Secret Order</option>
-                                <option value="theme-sleuth">Sleuth Society</option>
-                            </optgroup>
-                            <optgroup label="Boy & Adventure Themes">
-                                <option value="theme-pirate">Pirate Treasure</option>
-                                <option value="theme-galaxy">Space Fleet</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    <div class="user-profile">
-                        <span id="display-agent-id">PARENT COMMANDER</span>
-                        <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="dashboard-grid">
-                
-                <!-- LEFT COLUMN: STREAMLINED STEP-BY-STEP FORM -->
-                <div class="config-panel glass-panel">
-                    <h2><i id="panel-spec-icon" class="fa-solid fa-wand-magic-sparkles"></i> <span id="panel-spec-title">CREATE YOUR HUNT</span></h2>
-
-                    <form id="mission-form">
-
-                        <!-- STEP 1: HERO & PUZZLE TYPE -->
-                        <fieldset class="form-section step-card">
-                            <legend><span class="step-badge">1</span> PLAYER & PUZZLE STYLE</legend>
-                            
-                            <div class="form-row">
-                                <div class="input-group">
-                                    <label for="junior-agent-name" id="label-hero-name">Child's Name</label>
-                                    <input type="text" id="junior-agent-name" placeholder="e.g. John / Lily" value="John" required>
-                                </div>
-                                <div class="input-group">
-                                    <label for="junior-agent-code" id="label-hero-code">Codename / Title</label>
-                                    <input type="text" id="junior-agent-code" placeholder="e.g. 007½ / Starlight" value="007½" required>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <div class="label-with-help">
-                                    <label for="cipher-type" id="label-cipher-protocol">Secret Code Style</label>
-                                    <div class="help-tooltip-wrapper">
-                                        <button type="button" class="btn-help-icon" aria-label="Cipher Help"><i class="fa-solid fa-circle-question"></i></button>
-                                        <div class="tooltip-card">
-                                            <strong>Code Style Guide:</strong>
-                                            <p>• <strong>A=1 Number:</strong> Standard numbers (A=1, B=2).</p>
-                                            <p>• <strong>Symbols/Pigpen:</strong> Cool symbols & grid coordinates.</p>
-                                            <p>• <strong>Reverse:</strong> Words spelled backward.</p>
-                                            <p>• <strong>Caesar Shift:</strong> Shifts letters +1 step (A➔B).</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <select id="cipher-type">
-                                    <option value="number" selected>A=1 Numbers (A=1, B=2)</option>
-                                    <option value="symbol">Secret Symbols (# @ $ %)</option>
-                                    <option value="pigpen">Grid Coordinates (|1 +2 #3)</option>
-                                    <option value="reverse">Backward Text (KOOL NI)</option>
-                                    <option value="caesar">Alphabet Shift (+1 Shift)</option>
-                                </select>
-                            </div>
-                        </fieldset>
-
-                        <!-- STEP 2: HIDEOUT LOCATIONS & PRESETS -->
-                        <fieldset class="form-section step-card" id="clues-container">
-                            <legend><span class="step-badge">2</span> HIDEOUT LOCATIONS</legend>
-
-                            <!-- One-Click Preset Bar with Auto-Randomizer & Clear Buttons -->
-                            <div class="preset-bar-wrapper">
-                                <label><i class="fa-solid fa-bolt"></i> Quick Auto-Fill Locations:</label>
-                                <div class="preset-buttons">
-                                    <button type="button" class="btn-preset btn-random-all" id="btn-random-all-spots" title="Auto-fill entire hunt with randomized spots"><i class="fa-solid fa-dice"></i> 1-Tap Random</button>
-                                    <button type="button" class="btn-preset" data-preset="indoor"><i class="fa-solid fa-house"></i> Indoor</button>
-                                    <button type="button" class="btn-preset" data-preset="bedtime"><i class="fa-solid fa-bed"></i> Bedtime</button>
-                                    <button type="button" class="btn-preset" data-preset="backyard"><i class="fa-solid fa-tree"></i> Backyard</button>
-                                    <button type="button" class="btn-preset btn-clear-preset" id="btn-clear-clues"><i class="fa-solid fa-trash-can"></i> Clear</button>
-                                </div>
-                            </div>
-
-                            <!-- Quick Location Chips (Hideout Helper) -->
-                            <div class="hideout-helper-wrapper">
-                                <label class="helper-label"><i class="fa-solid fa-hand-pointer"></i> Tap a spot to fill next empty clue:</label>
-                                <div class="hideout-chips">
-                                    <button type="button" class="chip-btn" data-location="LOOK IN THE FRIDGE">🧊 Fridge</button>
-                                    <button type="button" class="chip-btn" data-location="CHECK UNDER YOUR PILLOW">🛏️ Pillow</button>
-                                    <button type="button" class="chip-btn" data-location="LOOK BEHIND THE MIRROR">🪞 Mirror</button>
-                                    <button type="button" class="chip-btn" data-location="CHECK INSIDE THE COUCH">🛋️ Couch</button>
-                                    <button type="button" class="chip-btn" data-location="LOOK INSIDE YOUR SHOE">👟 Shoe</button>
-                                    <button type="button" class="chip-btn" data-location="LOOK INSIDE THE MAILBOX">📬 Mailbox</button>
-                                    <button type="button" class="chip-btn" data-location="CHECK UNDER THE BATHROOM SINK">🧼 Sink</button>
-                                    <button type="button" class="chip-btn" data-location="SEARCH INSIDE THE BOOKSHELF">📚 Bookshelf</button>
-                                </div>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="clue-count" id="label-clue-count">How Many Clues?</label>
-                                <div class="radio-group" id="clue-count-selector">
-                                    <button type="button" class="btn-toggle active" data-clues="3">3 Clues</button>
-                                    <button type="button" class="btn-toggle" data-clues="4">4 Clues</button>
-                                    <button type="button" class="btn-toggle" data-clues="5">5 Clues</button>
-                                </div>
-                            </div>
-
-                            <div class="input-group clue-input-group">
-                                <div class="label-with-tool">
-                                    <label for="clue-1" id="label-clue-1"><i class="fa-solid fa-location-dot"></i> Clue 1 Hideout</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-1" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-1" class="clue-input" placeholder="LOOK IN THE FRIDGE" required>
-                            </div>
-
-                            <div class="input-group clue-input-group">
-                                <div class="label-with-tool">
-                                    <label for="clue-2" id="label-clue-2"><i class="fa-solid fa-location-dot"></i> Clue 2 Hideout</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-2" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-2" class="clue-input" placeholder="CHECK UNDER YOUR PILLOW" required>
-                            </div>
-
-                            <div class="input-group clue-input-group">
-                                <div class="label-with-tool">
-                                    <label for="clue-3" id="label-clue-3"><i class="fa-solid fa-location-dot"></i> Clue 3 Hideout</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-3" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-3" class="clue-input" placeholder="LOOK BEHIND THE MIRROR" required>
-                            </div>
-
-                            <div class="input-group clue-input-group hidden" id="clue-4-wrapper">
-                                <div class="label-with-tool">
-                                    <label for="clue-4" id="label-clue-4"><i class="fa-solid fa-location-dot"></i> Clue 4 Hideout</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-4" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-4" class="clue-input" placeholder="CHECK INSIDE THE COUCH">
-                            </div>
-
-                            <div class="input-group clue-input-group hidden" id="clue-5-wrapper">
-                                <div class="label-with-tool">
-                                    <label for="clue-5" id="label-clue-5"><i class="fa-solid fa-location-dot"></i> Clue 5 Hideout</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-5" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-5" class="clue-input" placeholder="LOOK INSIDE YOUR SHOE">
-                            </div>
-
-                            <div class="input-group clue-input-group">
-                                <div class="label-with-tool">
-                                    <label for="clue-final" id="label-clue-final"><i class="fa-solid fa-trophy"></i> Final Reward Message</label>
-                                    <button type="button" class="btn-random-clue" data-target="clue-final" title="Shuffle Theme Clue"><i class="fa-solid fa-dice"></i> Shuffle</button>
-                                </div>
-                                <input type="text" id="clue-final" class="clue-input" placeholder="MISSION COMPLETE GREAT JOB AGENT" required>
-                            </div>
-                        </fieldset>
-
-                        <!-- STEP 3: ADVANCED OPTIONS ACCORDION (COLLAPSIBLE) -->
-                        <details class="advanced-accordion">
-                            <summary class="advanced-summary">
-                                <span><i class="fa-solid fa-sliders"></i> Optional Print & Certificate Options</span>
-                                <i class="fa-solid fa-chevron-down accordion-arrow"></i>
-                            </summary>
-
-                            <div class="advanced-body">
-                                <div class="pdf-options-row">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="opt-include-hints" checked>
-                                        <span>Include Fill-in Lines (_ _ _) for Answers</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="opt-include-cert" checked>
-                                        <span>Include Printable Victory Certificate</span>
-                                    </label>
-                                </div>
-
-                                <div class="form-row cert-customizer-row" id="cert-customizer-wrapper">
-                                    <div class="input-group">
-                                        <label for="cert-award-title"><i class="fa-solid fa-award"></i> Certificate Title</label>
-                                        <input type="text" id="cert-award-title" placeholder="e.g. MASTER DECODER" value="MASTER DECODER">
-                                    </div>
-
-                                    <div class="input-group">
-                                        <label for="cert-stamp-seal"><i class="fa-solid fa-stamp"></i> Official Seal Mark</label>
-                                        <select id="cert-stamp-seal">
-                                            <option value="PASSED" selected>★ PASSED ★</option>
-                                            <option value="APPROVED">✔ APPROVED ✔</option>
-                                            <option value="TOP SECRET">🔒 TOP SECRET 🔒</option>
-                                            <option value="ROYAL SEAL">👑 ROYAL SEAL 👑</option>
-                                            <option value="CLEARED">⚡ CLEARED ⚡</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                    </form>
-                </div>
-
-                <!-- RIGHT COLUMN: Real-Time Encryption Preview & PDF Generator -->
-                <div class="preview-panel glass-panel">
-                    <div class="preview-title-bar">
-                        <h2><i id="panel-preview-icon" class="fa-solid fa-eye"></i> <span id="panel-preview-title">LIVE PREVIEW</span></h2>
-                        <button type="button" id="btn-copy-code" class="btn-secondary-sm" title="Copy Encrypted Text to Clipboard">
-                            <i class="fa-solid fa-copy"></i> Copy Codes
-                        </button>
-                    </div>
-                    
-                    <div class="dossier-preview-card">
-                        <div id="preview-top-stamp" class="classified-stamp">TOP SECRET</div>
-                        <div class="preview-header">
-                            <span id="preview-label-target" class="label">TARGET PLAYER:</span>
-                            <span id="preview-agent-name" class="value">JOHN (007½)</span>
-                        </div>
-
-                        <div class="preview-body">
-                            <!-- Dynamic Encrypted Clues List -->
-                            <div id="preview-missions-list" class="preview-missions-list">
-                                <!-- Generated dynamically -->
-                            </div>
-                        </div>
-
-                        <div id="preview-footer-note" class="preview-footer">
-                            <i class="fa-solid fa-lock"></i> AUTO-ENCODED & READY TO PRINT
-                        </div>
-                    </div>
-
-                    <div class="action-area">
-                        <button type="button" id="btn-generate-pdf" class="btn-primary btn-large">
-                            <i id="btn-compile-icon" class="fa-solid fa-file-pdf"></i>
-                            <span id="btn-compile-text">COMPILE & DOWNLOAD PDF PACK</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- PARENT BRIEFING MODAL -->
-    <div id="briefing-modal" class="modal-overlay hidden">
-        <div class="modal-card glass-panel">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-book-bookmark"></i> HOW IT WORKS</h3>
-                <button type="button" id="btn-close-modal" class="btn-close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="step-guide">
-                    <div class="step-card">
-                        <div class="step-num">1</div>
-                        <div>
-                            <h4>Type & Encode</h4>
-                            <p>Pick a theme, enter hideout spots around your house, or tap <strong>1-Tap Random</strong> to populate a full route instantly.</p>
-                        </div>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-num">2</div>
-                        <div>
-                            <h4>Print & Hide (with Parent Cheat Sheet!)</h4>
-                            <p>Download the PDF. Cut out the <strong>Parent Pocket Cheat Sheet box</strong>—it lists every hiding spot with checkboxes so you never forget where you placed a clue.</p>
-                        </div>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-num">3</div>
-                        <div>
-                            <h4>Hand Off & Play</h4>
-                            <p>Give your child the Decoder Key page. Each solved clue directs them to the next secret hiding spot!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btn-dismiss-modal" class="btn-primary">GET STARTED</button>
-            </div>
+    <!-- STAGE 2: ACTIVITY DISPLAY CARD -->
+    <section id="view-activity" class="view-screen hidden">
+      <div class="card glass-panel activity-card">
+        
+        <div class="activity-header">
+          <span class="badge prep-badge"><i class="fa-solid fa-stopwatch"></i> Prep: <span id="prep-time">1 min</span></span>
+          <span class="badge energy-badge"><i class="fa-solid fa-bolt"></i> <span id="energy-tag">High Energy</span></span>
         </div>
-    </div>
 
-    <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <h2 id="activity-title" class="activity-title">Activity Title</h2>
 
-    <!-- Project Scripts -->
-    <script src="js/sound.js"></script>
-    <script src="js/themeManager.js"></script>
-    <script src="js/cipher.js"></script>
-    <script src="js/login.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/pdf.js"></script>
-    <script src="js/app.js"></script>
+        <div class="instructions-block">
+          <h3><i class="fa-solid fa-list-check"></i> Instructions:</h3>
+          <ol id="activity-steps" class="steps-list"></ol>
+        </div>
+
+        <div class="twist-box">
+          <div class="twist-title">
+            <i class="fa-solid fa-fire"></i> LEVEL UP TWIST:
+          </div>
+          <p id="activity-twist"></p>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="card-actions">
+          <button type="button" id="btn-reroll" class="btn-secondary">
+            <i class="fa-solid fa-rotate"></i> Try Another Idea
+          </button>
+          <button type="button" id="btn-reset" class="btn-primary">
+            <i class="fa-solid fa-arrow-left"></i> Change Items
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ES MODULE ENTRY POINT -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

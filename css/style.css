@@ -308,3 +308,36 @@ body.theme-galaxy {
 .toast-item.warn i {
     color: #ff3366;
 }
+
+.hidden { display: none !important; }
+
+.chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chip {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.chip.selected {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.twist-box {
+  background: rgba(255, 193, 7, 0.2);
+  border-left: 4px solid #ffc107;
+  padding: 10px 15px;
+  margin-top: 15px;
+  border-radius: 4px;
+}
