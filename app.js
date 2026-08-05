@@ -43,7 +43,7 @@ let soundEnabled = true;
 let timerInterval = null;
 let timerSeconds = 120;
 
-// Web Audio API Synthesizer (No external MP3 files needed)
+// Web Audio API Synthesizer
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playAudioTone(freq, type, duration) {
@@ -78,27 +78,33 @@ document.addEventListener("DOMContentLoaded", () => {
   updateStreakDisplay();
   updateSavedDisplay();
 
-  // Primary listeners
-  generateBtn.addEventListener("click", () => generateActivity(false));
-  surpriseBtn.addEventListener("click", () => generateActivity(true));
+  // Primary Listeners
+  const generateBtn = document.getElementById("generateBtn");
+  const surpriseBtn = document.getElementById("surpriseBtn");
+  
+  if (generateBtn) generateBtn.addEventListener("click", () => generateActivity(false));
+  if (surpriseBtn) surpriseBtn.addEventListener("click", () => generateActivity(true));
+  
   document.getElementById("tryAnotherBtn").addEventListener("click", () => generateActivity(selectedItems.size === 0));
   document.getElementById("startOverBtn").addEventListener("click", resetToGenerator);
   document.getElementById("saveBtn").addEventListener("click", saveCurrentActivity);
   document.getElementById("shareBtn").addEventListener("click", shareCurrentActivity);
   
-  // Sound toggle
+  // Sound Toggle
   const soundBtn = document.getElementById("soundToggleBtn");
-  soundBtn.addEventListener("click", () => {
-    soundEnabled = !soundEnabled;
-    soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
-  });
+  if (soundBtn) {
+    soundBtn.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+    });
+  }
 
-  // Saved toggle
+  // Saved Toggle
   document.getElementById("toggleSavedBtn").addEventListener("click", () => {
     document.getElementById("savedList").classList.toggle("hidden");
   });
 
-  // Timer controls
+  // Timer Controls
   document.getElementById("timerStartBtn").addEventListener("click", toggleTimer);
   document.getElementById("timerResetBtn").addEventListener("click", resetTimer);
 });
@@ -106,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Render Item Grid
 function renderItemsGrid() {
   const grid = document.getElementById("itemsGrid");
+  if (!grid) return;
   grid.innerHTML = "";
   availableItems.forEach(item => {
     const card = document.createElement("div");
@@ -131,19 +138,22 @@ function toggleItem(id, cardElement) {
     if (selectedItems.size >= 3) {
       const firstAdded = Array.from(selectedItems)[0];
       selectedItems.delete(firstAdded);
-      document.querySelector(`[data-id="${firstAdded}"]`).classList.remove("selected");
+      const prevSelected = document.querySelector(`[data-id="${firstAdded}"]`);
+      if (prevSelected) prevSelected.classList.remove("selected");
     }
     selectedItems.add(id);
     cardElement.classList.add("selected");
   }
 
   const btn = document.getElementById("generateBtn");
-  if (selectedItems.size > 0) {
-    btn.disabled = false;
-    btn.textContent = `Bust Boredom! (${selectedItems.size} Selected)`;
-  } else {
-    btn.disabled = true;
-    btn.textContent = "Pick Items Above";
+  if (btn) {
+    if (selectedItems.size > 0) {
+      btn.disabled = false;
+      btn.textContent = `Bust Boredom! (${selectedItems.size} Selected)`;
+    } else {
+      btn.disabled = true;
+      btn.textContent = "Pick Items Above";
+    }
   }
 }
 
@@ -175,7 +185,7 @@ async function loadActivities() {
   }
 }
 
-// Matching Algorithm
+// Upgraded Matching Engine with Expanding Search Fallbacks
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
@@ -184,44 +194,59 @@ function generateActivity(isSurpriseMode = false) {
   const chosenItems = Array.from(selectedItems);
 
   if (isSurpriseMode) {
+    // Match age + mess + energy (skip items)
     matches = allActivities.filter(act => 
       act.ageGroups.includes(selectedAge) && 
       act.messLevel === selectedMess && 
       act.energyLevel === selectedEnergy
     );
   } else {
+    // Tier 1: Strict match (Items AND Age AND Energy)
     matches = allActivities.filter(act => {
       const sharesItem = act.items.some(i => chosenItems.includes(i));
       return sharesItem && act.ageGroups.includes(selectedAge) && act.energyLevel === selectedEnergy;
     });
 
-    if (matches.length === 0) {
-      matches = allActivities.filter(act => 
+    // Tier 2: Expand to ANY activity sharing ANY selected item + Age if options are sparse
+    if (matches.length <= 3) {
+      const broaderMatches = allActivities.filter(act => 
         act.items.some(i => chosenItems.includes(i)) && act.ageGroups.includes(selectedAge)
       );
+      if (broaderMatches.length > matches.length) {
+        matches = broaderMatches;
+      }
     }
 
-    if (matches.length === 0) {
-      matches = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
+    // Tier 3: Expand to ANY activity using ANY of the chosen items
+    if (matches.length <= 3) {
+      const itemOnlyMatches = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
+      if (itemOnlyMatches.length > matches.length) {
+        matches = itemOnlyMatches;
+      }
     }
   }
 
+  // Safety Fallback: Use full database if empty
   if (matches.length === 0) matches = allActivities;
 
+  // Filter out recently shown items to prevent loops
   const freshMatches = matches.filter(a => !recentlyShownIds.includes(a.id));
   const finalPool = freshMatches.length > 0 ? freshMatches : matches;
 
+  // Pick Random result from final pool
   const selected = finalPool[Math.floor(Math.random() * finalPool.length)];
   currentActivity = selected;
 
+  // Track history (keep last 6)
   recentlyShownIds.push(selected.id);
-  if (recentlyShownIds.length > 5) recentlyShownIds.shift();
+  if (recentlyShownIds.length > 6) recentlyShownIds.shift();
 
+  // Run Shuffle Theater Animation
   runSlotAnimation(() => {
     renderResultCard(selected);
     incrementStreak();
     fireConfetti();
-    playAudioTone(587.33, "sine", 0.2); // Success fanfare tone
+    playAudioTone(587.33, "sine", 0.2);
   });
 }
 
@@ -236,9 +261,9 @@ function runSlotAnimation(callback) {
   let step = 0;
 
   const interval = setInterval(() => {
-    icon.textContent = icons[step % icons.length];
-    text.textContent = texts[step % texts.length];
-    playAudioTone(200 + (step * 20), "square", 0.03); // Shuffle tick sound
+    if (icon) icon.textContent = icons[step % icons.length];
+    if (text) text.textContent = texts[step % texts.length];
+    playAudioTone(200 + (step * 20), "square", 0.03);
     step++;
   }, 130);
 
@@ -321,15 +346,19 @@ function resetTimer() {
   timerInterval = null;
   timerSeconds = 120;
   updateTimerDisplay();
-  document.getElementById("timerStartBtn").textContent = "▶️ Start 2-Min Timer";
-  document.getElementById("timerResetBtn").classList.add("hidden");
+  const startBtn = document.getElementById("timerStartBtn");
+  const resetBtn = document.getElementById("timerResetBtn");
+  if (startBtn) startBtn.textContent = "▶️ Start 2-Min Timer";
+  if (resetBtn) resetBtn.classList.add("hidden");
 }
 
 function updateTimerDisplay() {
   const mins = Math.floor(timerSeconds / 60);
   const secs = timerSeconds % 60;
-  document.getElementById("timerDisplay").textContent = 
-    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const display = document.getElementById("timerDisplay");
+  if (display) {
+    display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
 }
 
 // Web Share API
@@ -356,7 +385,8 @@ async function shareCurrentActivity() {
 // LocalStorage Persistence
 function updateStreakDisplay() {
   const count = localStorage.getItem("bb_streak_count") || 0;
-  document.getElementById("streakCount").textContent = count;
+  const streakEl = document.getElementById("streakCount");
+  if (streakEl) streakEl.textContent = count;
 }
 
 function incrementStreak() {
@@ -382,9 +412,11 @@ function saveCurrentActivity() {
 
 function updateSavedDisplay() {
   const saved = JSON.parse(localStorage.getItem("bb_saved_acts") || "[]");
-  document.getElementById("savedCount").textContent = saved.length;
+  const countEl = document.getElementById("savedCount");
+  if (countEl) countEl.textContent = saved.length;
 
   const container = document.getElementById("savedList");
+  if (!container) return;
   container.innerHTML = "";
 
   if (saved.length === 0) {
