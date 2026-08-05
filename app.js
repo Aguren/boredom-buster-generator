@@ -10,7 +10,27 @@ const availableItems = [
   { id: "tape", name: "Tape", icon: "🩹" },
   { id: "markers", name: "Markers", icon: "🖍️" },
   { id: "blankets", name: "Blankets", icon: "🧺" },
-  { id: "pots", name: "Pots & Pans", icon: "🍳" }
+  { id: "pots", name: "Pots & Pans", icon: "🍳" },
+  { id: "cups", name: "Plastic Cups", icon: "🥤" },
+  { id: "muffin_tin", name: "Muffin Tin", icon: "🧁" },
+  { id: "colander", name: "Colander", icon: "🥣" },
+  { id: "ice_cubes", name: "Ice Cubes", icon: "🧊" },
+  { id: "flashlight", name: "Flashlight", icon: "🔦" },
+  { id: "toilet_paper_rolls", name: "Paper Rolls", icon: "🧻" },
+  { id: "aluminum_foil", name: "Aluminum Foil", icon: "✨" },
+  { id: "sticky_notes", name: "Sticky Notes", icon: "📝" },
+  { id: "balloons", name: "Balloons", icon: "🎈" },
+  { id: "spray_bottle", name: "Spray Bottle", icon: "💦" },
+  { id: "laundry_basket", name: "Laundry Basket", icon: "🧺" },
+  { id: "cards", name: "Deck of Cards", icon: "🃏" },
+  { id: "hair_ties", name: "Hair Ties", icon: "⭕" },
+  { id: "spatula", name: "Spatula", icon: "🍳" },
+  { id: "coins", name: "Coins / Spare Change", icon: "🪙" },
+  { id: "rubber_bands", name: "Rubber Bands", icon: "〰️" },
+  { id: "cotton_balls", name: "Cotton Balls", icon: "☁️" },
+  { id: "straws", name: "Drinking Straws", icon: "🥤" },
+  { id: "toothpicks", name: "Toothpicks", icon: "🪵" },
+  { id: "books", name: "Hardcover Books", icon: "📚" }
 ];
 
 let selectedItems = new Set();

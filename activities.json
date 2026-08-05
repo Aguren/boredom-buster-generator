@@ -1,4 +1,4 @@
-    [
+[
   {
     "id": "act_01",
     "title": "The Cardboard Box Spaceship",
@@ -29,7 +29,7 @@
       "Draw two eyes and a mouth on the knuckle side using washable markers.",
       "Task them with putting on a 60-second secret agent play over the back of the couch."
     ],
-    "tip": "Wrap a rubber band loosely near the toe to give the puppet a pointy wizard hat."
+    "tip": "Wrap a rubber band loosely near the toe to give the puppet a pointy hat."
   },
   {
     "id": "act_03",
@@ -77,7 +77,7 @@
       "Hand over wooden spoons as drumsticks.",
       "Call out tempo changes ('SLOW MOTION!' or 'SPEED RACER!') for them to execute."
     ],
-    "tip": "Doing this on a carpet muffle the metallic echo significantly!"
+    "tip": "Doing this on a carpet muffles the metallic echo significantly!"
   },
   {
     "id": "act_06",
@@ -126,5 +126,277 @@
       "Give them toy cars (or small cardboard boxes) to run race trials."
     ],
     "tip": "Painter's tape strips easily off floors without leaving sticky residue."
+  },
+  {
+    "id": "act_09",
+    "title": "Tower of Power Destruction",
+    "items": ["cups"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "10-20 Plastic Cups",
+    "steps": [
+      "Show them how to stack cups in a 4-3-2-1 pyramid.",
+      "Let them build the tallest tower they can manage without it falling.",
+      "Roll a balled-up sock from across the room to wreck it in one shot."
+    ],
+    "tip": "Set a timer to see how many towers they can build and destroy in 3 minutes."
+  },
+  {
+    "id": "act_10",
+    "title": "Muffin Tin Color Sorting",
+    "items": ["muffin_tin", "socks"],
+    "ageGroups": ["toddler"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Muffin Tin + Assorted Colorful Socks or Toys",
+    "steps": [
+      "Place a muffin tin on the carpet.",
+      "Gather a pile of colorful socks or small toys.",
+      "Ask them to sort items into the cups by color, matching red items to one cup, blue to another."
+    ],
+    "tip": "Use kitchen tongs for older toddlers to turn it into a fine-motor challenge."
+  },
+  {
+    "id": "act_11",
+    "title": "Colander Hairdresser",
+    "items": ["colander", "string"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Upside-down Colander + Yarn or Pipe Cleaners",
+    "steps": [
+      "Turn a metal or plastic colander upside down.",
+      "Show them how to poke pieces of string or yarn through the tiny holes.",
+      "Let them create wild 'hair' for their monster creature."
+    ],
+    "tip": "This keeps toddlers focused for up to 20 minutes straight."
+  },
+  {
+    "id": "act_12",
+    "title": "Ice Cube Rescue Operation",
+    "items": ["ice_cubes", "spray_bottle"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Ice Cubes + Warm Water in a Spray Bottle + Tray",
+    "steps": [
+      "Place several ice cubes on a baking sheet or high-walled plastic tray.",
+      "Hand them a spray bottle filled with warm water.",
+      "Task them with melting the icy glaciers to rescue the 'trapped' air bubbles inside."
+    ],
+    "tip": "Add a tiny drop of food coloring to the spray bottle if you want colored melt-trails."
+  },
+  {
+    "id": "act_13",
+    "title": "Flashlight Shadow Theater",
+    "items": ["flashlight", "blankets"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Flashlight + Dark Room or Blanket Fort",
+    "steps": [
+      "Kill the overhead lights in a bedroom or drape a blanket over a table.",
+      "Point the flashlight at a bare wall.",
+      "Teach them hand shadows (bunnies, dogs, birds) and let them narrate a spooky bedtime story."
+    ],
+    "tip": "Great pre-bedtime wind-down routine when kids are overstimulated."
+  },
+  {
+    "id": "act_14",
+    "title": "Paper Roll Binoculars",
+    "items": ["toilet_paper_rolls", "tape", "markers"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "2 Toilet Paper Rolls + Tape + Markers",
+    "steps": [
+      "Tape two empty cardboard paper rolls side-by-side.",
+      "Let your child color the outside with markers or stickers.",
+      "Send them on a 'Living Room Safari' to find 5 hidden stuffed animals."
+    ],
+    "tip": "Tie a piece of yarn to both sides so they can wear them around their neck."
+  },
+  {
+    "id": "act_15",
+    "title": "Foil Sculpture Studio",
+    "items": ["aluminum_foil"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "3 Sheets of Aluminum Foil",
+    "steps": [
+      "Tear off 3 square sheets of tin foil.",
+      "Challenge them to bend, twist, and mold the foil into a robot, a crown, or a shiny animal.",
+      "No tape or glue allowed—the foil must hold its own shape!"
+    ],
+    "tip": "Have an art show on the kitchen counter when they finish."
+  },
+  {
+    "id": "act_16",
+    "title": "Sticky Note Ninja Hunt",
+    "items": ["sticky_notes"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "1 Pack of Sticky Notes",
+    "steps": [
+      "Write numbers 1 through 10 on separate sticky notes.",
+      "Hide them around the room at different heights while your kid closes their eyes.",
+      "Send them on a high-speed mission to find all 10 in numerical order."
+    ],
+    "tip": "For older kids, write letter codes on the notes that spell out a secret message."
+  },
+  {
+    "id": "act_17",
+    "title": "Keepy-Uppy Balloon Challenge",
+    "items": ["balloons"],
+    "ageGroups": ["toddler", "preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Blown-up Balloon",
+    "steps": [
+      "Blow up one balloon and tie it off.",
+      "The goal is simple: don't let the balloon touch the floor.",
+      "Add rules as they get better: knees only, head taps only, or no using hands!"
+    ],
+    "tip": "Perfect rainy-day energy burner that won't break household furniture."
+  },
+  {
+    "id": "act_18",
+    "title": "Spray Bottle Window Wash",
+    "items": ["spray_bottle"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Spray Bottle with Water + Microfiber Cloth",
+    "steps": [
+      "Fill a spray bottle with tap water and hand them a small rag.",
+      "Point them at a sliding glass door or low window.",
+      "Tell them they are on official window-cleaning duty."
+    ],
+    "tip": "Toddlers treat spraying water on glass like magic. You get clean windows for free."
+  },
+  {
+    "id": "act_19",
+    "title": "Cup & String Telephone",
+    "items": ["cups", "string"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "2 Plastic Cups + Long Piece of String",
+    "steps": [
+      "Poke a tiny hole in the bottom of two plastic cups.",
+      "Thread the string through both holes and tie knots inside the cups so it can't pull out.",
+      "Stand far apart until the string is tight, then whisper secret messages back and forth."
+    ],
+    "tip": "The string MUST be held pulled taut for the sound waves to travel!"
+  },
+  {
+    "id": "act_20",
+    "title": "Foil Boat Sink-or-Float",
+    "items": ["aluminum_foil", "pots"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Aluminum Foil + Large Pot Filled with Water",
+    "steps": [
+      "Fill a deep pot half-full with water.",
+      "Give them foil to shape into small boat hulls.",
+      "Test their designs by placing coins or small items inside to see how much weight the boat holds before sinking."
+    ],
+    "tip": "Teaches basic physics and displacement in a hands-on way."
+  },
+  {
+    "id": "act_21",
+    "title": "Balloon Tennis Match",
+    "items": ["balloons", "paper_plates", "spoons"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "1 Balloon + 2 Paper Plates + 2 Spoons or Sticks",
+    "steps": [
+      "Tape wooden spoons to the back of paper plates to make instant tennis rackets.",
+      "Blow up a balloon to serve as the tennis ball.",
+      "Volley back and forth across the living room rug!"
+    ],
+    "tip": "Set up a tape line on the floor as the official tennis net."
+  },
+  {
+    "id": "act_22",
+    "title": "Muffin Tin Target Toss",
+    "items": ["muffin_tin", "socks"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Muffin Tin + Balled-up Socks",
+    "steps": [
+      "Place a muffin tin on the floor.",
+      "Assign point values to each cup row using small sticky notes or pieces of paper.",
+      "Stand 5 feet away and toss balled-up socks into the muffin cups to tally points."
+    ],
+    "tip": "Assign higher points to the hardest-to-reach corner cups."
+  },
+  {
+    "id": "act_23",
+    "title": "Toilet Paper Roll Marble Run",
+    "items": ["toilet_paper_rolls", "tape"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "3-4 Empty Paper Rolls + Painter's Tape",
+    "steps": [
+      "Cut empty paper rolls in half lengthwise to make open chutes.",
+      "Tape them to a wall or door at declining angles to create a continuous track.",
+      "Drop a small ball or marble at the top to test the gravity run."
+    ],
+    "tip": "If the marble flies off the track, adjust the chute angle and re-test."
+  },
+  {
+    "id": "act_24",
+    "title": "Sticky Note Wall Art",
+    "items": ["sticky_notes"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Multiple Colors of Sticky Notes",
+    "steps": [
+      "Pick a blank wall, door, or window.",
+      "Use sticky notes like giant pixels to design a 2D mosaic (a heart, a Mario mushroom, or an alien).",
+      "Step back 10 feet to admire the pixel art creation."
+    ],
+    "tip": "Takes zero cleanup time—just peel them off and stick them back in the pad."
+  },
+  {
+    "id": "act_25",
+    "title": "Flashlight Stuffed Animal Rescue",
+    "items": ["flashlight", "pillows"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "1 Flashlight + Stuffed Animals + Pillows",
+    "steps": [
+      "Hide stuffed animals under pillows or behind chairs in a darkened room.",
+      "Hand your child a flashlight.",
+      "Send them on a nighttime search party to sweep the beam around and rescue every animal."
+    ],
+    "tip": "Turn off all lights to give it a thrilling 'campout' atmosphere."
   }
 ]
