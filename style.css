@@ -286,7 +286,6 @@ body {
   to { transform: translateY(-8px); }
 }
 
-/* Result Card */
 .result-card {
   background: white;
   padding: 22px;
@@ -296,6 +295,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
+  overflow: visible; /* Prevents mobile clipping */
 }
 
 .card-badges {
@@ -344,37 +345,49 @@ body {
   font-weight: 700;
 }
 
-/* Embedded Stopwatch Widget */
+/* Embedded Stopwatch Widget (Mobile-Optimized) */
 .timer-widget {
   background: #f0f9ff;
   border: 2px dashed #0284c7;
   padding: 12px;
   border-radius: 14px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  min-height: 56px; /* Ensures height doesn't collapse on mobile */
+  box-sizing: border-box;
 }
 
 .timer-display {
   font-family: var(--font-head);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #0369a1;
+  font-weight: 700;
+  min-width: 70px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
 
 .btn-timer {
   background: #0284c7;
   color: white;
   border: none;
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: 10px;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   cursor: pointer;
+  white-space: nowrap; /* Prevents text from wrapping onto two lines on small screens */
 }
 
 .btn-timer-reset {
   background: #64748b;
-  margin-left: 4px;
 }
 
 .pro-tip {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'boredom-buster-v1';
+const CACHE_NAME = 'boredom-buster-v4'; // Bump version number
 const ASSETS = [
   './',
   './index.html',
