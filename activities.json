@@ -1,0 +1,130 @@
+    [
+  {
+    "id": "act_01",
+    "title": "The Cardboard Box Spaceship",
+    "items": ["box", "tape", "markers"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "under 2 min",
+    "materialsText": "1 Box + Markers or Tape",
+    "steps": [
+      "Place the box in the middle of the room and announce it as a rocket heading to Jupiter.",
+      "Hand them markers to draw dashboard controls and button panels on the interior walls.",
+      "Give them a pillow for the pilot's seat and start a loud 10-second countdown."
+    ],
+    "tip": "Warning: They will insist on eating lunch inside this box for the next three days."
+  },
+  {
+    "id": "act_02",
+    "title": "Sock Puppet Sneak Attack",
+    "items": ["socks", "markers"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "2 Clean Socks + Marker",
+    "steps": [
+      "Put socks over your child's hands like mitts.",
+      "Draw two eyes and a mouth on the knuckle side using washable markers.",
+      "Task them with putting on a 60-second secret agent play over the back of the couch."
+    ],
+    "tip": "Wrap a rubber band loosely near the toe to give the puppet a pointy wizard hat."
+  },
+  {
+    "id": "act_03",
+    "title": "Hallway Laser Maze",
+    "items": ["string", "tape"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "String or Yarn + Painter's Tape",
+    "steps": [
+      "Tape string back and forth across a narrow hallway at various heights.",
+      "Instruct them to crawl through from one side to the other without touching the lasers.",
+      "Time their runs with your phone timer so they can try to break their world record."
+    ],
+    "tip": "If they touch a string, they have to do 5 jumping jacks before continuing."
+  },
+  {
+    "id": "act_04",
+    "title": "Fortress of Solitude",
+    "items": ["pillows", "blankets"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Couch Cushions, Pillows & Blanket",
+    "steps": [
+      "Stand cushions vertically to form fortress walls.",
+      "Drape a light blanket across the top gap.",
+      "Send them inside with a flashlight and a single snack to hold off imaginary dragons."
+    ],
+    "tip": "Anchor blanket corners under heavy books so it won't collapse during entry."
+  },
+  {
+    "id": "act_05",
+    "title": "Kitchen Sink Drumline",
+    "items": ["spoons", "pots"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "30 sec",
+    "materialsText": "2 Wooden Spoons + Upside-down Pots",
+    "steps": [
+      "Flip 2 plastic bowls and 1 metal pot upside down on a rug.",
+      "Hand over wooden spoons as drumsticks.",
+      "Call out tempo changes ('SLOW MOTION!' or 'SPEED RACER!') for them to execute."
+    ],
+    "tip": "Doing this on a carpet muffle the metallic echo significantly!"
+  },
+  {
+    "id": "act_06",
+    "title": "Paper Plate Frisbee Golf",
+    "items": ["paper_plates", "tape"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "3 Paper Plates + Tape",
+    "steps": [
+      "Write 10, 50, and 100 points on 3 paper plates.",
+      "Tape them to doors or walls at various heights across the room.",
+      "Have them throw balled-up socks or paper frisbees from 8 feet away."
+    ],
+    "tip": "Cut out the centers of the paper plates to make target rings instead."
+  },
+  {
+    "id": "act_07",
+    "title": "The Floor Is Lava Trail",
+    "items": ["pillows", "paper_plates"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Pillows + Paper Plates",
+    "steps": [
+      "Lay out paper plates and pillows across the living room carpet like stepping stones.",
+      "Declare the carpet to be molten lava.",
+      "Challenge them to cross from room A to room B without touching the rug."
+    ],
+    "tip": "Space items farther apart for older kids to force long leaps."
+  },
+  {
+    "id": "act_08",
+    "title": "Tape Track Grand Prix",
+    "items": ["tape", "box"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Painter's Tape + Toy Cars or Boxes",
+    "steps": [
+      "Tape a winding road circuit directly onto the rug or hardwood floor.",
+      "Include sharp turns, parking spots, and a pit stop zone.",
+      "Give them toy cars (or small cardboard boxes) to run race trials."
+    ],
+    "tip": "Painter's tape strips easily off floors without leaving sticky residue."
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "short_name": "BoredomBuster",
+  "name": "The Boredom Buster Activity Generator",
+  "icons": [
+    {
+      "src": "https://fav.farm/🚀",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#f4f7fb",
+  "theme_color": "#ff5964",
+  "display": "standalone",
+  "orientation": "portrait"
+}
