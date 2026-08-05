@@ -181,7 +181,7 @@ async function loadActivities() {
   }
 }
 
-// Adaptive Fallback Matching Engine
+// Fixed Matching Engine: Scores activities by item overlap
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
@@ -190,46 +190,61 @@ function generateActivity(isSurpriseMode = false) {
   const chosenItems = Array.from(selectedItems);
 
   if (isSurpriseMode) {
+    // Surprise Mode: Context match only
     matches = allActivities.filter(act => 
       act.ageGroups.includes(selectedAge) && 
       act.messLevel === selectedMess && 
       act.energyLevel === selectedEnergy
     );
   } else {
-    // Tier 1: Strict Match (Items AND Age AND Energy AND Mess)
-    matches = allActivities.filter(act => {
-      const sharesItem = act.items.some(i => chosenItems.includes(i));
-      return sharesItem && 
-             act.ageGroups.includes(selectedAge) && 
-             act.energyLevel === selectedEnergy && 
-             act.messLevel === selectedMess;
-    });
+    // 1. Calculate how many selected items each activity matches
+    const scoredActivities = allActivities.map(act => {
+      const matchCount = act.items.filter(item => chosenItems.includes(item)).length;
+      return { activity: act, matchCount };
+    }).filter(item => item.matchCount > 0); // Must match at least ONE selected item
 
-    // Tier 2: Relax Mess level if options < 5
-    if (matches.length < 5) {
-      const tier2 = allActivities.filter(act => {
-        const sharesItem = act.items.some(i => chosenItems.includes(i));
-        return sharesItem && act.ageGroups.includes(selectedAge) && act.energyLevel === selectedEnergy;
-      });
-      if (tier2.length > matches.length) matches = tier2;
-    }
+    if (scoredActivities.length > 0) {
+      // Sort by highest item overlap first
+      scoredActivities.sort((a, b) => b.matchCount - a.matchCount);
 
-    // Tier 3: Relax Energy filter if options < 5
-    if (matches.length < 5) {
-      const tier3 = allActivities.filter(act => 
-        act.items.some(i => chosenItems.includes(i)) && act.ageGroups.includes(selectedAge)
-      );
-      if (tier3.length > matches.length) matches = tier3;
-    }
+      // 2. Strict Filter (Highest Item Overlap + Exact Age + Exact Energy + Exact Mess)
+      let maxOverlap = scoredActivities[0].matchCount;
+      matches = scoredActivities
+        .filter(item => item.matchCount === maxOverlap && 
+                        item.activity.ageGroups.includes(selectedAge) &&
+                        item.activity.messLevel === selectedMess &&
+                        item.activity.energyLevel === selectedEnergy)
+        .map(item => item.activity);
 
-    // Tier 4: Match ANY activity sharing ANY selected item
-    if (matches.length < 5) {
-      const tier4 = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
-      if (tier4.length > matches.length) matches = tier4;
+      // 3. Fallback Tier A: Relax Mess Level (Keep highest item overlap + Age + Energy)
+      if (matches.length < 2) {
+        const fallbackA = scoredActivities
+          .filter(item => item.matchCount >= Math.max(1, maxOverlap - 1) && 
+                          item.activity.ageGroups.includes(selectedAge) &&
+                          item.activity.energyLevel === selectedEnergy)
+          .map(item => item.activity);
+        if (fallbackA.length > matches.length) matches = fallbackA;
+      }
+
+      // 4. Fallback Tier B: Relax Energy Level (Keep highest item overlap + Age)
+      if (matches.length < 2) {
+        const fallbackB = scoredActivities
+          .filter(item => item.matchCount >= Math.max(1, maxOverlap - 1) && 
+                          item.activity.ageGroups.includes(selectedAge))
+          .map(item => item.activity);
+        if (fallbackB.length > matches.length) matches = fallbackB;
+      }
+
+      // 5. Fallback Tier C: Highest item overlap only
+      if (matches.length < 2) {
+        matches = scoredActivities
+          .filter(item => item.matchCount === maxOverlap)
+          .map(item => item.activity);
+      }
     }
   }
 
-  // Safety Fallback: Use full database if needed
+  // Safety Fallback
   if (matches.length === 0) matches = allActivities;
 
   // Filter out recently shown items to eliminate loops
@@ -240,9 +255,9 @@ function generateActivity(isSurpriseMode = false) {
   const selected = finalPool[Math.floor(Math.random() * finalPool.length)];
   currentActivity = selected;
 
-  // Track history (keep last 8)
+  // Track history (keep last 10 to avoid quick repeats)
   recentlyShownIds.push(selected.id);
-  if (recentlyShownIds.length > 8) recentlyShownIds.shift();
+  if (recentlyShownIds.length > 10) recentlyShownIds.shift();
 
   // Run Shuffle Animation
   runSlotAnimation(() => {
