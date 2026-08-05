@@ -2,7 +2,7 @@
   {
     "id": "act_01",
     "title": "The Cardboard Box Spaceship",
-    "items": ["box", "tape", "markers"],
+    "items": ["box", "tape", "markers", "pillows", "blankets"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -18,7 +18,7 @@
   {
     "id": "act_02",
     "title": "Sock Puppet Sneak Attack",
-    "items": ["socks", "markers"],
+    "items": ["socks", "markers", "rubber_bands", "string"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -34,7 +34,7 @@
   {
     "id": "act_03",
     "title": "Hallway Laser Maze",
-    "items": ["string", "tape"],
+    "items": ["string", "tape", "paper_plates"],
     "ageGroups": ["preschool", "big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -50,7 +50,7 @@
   {
     "id": "act_04",
     "title": "Fortress of Solitude",
-    "items": ["pillows", "blankets"],
+    "items": ["pillows", "blankets", "flashlight", "books", "box"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "minor",
     "energyLevel": "quiet",
@@ -66,7 +66,7 @@
   {
     "id": "act_05",
     "title": "Kitchen Sink Drumline",
-    "items": ["spoons", "pots"],
+    "items": ["spoons", "pots", "spatula", "muffin_tin", "colander"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -82,7 +82,7 @@
   {
     "id": "act_06",
     "title": "Paper Plate Frisbee Golf",
-    "items": ["paper_plates", "tape"],
+    "items": ["paper_plates", "tape", "socks", "markers"],
     "ageGroups": ["preschool", "big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -98,7 +98,7 @@
   {
     "id": "act_07",
     "title": "The Floor Is Lava Trail",
-    "items": ["pillows", "paper_plates"],
+    "items": ["pillows", "paper_plates", "blankets", "books"],
     "ageGroups": ["preschool", "big-kid"],
     "messLevel": "minor",
     "energyLevel": "burn",
@@ -114,7 +114,7 @@
   {
     "id": "act_08",
     "title": "Tape Track Grand Prix",
-    "items": ["tape", "box"],
+    "items": ["tape", "box", "books", "paper_plates", "cups"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -130,7 +130,7 @@
   {
     "id": "act_09",
     "title": "Tower of Power Destruction",
-    "items": ["cups"],
+    "items": ["cups", "socks", "cards", "toilet_paper_rolls"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -146,7 +146,7 @@
   {
     "id": "act_10",
     "title": "Muffin Tin Color Sorting",
-    "items": ["muffin_tin", "socks"],
+    "items": ["muffin_tin", "socks", "hair_ties", "coins", "cotton_balls"],
     "ageGroups": ["toddler"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -162,15 +162,15 @@
   {
     "id": "act_11",
     "title": "Colander Hairdresser",
-    "items": ["colander", "string"],
+    "items": ["colander", "string", "straws", "rubber_bands", "toothpicks"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "zero",
     "energyLevel": "quiet",
     "setupTime": "1 min",
-    "materialsText": "1 Upside-down Colander + Yarn or Pipe Cleaners",
+    "materialsText": "1 Upside-down Colander + Yarn or Straws",
     "steps": [
       "Turn a metal or plastic colander upside down.",
-      "Show them how to poke pieces of string or yarn through the tiny holes.",
+      "Show them how to poke pieces of string or drinking straws through the tiny holes.",
       "Let them create wild 'hair' for their monster creature."
     ],
     "tip": "This keeps toddlers focused for up to 20 minutes straight."
@@ -178,8 +178,8 @@
   {
     "id": "act_12",
     "title": "Ice Cube Rescue Operation",
-    "items": ["ice_cubes", "spray_bottle"],
-    "ageGroups": ["preschool", "big-kid"],
+    "items": ["ice_cubes", "spray_bottle", "cups", "pots", "colander"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "minor",
     "energyLevel": "quiet",
     "setupTime": "2 min",
@@ -194,7 +194,7 @@
   {
     "id": "act_13",
     "title": "Flashlight Shadow Theater",
-    "items": ["flashlight", "blankets"],
+    "items": ["flashlight", "blankets", "pillows", "paper_plates", "straws"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -210,7 +210,7 @@
   {
     "id": "act_14",
     "title": "Paper Roll Binoculars",
-    "items": ["toilet_paper_rolls", "tape", "markers"],
+    "items": ["toilet_paper_rolls", "tape", "markers", "string"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -226,7 +226,7 @@
   {
     "id": "act_15",
     "title": "Foil Sculpture Studio",
-    "items": ["aluminum_foil"],
+    "items": ["aluminum_foil", "coins", "toothpicks"],
     "ageGroups": ["preschool", "big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -242,7 +242,7 @@
   {
     "id": "act_16",
     "title": "Sticky Note Ninja Hunt",
-    "items": ["sticky_notes"],
+    "items": ["sticky_notes", "markers", "tape"],
     "ageGroups": ["preschool", "big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -258,7 +258,7 @@
   {
     "id": "act_17",
     "title": "Keepy-Uppy Balloon Challenge",
-    "items": ["balloons"],
+    "items": ["balloons", "paper_plates", "spoons", "spatula", "socks"],
     "ageGroups": ["toddler", "preschool", "big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -274,7 +274,7 @@
   {
     "id": "act_18",
     "title": "Spray Bottle Window Wash",
-    "items": ["spray_bottle"],
+    "items": ["spray_bottle", "sticky_notes", "tape"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "minor",
     "energyLevel": "burn",
@@ -290,7 +290,7 @@
   {
     "id": "act_19",
     "title": "Cup & String Telephone",
-    "items": ["cups", "string"],
+    "items": ["cups", "string", "toilet_paper_rolls"],
     "ageGroups": ["preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -306,8 +306,8 @@
   {
     "id": "act_20",
     "title": "Foil Boat Sink-or-Float",
-    "items": ["aluminum_foil", "pots"],
-    "ageGroups": ["preschool", "big-kid"],
+    "items": ["aluminum_foil", "pots", "coins", "cups", "colander"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
     "messLevel": "minor",
     "energyLevel": "quiet",
     "setupTime": "2 min",
@@ -322,7 +322,7 @@
   {
     "id": "act_21",
     "title": "Balloon Tennis Match",
-    "items": ["balloons", "paper_plates", "spoons"],
+    "items": ["balloons", "paper_plates", "spoons", "spatula", "tape"],
     "ageGroups": ["preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -338,7 +338,7 @@
   {
     "id": "act_22",
     "title": "Muffin Tin Target Toss",
-    "items": ["muffin_tin", "socks"],
+    "items": ["muffin_tin", "socks", "coins", "cotton_balls", "sticky_notes"],
     "ageGroups": ["toddler", "preschool", "big-kid"],
     "messLevel": "zero",
     "energyLevel": "burn",
@@ -353,8 +353,8 @@
   },
   {
     "id": "act_23",
-    "title": "Toilet Paper Roll Marble Run",
-    "items": ["toilet_paper_rolls", "tape"],
+    "title": "Paper Roll Marble Run",
+    "items": ["toilet_paper_rolls", "tape", "box", "straws"],
     "ageGroups": ["big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -370,7 +370,7 @@
   {
     "id": "act_24",
     "title": "Sticky Note Wall Art",
-    "items": ["sticky_notes"],
+    "items": ["sticky_notes", "markers", "tape"],
     "ageGroups": ["big-kid", "tween"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -386,7 +386,7 @@
   {
     "id": "act_25",
     "title": "Flashlight Stuffed Animal Rescue",
-    "items": ["flashlight", "pillows"],
+    "items": ["flashlight", "pillows", "blankets"],
     "ageGroups": ["toddler", "preschool"],
     "messLevel": "zero",
     "energyLevel": "quiet",
@@ -398,5 +398,1205 @@
       "Send them on a nighttime search party to sweep the beam around and rescue every animal."
     ],
     "tip": "Turn off all lights to give it a thrilling 'campout' atmosphere."
+  },
+  {
+    "id": "act_26",
+    "title": "Laundry Basket Bobsled",
+    "items": ["laundry_basket", "blankets", "pillows"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Laundry Basket + Blanket",
+    "steps": [
+      "Line a plastic laundry basket with a soft folded blanket.",
+      "Have your child sit inside and hold the front handles firmly.",
+      "Pull them slowly across hardwood or tile floors on a magical bobsled tour."
+    ],
+    "tip": "Only attempt on smooth flooring, and keep speed manageable."
+  },
+  {
+    "id": "act_27",
+    "title": "Card Tower Collision Course",
+    "items": ["cards", "books", "cups"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "1 Deck of Playing Cards",
+    "steps": [
+      "Show them how to lean two cards together into a triangular tent shape.",
+      "Challenge them to build a 3-tier house of cards on a flat surface.",
+      "Count how many seconds the structure stands before it collapses."
+    ],
+    "tip": "Building on carpet or a felt mat prevents cards from slipping out."
+  },
+  {
+    "id": "act_28",
+    "title": "Hair Tie Door Knob Target Toss",
+    "items": ["hair_ties", "rubber_bands", "tape"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "5 Elastic Hair Ties",
+    "steps": [
+      "Stand 4 feet away from an interior doorknob.",
+      "Toss stretchy hair ties like mini ring-toss hoops.",
+      "Land 3 rings around the knob in a row to win."
+    ],
+    "tip": "Assign different point values to different doorknobs down the hallway."
+  },
+  {
+    "id": "act_29",
+    "title": "Spatula Balloon Hockey",
+    "items": ["spatula", "balloons", "spoons", "tape"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "2 Kitchen Spatulas + 1 Balloon + 2 Chairs",
+    "steps": [
+      "Set up two chairs as goalposts at opposite ends of the room.",
+      "Hand out spatulas as hockey sticks.",
+      "Sweep and flick the balloon across the rug to score goals."
+    ],
+    "tip": "Hands cannot touch the balloon during play—spatulas only!"
+  },
+  {
+    "id": "act_30",
+    "title": "Coin Drop Precision Challenge",
+    "items": ["coins", "cups", "muffin_tin"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "5 Coins + 1 Plastic Cup",
+    "steps": [
+      "Place a plastic cup on the floor.",
+      "Have your child stand completely upright directly over the cup.",
+      "Hold coins at chin level and drop them, aiming to land every coin inside."
+    ],
+    "tip": "Try dropping while standing on one foot to increase difficulty."
+  },
+  {
+    "id": "act_31",
+    "title": "Rubber Band Guitar Jam",
+    "items": ["rubber_bands", "muffin_tin", "box", "books"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "4-6 Rubber Bands + Muffin Tin or Tissue Box",
+    "steps": [
+      "Stretch rubber bands of varying thicknesses across an empty muffin tin.",
+      "Show them how plucking different band sizes alters the musical pitch.",
+      "Let them compose a 30-second acoustic song."
+    ],
+    "tip": "Thicker rubber bands create deeper bass notes."
+  },
+  {
+    "id": "act_32",
+    "title": "Cotton Ball Blizzard Sweep",
+    "items": ["cotton_balls", "spatula", "tape", "spoons", "box"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "15 Cotton Balls + Spatula + Tape",
+    "steps": [
+      "Tape a square target on the living room floor.",
+      "Scatter cotton balls across the carpet like a snowstorm.",
+      "Task them with using only a spatula to sweep all cotton balls into the box."
+    ],
+    "tip": "Set a timer to see if they can clear the floor in under 60 seconds."
+  },
+  {
+    "id": "act_33",
+    "title": "Straw Rocket Launchpad",
+    "items": ["straws", "paper_plates", "tape", "markers"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "1 Drinking Straw + Paper + Tape",
+    "steps": [
+      "Roll a small piece of paper tightly around a pencil, tape it into a tube, and seal one end.",
+      "Slide the paper tube over a drinking straw.",
+      "Blow hard into the straw to launch the paper rocket across the room."
+    ],
+    "tip": "Angle the launch trajectory at 45 degrees for maximum distance."
+  },
+  {
+    "id": "act_34",
+    "title": "Toothpick Engineering Lab",
+    "items": ["toothpicks", "muffin_tin", "aluminum_foil", "straws"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Pack of Toothpicks + Playdough or Marshmallows",
+    "steps": [
+      "Connect toothpicks together using small connectors (playdough balls or mini marshmallows).",
+      "Build a geometric cube, pyramid, or tall tower.",
+      "Test structural strength by gently pressing on top."
+    ],
+    "tip": "Triangular base patterns create much stronger towers than squares."
+  },
+  {
+    "id": "act_35",
+    "title": "Hardcover Book Domino Rally",
+    "items": ["books", "cards", "box"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "8-15 Hardcover Books",
+    "steps": [
+      "Stand hardcover books upright on their bottom edges, spaced 2 inches apart.",
+      "Curve the line around table legs or hallway corners.",
+      "Tap the first book to trigger a chain-reaction tumble."
+    ],
+    "tip": "Keep spacing consistent so every falling book reaches the next."
+  },
+  {
+    "id": "act_36",
+    "title": "Laundry Basket Hoop Dreams",
+    "items": ["laundry_basket", "socks", "tape", "pillows"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Laundry Basket + 5 Balled-up Socks",
+    "steps": [
+      "Place a laundry basket atop a chair or bed.",
+      "Mark a shooting line on the floor 6 feet away using tape.",
+      "Attempt 5 sock jumpshots, tallying high scores."
+    ],
+    "tip": "Move the basket higher up to elevate the challenge level."
+  },
+  {
+    "id": "act_37",
+    "title": "Card Matching Memory Grid",
+    "items": ["cards", "sticky_notes"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "12 Matching Pairs of Playing Cards",
+    "steps": [
+      "Lay 24 cards face-down in a neat grid pattern.",
+      "Players flip two cards per turn searching for matching numbers.",
+      "Keep matched pairs until the grid is cleared."
+    ],
+    "tip": "Use fewer cards (6 pairs) for younger toddlers."
+  },
+  {
+    "id": "act_38",
+    "title": "Spoon & Cotton Ball Relay",
+    "items": ["spoons", "cotton_balls", "cups", "muffin_tin"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Wooden Spoon + Cotton Balls + 2 Bowls",
+    "steps": [
+      "Set one bowl filled with cotton balls at one end of the room.",
+      "Place an empty bowl at the opposite end.",
+      "Balance a cotton ball on a spoon and walk fast to transfer items across without dropping them."
+    ],
+    "tip": "Hold the spoon handle with non-dominant hands for older kids."
+  },
+  {
+    "id": "act_39",
+    "title": "Coin Rubbing Art Gallery",
+    "items": ["coins", "markers", "paper_plates"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Assorted Coins + Paper + Crayons/Markers",
+    "steps": [
+      "Place coins under a thin sheet of paper.",
+      "Rub the side of a crayon over the paper surface to reveal coin textures.",
+      "Arrange coin patterns to create artwork."
+    ],
+    "tip": "Bigger coins (quarters, half-dollars) provide clearest details."
+  },
+  {
+    "id": "act_40",
+    "title": "Balloon Volleyball",
+    "items": ["balloons", "string", "tape", "pillows"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "1 Balloon + String + 2 Chairs",
+    "steps": [
+      "Tie string between two chair backs to mark a volleyball net.",
+      "Kneel on opposite sides of the string.",
+      "Volley the balloon over the net without letting it touch the floor."
+    ],
+    "tip": "Kneeling keeps play controlled indoors."
+  },
+  {
+    "id": "act_41",
+    "title": "Straw Maze Navigation",
+    "items": ["straws", "tape", "box"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Drinking Straws + Box Lid + Tape + Small Ball",
+    "steps": [
+      "Tape straws inside a shallow box lid to build maze paths.",
+      "Place a marble or small ball at the entrance.",
+      "Tilt the box lid to guide the ball through to the exit."
+    ],
+    "tip": "Cut straw segments shorter to build tricky dead-end turns."
+  },
+  {
+    "id": "act_42",
+    "title": "Toothpick Tower Balance",
+    "items": ["toothpicks", "coins"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Toothpicks + Coins",
+    "steps": [
+      "Balance a single toothpick across a coin or rim.",
+      "Stack additional toothpicks crosswise without disturbing the structure.",
+      "Count how many toothpicks can balance before tipping over."
+    ],
+    "tip": "Requires steady hands and concentration."
+  },
+  {
+    "id": "act_43",
+    "title": "Book Bridge Weight Test",
+    "items": ["books", "paper_plates", "coins"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "2 Books + Paper + Coins",
+    "steps": [
+      "Set two books 5 inches apart.",
+      "Bridge the gap with a single piece of paper.",
+      "Fold paper into accordion pleats and re-test how many coins it supports."
+    ],
+    "tip": "Accordion folds distribute weight efficiently across the span."
+  },
+  {
+    "id": "act_44",
+    "title": "Hair Tie Slingshot Target",
+    "items": ["hair_ties", "cups"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "3 Stretchy Hair Ties + Plastic Cups",
+    "steps": [
+      "Stack plastic cups into a target pyramid.",
+      "Hook a hair tie over thumb tips and flick gently toward cup targets.",
+      "Knock down the entire stack in under three shots."
+    ],
+    "tip": "Flick downwards toward the floor for safe trajectories."
+  },
+  {
+    "id": "act_45",
+    "title": "Spatula Balance Walk",
+    "items": ["spatula", "socks"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "30 sec",
+    "materialsText": "1 Spatula + 1 Balled-up Sock",
+    "steps": [
+      "Balance a balled-up sock on a flat spatula head.",
+      "Walk along a taped line or rug edge without dropping the sock.",
+      "Step over obstacles along the path."
+    ],
+    "tip": "Perform a full turn mid-walk to increase difficulty."
+  },
+  {
+    "id": "act_46",
+    "title": "Flashlight Code Signals",
+    "items": ["flashlight"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Flashlight",
+    "steps": [
+      "Darken the room slightly.",
+      "Create a signal code (1 flash = YES, 2 flashes = NO, 3 = DANCE).",
+      "Send secret light messages across the room."
+    ],
+    "tip": "Try inventing custom Morse code variations."
+  },
+  {
+    "id": "act_47",
+    "title": "Paper Roll Marble Slide",
+    "items": ["toilet_paper_rolls", "tape", "cups"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Paper Rolls + Tape + Cup",
+    "steps": [
+      "Tape paper rolls together end-to-end.",
+      "Angle the long tube down from a sofa armrest into a cup on the floor.",
+      "Roll marbles or cotton balls down the chute."
+    ],
+    "tip": "Ensure internal seams don't catch rolling marbles."
+  },
+  {
+    "id": "act_48",
+    "title": "Foil Animal Menagerie",
+    "items": ["aluminum_foil"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "Aluminum Foil Sheets",
+    "steps": [
+      "Tear off 3 foil sheets.",
+      "Crumple and shape foil into mini animal figures.",
+      "Build a tiny foil zoo display."
+    ],
+    "tip": "Foil holds shapes easily without adhesives."
+  },
+  {
+    "id": "act_49",
+    "title": "Sticky Note Scavenger Hunt",
+    "items": ["sticky_notes", "markers"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "Sticky Notes + Marker",
+    "steps": [
+      "Draw simple shapes on 6 sticky notes.",
+      "Stick them around the room at eye level.",
+      "Task your child with finding all notes and bringing them back."
+    ],
+    "tip": "Match sticky note colors to specific room zones."
+  },
+  {
+    "id": "act_50",
+    "title": "Spray Bottle Target Erase",
+    "items": ["spray_bottle", "tape"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "Spray Bottle filled with Water + Sidewalk Chalk or Outdoor Wall",
+    "steps": [
+      "Draw target circles with chalk on an outdoor wall or patio floor.",
+      "Hand over a water spray bottle.",
+      "Blast targets with water streams until chalk marks disappear."
+    ],
+    "tip": "Adjust nozzle setting to a sharp stream for better range."
+  },
+  {
+    "id": "act_51",
+    "title": "Muffin Tin Sorting Dash",
+    "items": ["muffin_tin", "coins", "socks"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Muffin Tin + Assorted Items",
+    "steps": [
+      "Place a muffin tin at one end of the room.",
+      "Scatter items (socks, coins, paper clips) at the opposite end.",
+      "Run back and forth transporting one item at a time to sort into muffin cups."
+    ],
+    "tip": "Builds speed and sorting accuracy simultaneously."
+  },
+  {
+    "id": "act_52",
+    "title": "Colander Bubble Blowing",
+    "items": ["colander", "cups"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Colander + Water & Dish Soap in a Bowl",
+    "steps": [
+      "Mix water and dish soap in a broad dish.",
+      "Dip colander bottom into the soapy mix.",
+      "Blow gently through holes to create bubble clusters."
+    ],
+    "tip": "Best played outdoors or over a kitchen towel."
+  },
+  {
+    "id": "act_53",
+    "title": "Ice Cube Hockey Track",
+    "items": ["ice_cubes", "spoons", "box"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Ice Cube + 2 Spoons + Baking Sheet",
+    "steps": [
+      "Place an ice cube onto a rimmed baking sheet.",
+      "Use wooden spoons to slide the ice back and forth.",
+      "Try scoring goals past your opponent's spoon."
+    ],
+    "tip": "Melting ice makes sliding tracks faster over time."
+  },
+  {
+    "id": "act_54",
+    "title": "Pillow Cushion Crawl",
+    "items": ["pillows", "blankets"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Pillows + Cushions + Blanket",
+    "steps": [
+      "Pile pillows and couch cushions under a heavy blanket.",
+      "Create a lumpy crawling hill terrain.",
+      "Crawl across the hill path without falling off."
+    ],
+    "tip": "Build soft landing zones around edges."
+  },
+  {
+    "id": "act_55",
+    "title": "Kitchen Pot Echo Chamber",
+    "items": ["pots", "spoons"],
+    "ageGroups": ["toddler"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "1 Large Pot + Wooden Spoon",
+    "steps": [
+      "Sing or speak into an empty metal pot to hear echo reverberations.",
+      "Tap the pot sides gently with wooden spoons to compare pitches.",
+      "Explore quiet acoustics together."
+    ],
+    "tip": "Demonstrates sound reverberation safely."
+  },
+  {
+    "id": "act_56",
+    "title": "Paper Plate Steering Wheel",
+    "items": ["paper_plates", "markers"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Paper Plate + Markers",
+    "steps": [
+      "Draw a dashboard onto a paper plate.",
+      "Hold the plate like a steering wheel and drive around the house.",
+      "Steer around chairs and stop at imaginary red lights."
+    ],
+    "tip": "Add turn signal buttons for realism."
+  },
+  {
+    "id": "act_57",
+    "title": "Sock Sorting Time Attack",
+    "items": ["socks"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "10 Pairs of Unmatched Clean Socks",
+    "steps": [
+      "Dump clean socks into a central pile.",
+      "Start a timer.",
+      "Match pairs and roll them into balls as quickly as possible."
+    ],
+    "tip": "Turns household chores into a competitive game."
+  },
+  {
+    "id": "act_58",
+    "title": "Tape Balance Beam",
+    "items": ["tape"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Painter's Tape",
+    "steps": [
+      "Stick a straight line of tape along the carpet.",
+      "Walk heel-to-toe along the tape without stepping off.",
+      "Try walking backwards or hopping on one foot along the line."
+    ],
+    "tip": "Add zig-zag segments for advanced balance practice."
+  },
+  {
+    "id": "act_59",
+    "title": "Plastic Cup Bowling Alley",
+    "items": ["cups", "socks"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "6 Plastic Cups + 1 Balled-up Sock",
+    "steps": [
+      "Arrange 6 plastic cups into a bowling triangle.",
+      "Take 3 steps back.",
+      "Roll a sock ball across the floor to knock down pins."
+    ],
+    "tip": "Keep score over 5 bowling frames."
+  },
+  {
+    "id": "act_60",
+    "title": "Yarn Web Escape Room",
+    "items": ["string"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "Yarn or String + 4 Chairs",
+    "steps": [
+      "Position four chairs in a square.",
+      "Wrap yarn around chair legs to build a low obstacle web.",
+      "Step over and duck under yarn strands without snagging threads."
+    ],
+    "tip": "Attach a small bell to signal web contacts."
+  },
+  {
+    "id": "act_61",
+    "title": "Card Flip Probability Game",
+    "items": ["cards"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "1 Deck of Playing Cards",
+    "steps": [
+      "Place a card face down.",
+      "Guess whether the next drawn card will be higher or lower.",
+      "Track how many correct guesses you make in a row."
+    ],
+    "tip": "Aces count low, Kings count high."
+  },
+  {
+    "id": "act_62",
+    "title": "Rubber Band Target Board",
+    "items": ["rubber_bands", "cups"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Rubber Bands + Plastic Cups",
+    "steps": [
+      "Set up plastic cup targets on a table.",
+      "Hold rubber bands between fingers.",
+      "Flick rubber bands carefully to knock targets off the table."
+    ],
+    "tip": "Ensure safety by shooting away from people."
+  },
+  {
+    "id": "act_63",
+    "title": "Cotton Ball Blowing Race",
+    "items": ["cotton_balls", "straws"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Cotton Balls + Drinking Straws",
+    "steps": [
+      "Mark start and finish lines on a smooth table.",
+      "Place a cotton ball at the start.",
+      "Blow through a straw to power your cotton ball across the finish line."
+    ],
+    "tip": "No direct physical contact allowed—air power only!"
+  },
+  {
+    "id": "act_64",
+    "title": "Straw & Connector Architecture",
+    "items": ["straws", "tape"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Drinking Straws + Tape",
+    "steps": [
+      "Snip small slits in straw ends to join them together.",
+      "Use tape to secure joints.",
+      "Construct a bridge structure capable of supporting a lightweight toy."
+    ],
+    "tip": "Triangular bracing creates maximum stability."
+  },
+  {
+    "id": "act_65",
+    "title": "Toothpick Shadow Sculptures",
+    "items": ["toothpicks", "flashlight"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Toothpicks + Playdough + Flashlight",
+    "steps": [
+      "Build a abstract toothpick sculpture on a small base.",
+      "Shine a flashlight on the sculpture toward a blank wall.",
+      "Observe and draw the intricate shadow patterns generated."
+    ],
+    "tip": "Rotate the light source angle to alter shadow shapes."
+  },
+  {
+    "id": "act_66",
+    "title": "Hardcover Book Marble Track",
+    "items": ["books"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "3-5 Hardcover Books",
+    "steps": [
+      "Prop open books at varying angles across a table.",
+      "Use the spine grooves as marble tracks.",
+      "Guide marbles down a multi-book path."
+    ],
+    "tip": "Adjust book tilt angles to control marble speeds."
+  },
+  {
+    "id": "act_67",
+    "title": "Laundry Basket Catch",
+    "items": ["laundry_basket", "balloons"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "1 Laundry Basket + 1 Balloon",
+    "steps": [
+      "Parent tosses a balloon high into the air.",
+      "Child runs underneath holding a laundry basket to catch it before it hits the floor.",
+      "Repeat from greater distances."
+    ],
+    "tip": "Keeps toddlers moving without risk of injury."
+  },
+  {
+    "id": "act_68",
+    "title": "Coin Spinning Championship",
+    "items": ["coins"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "Assorted Coins",
+    "steps": [
+      "Flick coins into a spin on a hard table surface.",
+      "Time how long each coin spins before topping over.",
+      "Crown the longest-spinning coin size champion."
+    ],
+    "tip": "Quarters and nickel coins usually spin longest."
+  },
+  {
+    "id": "act_69",
+    "title": "Hair Tie Color Match Sprint",
+    "items": ["hair_ties", "paper_plates"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Colorful Hair Ties + Paper Plates with Color Spots",
+    "steps": [
+      "Place color-coded paper plates across the room.",
+      "Hand your child mixed hair ties.",
+      "Run and match hair ties to their corresponding plate colors."
+    ],
+    "tip": "Combines color recognition with physical activity."
+  },
+  {
+    "id": "act_70",
+    "title": "Spatula Bubble Wand",
+    "items": ["spatula", "cups"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Slotted Spatula + Soapy Water in Cup",
+    "steps": [
+      "Dip a slotted spatula into soapy water.",
+      "Wave it slowly through the air to form long bubble trails.",
+      "Count how many bubbles form in a single wave."
+    ],
+    "tip": "Slotted spatula designs create unique multi-bubbles."
+  },
+  {
+    "id": "act_71",
+    "title": "Paper Roll Telescope Quest",
+    "items": ["toilet_paper_rolls"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "1 Empty Paper Roll",
+    "steps": [
+      "Look through a paper roll telescope with one eye.",
+      "Spot 3 red items hidden around the room.",
+      "Describe what you see through your scope."
+    ],
+    "tip": "Narrows visual focus to help calm overstimulated children."
+  },
+  {
+    "id": "act_72",
+    "title": "Sticky Note Target Bullseye",
+    "items": ["sticky_notes", "socks"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Sticky Notes + Sock Ball",
+    "steps": [
+      "Stick concentric rings of sticky notes on a door as a bullseye target.",
+      "Throw sock balls from 6 feet away.",
+      "Add up score points based on which ring you hit."
+    ],
+    "tip": "Center notes yield highest point values."
+  },
+  {
+    "id": "act_73",
+    "title": "Foil Mask Studio",
+    "items": ["aluminum_foil"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Aluminum Foil Sheet",
+    "steps": [
+      "Press a sheet of foil gently over a toy or doll face to imprint features.",
+      "Carefully lift off the foil to reveal a 3D impression mask.",
+      "Display your metal mask creation."
+    ],
+    "tip": "Do not press directly on human eyes or nose areas."
+  },
+  {
+    "id": "act_74",
+    "title": "Colander Starlight Projector",
+    "items": ["colander", "flashlight"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Colander + Flashlight",
+    "steps": [
+      "Place a flashlight face-up inside a dark room.",
+      "Cover the flashlight with an upside-down colander.",
+      "Watch star-like light patterns project across walls and ceiling."
+    ],
+    "tip": "Slowly rotate the colander to move star projections."
+  },
+  {
+    "id": "act_75",
+    "title": "Ice Cube Salt Melt Experiment",
+    "items": ["ice_cubes", "string"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Ice Cube + String + Pinch of Salt",
+    "steps": [
+      "Lay a piece of string across an ice cube.",
+      "Sprinkle a pinch of salt over the string and ice.",
+      "Wait 60 seconds, then lift the string—the ice cube freezes onto it!"
+    ],
+    "tip": "Salt lowers water's freezing point, causing temporary refreezing."
+  },
+  {
+    "id": "act_76",
+    "title": "Tape & Straw Marble Slalom",
+    "items": ["tape", "straws", "paper_plates", "box"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "under 2 min",
+    "materialsText": "Tape + Straws or Paper Plates",
+    "steps": [
+      "Tape straws down onto a paper plate or cardboard box lid to create a winding slalom path.",
+      "Place a marble, round bead, or balled-up piece of foil at the start.",
+      "Tilt the board with two hands to navigate through the obstacles without crossing the tape boundaries."
+    ],
+    "tip": "Tape double-straw walls near steep turns to prevent marbles from flying off."
+  },
+  {
+    "id": "act_77",
+    "title": "Foil & Coin Density Boat Test",
+    "items": ["aluminum_foil", "coins", "pots", "cups"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Aluminum Foil + Coins + Pot or Bowl of Water",
+    "steps": [
+      "Fold and shape 3 square sheets of foil into different hull designs (flat raft, deep canoe, wide barge).",
+      "Float them in a pot or large bowl filled with tap water.",
+      "Add coins one by one into each boat to see which design holds the highest weight before sinking."
+    ],
+    "tip": "Wider flat bottoms distribute coin weight much better than narrow deep hulls."
+  },
+  {
+    "id": "act_78",
+    "title": "Sock & Cup Skee-Ball Alley",
+    "items": ["socks", "cups", "laundry_basket", "box"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Balled-up Socks + Plastic Cups or Laundry Basket",
+    "steps": [
+      "Arrange cups or laundry baskets in a line on the floor, labeling them 10, 25, and 50 points.",
+      "Mark a throwing line 6 feet away using tape or a pillow.",
+      "Toss balled-up socks underhand, aiming for the highest-scoring target container."
+    ],
+    "tip": "Place the 50-point basket on top of a chair to make the trajectory harder."
+  },
+  {
+    "id": "act_79",
+    "title": "Sticky Note Wall Boggle",
+    "items": ["sticky_notes", "markers"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "16 Sticky Notes + Marker",
+    "steps": [
+      "Write a single bold letter on 16 sticky notes and stick them to a door in a 4x4 grid.",
+      "Set a 2-minute timer on your phone.",
+      "Have kids connect adjacent letters vertically, horizontally, or diagonally to spell as many words as possible."
+    ],
+    "tip": "Include plenty of vowels (A, E, I, O) so they can build longer words easily."
+  },
+  {
+    "id": "act_80",
+    "title": "Paper Roll Whispering Tubes",
+    "items": ["toilet_paper_rolls", "tape", "string"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "2 Paper Rolls + Tape",
+    "steps": [
+      "Tape 2 or 3 empty paper rolls together into a long listening scope.",
+      "Have one person put their ear to one end while the other whispers secret animal sounds into the opposite end.",
+      "Guess the animal sound based purely on the amplified tube acoustics."
+    ],
+    "tip": "Great wind-down activity right before naptime or bedtime."
+  },
+  {
+    "id": "act_81",
+    "title": "Muffin Tin Target Cornhole",
+    "items": ["muffin_tin", "coins", "cotton_balls"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Muffin Tin + Coins or Cotton Balls",
+    "steps": [
+      "Set a muffin tin on a table or carpeted floor.",
+      "Assign point values to each row (1 point for front cups, 5 points for back cups).",
+      "Pitch coins or cotton balls from 4 feet away to accumulate the highest score in 10 tosses."
+    ],
+    "tip": "Bounce coins off the table surface first for a trick-shot variation."
+  },
+  {
+    "id": "act_82",
+    "title": "Flashlight Constellation Maker",
+    "items": ["flashlight", "toilet_paper_rolls", "aluminum_foil", "toothpicks"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "Flashlight + Foil + Toothpick + Paper Roll",
+    "steps": [
+      "Wrap a piece of aluminum foil over the end of an empty paper roll and poke tiny star holes using a toothpick.",
+      "Darken the room completely.",
+      "Shine the flashlight through the paper roll to project glowing star constellations onto the bedroom ceiling."
+    ],
+    "tip": "Try poking patterns like the Big Dipper or simple shapes like hearts and stars."
+  },
+  {
+    "id": "act_83",
+    "title": "Colander Threading Monster Hair",
+    "items": ["colander", "straws", "string", "rubber_bands"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Colander + Straws or Yarn",
+    "steps": [
+      "Flip an upside-down colander on the table.",
+      "Give your child drinking straws, pipe cleaners, or thick string.",
+      "Have them thread the items through the tiny holes to create wild, spiky monster hair."
+    ],
+    "tip": "Builds incredible fine-motor control and concentration for toddlers."
+  },
+  {
+    "id": "act_84",
+    "title": "Spoon & Sock Spoon-Race Relay",
+    "items": ["spoons", "socks", "pillows"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Wooden Spoon + Balled Sock + Pillows",
+    "steps": [
+      "Set up an obstacle course using pillows spread across the floor.",
+      "Balance a balled-up sock on the flat head of a wooden spoon.",
+      "Weave through the pillow course as fast as possible without dropping the sock payload."
+    ],
+    "tip": "If the sock drops, they must perform 3 wiggle-dances before picking it back up."
+  },
+  {
+    "id": "act_85",
+    "title": "Card Deck Fitness Challenge",
+    "items": ["cards"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "30 sec",
+    "materialsText": "1 Deck of Playing Cards",
+    "steps": [
+      "Assign an exercise to each suit: Red Hearts = Jumping Jacks, Red Diamonds = Squats, Black Spades = Bear Crawl, Black Clubs = High Knees.",
+      "Draw cards one at a time from the deck.",
+      "Perform the number of reps shown on the card face (Jacks=11, Queens=12, Kings=13)."
+    ],
+    "tip": "Awesome way to tire out energetic kids indoors on a rainy afternoon."
+  },
+  {
+    "id": "act_86",
+    "title": "Laundry Basket Island Escape",
+    "items": ["laundry_basket", "pillows", "blankets"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Laundry Basket + Pillows & Blankets",
+    "steps": [
+      "Place the laundry basket in the center of the room as the 'Safe Island'.",
+      "Scatter pillows across the floor surrounding it as stepping stones over shark-infested waters.",
+      "Hop from pillow to pillow to reach the island basket safety zone."
+    ],
+    "tip": "Add stuffed animals inside the basket that need to be 'rescued'."
+  },
+  {
+    "id": "act_87",
+    "title": "Paper Plate Balloon Paddle Ball",
+    "items": ["paper_plates", "spoons", "balloons", "tape"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "Paper Plates + Wooden Spoons + Tape + Balloon",
+    "steps": [
+      "Tape a wooden spoon securely to the back of two paper plates to make lightweight paddles.",
+      "Blow up one balloon.",
+      "Volley the balloon back and forth without letting it touch the floor or carpet."
+    ],
+    "tip": "Count out loud to see if you can reach 50 consecutive hits without a drop."
+  },
+  {
+    "id": "act_88",
+    "title": "Toothpick & Foil Geometry Towers",
+    "items": ["toothpicks", "aluminum_foil"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Toothpicks + Small Foil Balls",
+    "steps": [
+      "Roll tiny scraps of aluminum foil into dense squishy connector balls.",
+      "Insert toothpick ends into the foil balls to join them together into 3D shapes.",
+      "Construct geodesic domes, pyramids, or tall skyscrapers."
+    ],
+    "tip": "Foil connector balls replace playdough or marshmallows with zero sticky residue!"
+  },
+  {
+    "id": "act_89",
+    "title": "Book Spine Alphabet Hunt",
+    "items": ["books"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "30 sec",
+    "materialsText": "Stack of 10 Hardcover Books",
+    "steps": [
+      "Lay 10 hardcover books out on a table or rug.",
+      "Challenge your kid to find words on the book spines starting with letters A through Z in alphabetical order.",
+      "Set a clock to see how fast they can complete the alphabet sweep."
+    ],
+    "tip": "For younger kids, just search for single target letters instead of full words."
+  },
+  {
+    "id": "act_90",
+    "title": "Hair Tie Precision Launcher",
+    "items": ["hair_ties", "cups", "box"],
+    "ageGroups": ["big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Stretchy Hair Ties + Plastic Cups or Box",
+    "steps": [
+      "Set plastic cups on their sides inside an open cardboard box target.",
+      "Hook stretchy hair ties over your thumb and index finger like a slingshot.",
+      "Flick the hair ties gently, aiming to land them inside the cup openings."
+    ],
+    "tip": "Always aim away from people or pets toward a soft padded wall or box."
+  },
+  {
+    "id": "act_91",
+    "title": "Spray Bottle Target Erase Track",
+    "items": ["spray_bottle", "sticky_notes", "tape"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "2 min",
+    "materialsText": "Spray Bottle + Sticky Notes + Marker",
+    "steps": [
+      "Draw target symbols or numbers on sticky notes with a washable marker.",
+      "Stick them to a sliding glass door, shower wall, or outdoor patio fence.",
+      "Hand over a spray bottle filled with warm water to squirt and 'melt' the drawings off."
+    ],
+    "tip": "Adjust nozzle setting to a long narrow jet stream for distant targets."
+  },
+  {
+    "id": "act_92",
+    "title": "Ice Cube Salt Freezing Magic",
+    "items": ["ice_cubes", "string", "cups"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Ice Cubes + String + Cup of Water + Table Salt",
+    "steps": [
+      "Float an ice cube in a cup filled with cold water.",
+      "Lay a piece of string across the top surface of the floating ice cube.",
+      "Sprinkle a generous pinch of table salt over the string and ice, wait 60 seconds, then lift the string to pick up the ice magically!"
+    ],
+    "tip": "Salt lowers water's freezing point, melting the top layer briefly before it refreezes around the string."
+  },
+  {
+    "id": "act_93",
+    "title": "Pillow Cushion Crash Pad Sprint",
+    "items": ["pillows", "blankets"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "minor",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Pillows + Cushions + Blankets",
+    "steps": [
+      "Pile every couch cushion and pillow into a giant soft crash pad landing zone.",
+      "Drape a blanket over the top to keep them contained.",
+      "Have kids run from the far hallway and safely leap into the giant soft cushion pile."
+    ],
+    "tip": "Ensure the crash zone is clear of coffee tables or hard sharp edges."
+  },
+  {
+    "id": "act_94",
+    "title": "Straw & Tape Bubble Blower",
+    "items": ["straws", "tape", "cups"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "2 min",
+    "materialsText": "3 Straws + Tape + Cup of Water & Dish Soap",
+    "steps": [
+      "Tape 3 drinking straws together into a bundle.",
+      "Mix 2 tablespoons of dish soap with warm water in a plastic cup.",
+      "Dip the straw bundle end into the soap mix and blow through the opposite end to produce giant cluster bubble foam!"
+    ],
+    "tip": "Place a kitchen towel or tray underneath the cup to catch overflow foam."
+  },
+  {
+    "id": "act_95",
+    "title": "Spatula & Cotton Ball Hockey",
+    "items": ["spatula", "cotton_balls", "tape"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "Kitchen Spatula + Cotton Balls + Painter's Tape",
+    "steps": [
+      "Tape two goal boxes on opposite sides of the living room floor.",
+      "Scatter 10 cotton balls in the middle of the room.",
+      "Use kitchen spatulas as mini hockey sticks to flick cotton balls into the goal zones."
+    ],
+    "tip": "Cotton balls slide across hardwood or tile floors smoothly without scratching."
+  },
+  {
+    "id": "act_96",
+    "title": "Card Deck Memory Tower",
+    "items": ["cards"],
+    "ageGroups": ["preschool", "big-kid", "tween"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "1 Deck of Playing Cards",
+    "steps": [
+      "Lay 12 cards face down in a 3x4 grid pattern.",
+      "Take turns flipping two cards searching for numerical matches (e.g., two 7s).",
+      "Whenever a match is found, stack the pair to build a paper tower."
+    ],
+    "tip": "Reduce grid size to 6 cards (3 pairs) for younger toddlers."
+  },
+  {
+    "id": "act_97",
+    "title": "Rubber Band Shoebox Harp",
+    "items": ["rubber_bands", "box"],
+    "ageGroups": ["toddler", "preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "4-6 Rubber Bands + Cardboard Box or Tissue Box",
+    "steps": [
+      "Stretch rubber bands of different widths across an open cardboard or tissue box.",
+      "Pluck each rubber band to hear acoustic pitch variations.",
+      "Compose a short 4-note melody and perform it for the family."
+    ],
+    "tip": "Slide a pencil underneath the rubber bands at one end to lift them off the box surface."
+  },
+  {
+    "id": "act_98",
+    "title": "Paper Roll Bowling Runway",
+    "items": ["toilet_paper_rolls", "socks", "tape"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "zero",
+    "energyLevel": "burn",
+    "setupTime": "1 min",
+    "materialsText": "5 Paper Rolls + Balled-up Sock + Tape",
+    "steps": [
+      "Stand 5 empty cardboard paper rolls upright like bowling pins on the floor.",
+      "Tape a starting line 5 feet away.",
+      "Roll a balled-up sock along the floor to bowl down all 5 pins in one shot."
+    ],
+    "tip": "Put small stickers on the paper rolls to turn them into character pins."
+  },
+  {
+    "id": "act_99",
+    "title": "Pots & Pans Blindfold Sound Hunt",
+    "items": ["pots", "spoons"],
+    "ageGroups": ["preschool", "big-kid"],
+    "messLevel": "zero",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "2 Metal Pots + 2 Wooden Spoons",
+    "steps": [
+      "Have your kid close their eyes or wear a soft blindfold in the middle of the room.",
+      "Move quietly to a corner of the room and gently tap a pot with a wooden spoon.",
+      "They must point or walk directly toward where the sound originated."
+    ],
+    "tip": "Teaches directional listening and auditory spatial awareness."
+  },
+  {
+    "id": "act_100",
+    "title": "Master Kitchen Sink Water Lab",
+    "items": ["cups", "colander", "spoons", "muffin_tin", "spray_bottle"],
+    "ageGroups": ["toddler", "preschool"],
+    "messLevel": "minor",
+    "energyLevel": "quiet",
+    "setupTime": "1 min",
+    "materialsText": "Plastic Cups + Colander + Muffin Tin + Water",
+    "steps": [
+      "Fill a deep sink, storage bin, or bath with 2 inches of warm water.",
+      "Add plastic cups, a colander, and a muffin tin.",
+      "Let kids pour, strain, squirt, and measure water between containers continuously."
+    ],
+    "tip": "Place a large bath towel on the floor below the sink to absorb accidental splashes."
   }
 ]

@@ -70,7 +70,7 @@ function triggerHaptic() {
   }
 }
 
-// DOM Setup
+// DOM Initialization
 document.addEventListener("DOMContentLoaded", () => {
   renderItemsGrid();
   loadActivities();
@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateStreakDisplay();
   updateSavedDisplay();
 
-  // Primary Listeners
   const generateBtn = document.getElementById("generateBtn");
   const surpriseBtn = document.getElementById("surpriseBtn");
   
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("saveBtn").addEventListener("click", saveCurrentActivity);
   document.getElementById("shareBtn").addEventListener("click", shareCurrentActivity);
   
-  // Sound Toggle
   const soundBtn = document.getElementById("soundToggleBtn");
   if (soundBtn) {
     soundBtn.addEventListener("click", () => {
@@ -99,17 +97,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Saved Toggle
   document.getElementById("toggleSavedBtn").addEventListener("click", () => {
     document.getElementById("savedList").classList.toggle("hidden");
   });
 
-  // Timer Controls
   document.getElementById("timerStartBtn").addEventListener("click", toggleTimer);
   document.getElementById("timerResetBtn").addEventListener("click", resetTimer);
 });
 
-// Render Item Grid
+// Render Interactive Item Grid
 function renderItemsGrid() {
   const grid = document.getElementById("itemsGrid");
   if (!grid) return;
@@ -185,7 +181,7 @@ async function loadActivities() {
   }
 }
 
-// Upgraded Matching Engine with Expanding Search Fallbacks
+// Adaptive Fallback Matching Engine
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
@@ -194,42 +190,49 @@ function generateActivity(isSurpriseMode = false) {
   const chosenItems = Array.from(selectedItems);
 
   if (isSurpriseMode) {
-    // Match age + mess + energy (skip items)
     matches = allActivities.filter(act => 
       act.ageGroups.includes(selectedAge) && 
       act.messLevel === selectedMess && 
       act.energyLevel === selectedEnergy
     );
   } else {
-    // Tier 1: Strict match (Items AND Age AND Energy)
+    // Tier 1: Strict Match (Items AND Age AND Energy AND Mess)
     matches = allActivities.filter(act => {
       const sharesItem = act.items.some(i => chosenItems.includes(i));
-      return sharesItem && act.ageGroups.includes(selectedAge) && act.energyLevel === selectedEnergy;
+      return sharesItem && 
+             act.ageGroups.includes(selectedAge) && 
+             act.energyLevel === selectedEnergy && 
+             act.messLevel === selectedMess;
     });
 
-    // Tier 2: Expand to ANY activity sharing ANY selected item + Age if options are sparse
-    if (matches.length <= 3) {
-      const broaderMatches = allActivities.filter(act => 
-        act.items.some(i => chosenItems.includes(i)) && act.ageGroups.includes(selectedAge)
-      );
-      if (broaderMatches.length > matches.length) {
-        matches = broaderMatches;
-      }
+    // Tier 2: Relax Mess level if options < 5
+    if (matches.length < 5) {
+      const tier2 = allActivities.filter(act => {
+        const sharesItem = act.items.some(i => chosenItems.includes(i));
+        return sharesItem && act.ageGroups.includes(selectedAge) && act.energyLevel === selectedEnergy;
+      });
+      if (tier2.length > matches.length) matches = tier2;
     }
 
-    // Tier 3: Expand to ANY activity using ANY of the chosen items
-    if (matches.length <= 3) {
-      const itemOnlyMatches = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
-      if (itemOnlyMatches.length > matches.length) {
-        matches = itemOnlyMatches;
-      }
+    // Tier 3: Relax Energy filter if options < 5
+    if (matches.length < 5) {
+      const tier3 = allActivities.filter(act => 
+        act.items.some(i => chosenItems.includes(i)) && act.ageGroups.includes(selectedAge)
+      );
+      if (tier3.length > matches.length) matches = tier3;
+    }
+
+    // Tier 4: Match ANY activity sharing ANY selected item
+    if (matches.length < 5) {
+      const tier4 = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
+      if (tier4.length > matches.length) matches = tier4;
     }
   }
 
-  // Safety Fallback: Use full database if empty
+  // Safety Fallback: Use full database if needed
   if (matches.length === 0) matches = allActivities;
 
-  // Filter out recently shown items to prevent loops
+  // Filter out recently shown items to eliminate loops
   const freshMatches = matches.filter(a => !recentlyShownIds.includes(a.id));
   const finalPool = freshMatches.length > 0 ? freshMatches : matches;
 
@@ -237,11 +240,11 @@ function generateActivity(isSurpriseMode = false) {
   const selected = finalPool[Math.floor(Math.random() * finalPool.length)];
   currentActivity = selected;
 
-  // Track history (keep last 6)
+  // Track history (keep last 8)
   recentlyShownIds.push(selected.id);
-  if (recentlyShownIds.length > 6) recentlyShownIds.shift();
+  if (recentlyShownIds.length > 8) recentlyShownIds.shift();
 
-  // Run Shuffle Theater Animation
+  // Run Shuffle Animation
   runSlotAnimation(() => {
     renderResultCard(selected);
     incrementStreak();
@@ -316,7 +319,7 @@ function resetToGenerator() {
   document.getElementById("generatorView").classList.remove("hidden");
 }
 
-// Stopwatch Widget
+// Stopwatch Module
 function toggleTimer() {
   const startBtn = document.getElementById("timerStartBtn");
   const resetBtn = document.getElementById("timerResetBtn");
@@ -361,7 +364,7 @@ function updateTimerDisplay() {
   }
 }
 
-// Web Share API
+// Web Share API Integration
 async function shareCurrentActivity() {
   if (!currentActivity) return;
   const shareData = {
