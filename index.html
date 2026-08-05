@@ -14,37 +14,42 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="app-container">
     
+    <!-- Top Utility Bar -->
+    <div class="top-bar">
+      <button class="sound-toggle" id="soundToggleBtn" aria-label="Toggle Sound Effects">🔊</button>
+    </div>
+
     <!-- Header -->
     <header class="header">
       <h1>Boredom Buster 🚀</h1>
-      <p class="tagline">Tap what you have. Get a 2-minute sanity saver.</p>
-      <div class="streak-badge">
+      <p class="tagline">Tap what you have. Get 2-minute sanity saver magic.</p>
+      <div class="streak-badge" id="streakBadge">
         🏆 <span id="streakCount">0</span> Boredoms Busted!
       </div>
     </header>
 
-    <!-- MAIN FORM VIEW -->
+    <!-- MAIN GENERATOR VIEW -->
     <main id="generatorView">
       
       <!-- Section 1: Item Grid -->
       <section class="section">
         <div class="section-header">
           <label class="section-title">1. What's lying around?</label>
-          <span class="subtext">Pick 2–3 items</span>
+          <span class="subtext">Pick 1 to 3 items</span>
         </div>
         <div class="items-grid" id="itemsGrid">
           <!-- Populated dynamically by app.js -->
         </div>
-        <button class="btn-surprise" id="surpriseBtn">✨ "Surprise Me!" (Skip Items)</button>
+        <button class="btn-surprise" id="surpriseBtn">✨ "Surprise Me!" (Skip Item Selection)</button>
       </section>
 
-      <!-- Section 2: Filters -->
+      <!-- Section 2: Context Filters -->
       <section class="section filters-section">
         <label class="section-title">2. What's the situation?</label>
 
@@ -79,22 +84,22 @@
         </div>
       </section>
 
-      <!-- Generate CTA -->
+      <!-- Main Action Button -->
       <button class="btn-primary" id="generateBtn" disabled>
         Pick Items Above
       </button>
 
-      <!-- Install App Banner (PWA) -->
+      <!-- PWA Installation -->
       <button class="btn-pwa hidden" id="installPwaBtn">
-        📱 Add App to Home Screen
+        📱 Install App on Home Screen
       </button>
     </main>
 
-    <!-- Slot Machine Theater Overlay -->
+    <!-- Slot Machine Animation Overlay -->
     <div class="slot-overlay hidden" id="slotOverlay">
       <div class="slot-card">
         <span class="slot-icon" id="slotIcon">🎰</span>
-        <div class="slot-text" id="slotText">Shuffling ideas...</div>
+        <div class="slot-text" id="slotText">Shuffling magic...</div>
       </div>
     </div>
 
@@ -120,13 +125,24 @@
           </ol>
         </div>
 
+        <!-- Embedded Activity Stopwatch -->
+        <div class="timer-widget">
+          <div class="timer-display" id="timerDisplay">02:00</div>
+          <div class="timer-controls">
+            <button class="btn-timer" id="timerStartBtn">▶️ Start 2-Min Timer</button>
+            <button class="btn-timer btn-timer-reset hidden" id="timerResetBtn">🔄 Reset</button>
+          </div>
+        </div>
+
         <div class="pro-tip" id="resTip">
           💡 Parent Pro-Tip here...
         </div>
 
+        <!-- Action Row -->
         <div class="action-buttons">
           <button class="btn-secondary" id="tryAnotherBtn">🔄 Try Another</button>
-          <button class="btn-save" id="saveBtn">❤️ Save This</button>
+          <button class="btn-save" id="saveBtn">❤️ Save</button>
+          <button class="btn-share" id="shareBtn">📲 Share</button>
         </div>
         <button class="btn-text" id="startOverBtn">← Choose Different Items</button>
       </div>
@@ -144,9 +160,10 @@
 
   </div>
 
+  <!-- Confetti Canvas Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="app.js"></script>
   <script>
-    // Register Service Worker for Offline Capabilities
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW reg failed:', err));
