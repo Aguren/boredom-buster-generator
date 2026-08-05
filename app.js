@@ -181,83 +181,78 @@ async function loadActivities() {
   }
 }
 
-// Fixed Matching Engine: Scores activities by item overlap
+// Guaranteed Multi-Option Engine
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
 
-  let matches = [];
+  let candidatePool = [];
   const chosenItems = Array.from(selectedItems);
 
   if (isSurpriseMode) {
-    // Surprise Mode: Context match only
-    matches = allActivities.filter(act => 
+    candidatePool = allActivities.filter(act => 
       act.ageGroups.includes(selectedAge) && 
       act.messLevel === selectedMess && 
       act.energyLevel === selectedEnergy
     );
   } else {
-    // 1. Calculate how many selected items each activity matches
-    const scoredActivities = allActivities.map(act => {
+    // 1. Score activities by how many chosen items they match
+    const scored = allActivities.map(act => {
       const matchCount = act.items.filter(item => chosenItems.includes(item)).length;
       return { activity: act, matchCount };
-    }).filter(item => item.matchCount > 0); // Must match at least ONE selected item
+    }).filter(item => item.matchCount > 0);
 
-    if (scoredActivities.length > 0) {
-      // Sort by highest item overlap first
-      scoredActivities.sort((a, b) => b.matchCount - a.matchCount);
+    // Sort by item overlap strength (3 matches > 2 matches > 1 match)
+    scored.sort((a, b) => b.matchCount - a.matchCount);
 
-      // 2. Strict Filter (Highest Item Overlap + Exact Age + Exact Energy + Exact Mess)
-      let maxOverlap = scoredActivities[0].matchCount;
-      matches = scoredActivities
-        .filter(item => item.matchCount === maxOverlap && 
-                        item.activity.ageGroups.includes(selectedAge) &&
-                        item.activity.messLevel === selectedMess &&
-                        item.activity.energyLevel === selectedEnergy)
-        .map(item => item.activity);
+    // 2. Build Candidate Pool: Gather matching activities until pool size >= 8
+    // Tier A: Match selected items + Age + Energy + Mess
+    let pool = scored.filter(i => 
+      i.activity.ageGroups.includes(selectedAge) &&
+      i.activity.energyLevel === selectedEnergy &&
+      i.activity.messLevel === selectedMess
+    ).map(i => i.activity);
 
-      // 3. Fallback Tier A: Relax Mess Level (Keep highest item overlap + Age + Energy)
-      if (matches.length < 2) {
-        const fallbackA = scoredActivities
-          .filter(item => item.matchCount >= Math.max(1, maxOverlap - 1) && 
-                          item.activity.ageGroups.includes(selectedAge) &&
-                          item.activity.energyLevel === selectedEnergy)
-          .map(item => item.activity);
-        if (fallbackA.length > matches.length) matches = fallbackA;
-      }
-
-      // 4. Fallback Tier B: Relax Energy Level (Keep highest item overlap + Age)
-      if (matches.length < 2) {
-        const fallbackB = scoredActivities
-          .filter(item => item.matchCount >= Math.max(1, maxOverlap - 1) && 
-                          item.activity.ageGroups.includes(selectedAge))
-          .map(item => item.activity);
-        if (fallbackB.length > matches.length) matches = fallbackB;
-      }
-
-      // 5. Fallback Tier C: Highest item overlap only
-      if (matches.length < 2) {
-        matches = scoredActivities
-          .filter(item => item.matchCount === maxOverlap)
-          .map(item => item.activity);
-      }
+    // Tier B: If under 8 options, relax Mess constraint
+    if (pool.length < 8) {
+      const tierB = scored.filter(i => 
+        i.activity.ageGroups.includes(selectedAge) &&
+        i.activity.energyLevel === selectedEnergy
+      ).map(i => i.activity);
+      pool = Array.from(new Set([...pool, ...tierB]));
     }
+
+    // Tier C: If under 8 options, relax Energy constraint
+    if (pool.length < 8) {
+      const tierC = scored.filter(i => 
+        i.activity.ageGroups.includes(selectedAge)
+      ).map(i => i.activity);
+      pool = Array.from(new Set([...pool, ...tierC]));
+    }
+
+    // Tier D: Include any activity that matches ANY selected item
+    if (pool.length < 8) {
+      const tierD = scored.map(i => i.activity);
+      pool = Array.from(new Set([...pool, ...tierD]));
+    }
+
+    candidatePool = pool;
   }
 
   // Safety Fallback
-  if (matches.length === 0) matches = allActivities;
+  if (candidatePool.length === 0) candidatePool = allActivities;
 
-  // Filter out recently shown items to eliminate loops
-  const freshMatches = matches.filter(a => !recentlyShownIds.includes(a.id));
-  const finalPool = freshMatches.length > 0 ? freshMatches : matches;
+  // Filter out recently shown items to eliminate repeating choices
+  const freshMatches = candidatePool.filter(a => !recentlyShownIds.includes(a.id));
+  const finalPool = freshMatches.length > 0 ? freshMatches : candidatePool;
 
-  // Pick Random result from final pool
+  // Pick Random result from candidate pool
   const selected = finalPool[Math.floor(Math.random() * finalPool.length)];
   currentActivity = selected;
 
-  // Track history (keep last 10 to avoid quick repeats)
+  // Track history (keep last 20 to prevent repeats)
   recentlyShownIds.push(selected.id);
-  if (recentlyShownIds.length > 10) recentlyShownIds.shift();
+  if (recentlyShownIds.length > 20) recentlyShownIds.shift();
 
   // Run Shuffle Animation
   runSlotAnimation(() => {
