@@ -180,7 +180,7 @@ async function loadActivities() {
   }
 }
 
-// Fixed Matching Algorithm: Guarantees a fresh card every click
+// Strict Material Matching Engine
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
@@ -195,51 +195,59 @@ function generateActivity(isSurpriseMode = false) {
       act.energyLevel === selectedEnergy
     );
   } else {
-    // 1. Gather all activities matching ANY selected item
-    const matches = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
+    // RULE: An activity is valid ONLY IF all of its required items are in chosenItems
+    const validByMaterials = allActivities.filter(act => {
+      return act.items.every(reqItem => chosenItems.includes(reqItem));
+    });
 
-    // Tier A: Match Selected Items + Age + Mess + Energy
-    pool = matches.filter(act => 
+    // Tier 1: Valid Materials + Exact Age + Mess + Energy
+    pool = validByMaterials.filter(act => 
       act.ageGroups.includes(selectedAge) &&
       act.messLevel === selectedMess &&
       act.energyLevel === selectedEnergy
     );
 
-    // Tier B: Relax Mess filter if pool < 3
-    if (pool.length < 3) {
-      const tierB = matches.filter(act => 
+    // Tier 2: Relax Mess level if no exact match
+    if (pool.length === 0) {
+      pool = validByMaterials.filter(act => 
         act.ageGroups.includes(selectedAge) &&
         act.energyLevel === selectedEnergy
       );
-      pool = Array.from(new Set([...pool, ...tierB]));
     }
 
-    // Tier C: Relax Energy filter if pool < 3
-    if (pool.length < 3) {
-      const tierC = matches.filter(act => act.ageGroups.includes(selectedAge));
-      pool = Array.from(new Set([...pool, ...tierC]));
+    // Tier 3: Relax Energy level if still no match
+    if (pool.length === 0) {
+      pool = validByMaterials.filter(act => 
+        act.ageGroups.includes(selectedAge)
+      );
     }
 
-    // Tier D: All item matches
-    if (pool.length < 3) {
-      pool = matches;
+    // Tier 4: Any activity that strictly uses ONLY the selected materials
+    if (pool.length === 0) {
+      pool = validByMaterials;
+    }
+
+    // Tier 5: Fallback if no strict 100% material match exists in JSON
+    // (Pulls activities that use AT LEAST ONE selected item, but prioritizes highest match ratio)
+    if (pool.length === 0) {
+      const partialMatches = allActivities.filter(act => 
+        act.items.some(i => chosenItems.includes(i))
+      );
+      pool = partialMatches;
     }
   }
 
-  // Safety Fallback if item selection yields zero matches
   if (pool.length === 0) pool = allActivities;
 
-  // STRICT Anti-Repeat Rule: Filter out ONLY the currently visible activity
+  // Filter out current activity so "Try Another" never repeats the same card
   let availablePool = pool;
   if (currentActivity && pool.length > 1) {
     availablePool = pool.filter(act => act.id !== currentActivity.id);
   }
 
-  // Pick a truly random item from the available pool
   const selected = availablePool[Math.floor(Math.random() * availablePool.length)];
   currentActivity = selected;
 
-  // Run Shuffle Animation & Render
   runSlotAnimation(() => {
     renderResultCard(selected);
     incrementStreak();
@@ -359,7 +367,7 @@ function updateTimerDisplay() {
   }
 }
 
-// Web Share API Integration
+// Web Share API
 async function shareCurrentActivity() {
   if (!currentActivity) return;
   const shareData = {
