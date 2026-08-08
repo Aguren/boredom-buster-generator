@@ -180,7 +180,7 @@ async function loadActivities() {
   }
 }
 
-// Strict Material Matching Engine
+// Upgraded Matching Engine: Ranks by Item Combination Count
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
@@ -195,51 +195,62 @@ function generateActivity(isSurpriseMode = false) {
       act.energyLevel === selectedEnergy
     );
   } else {
-    // RULE: An activity is valid ONLY IF all of its required items are in chosenItems
-    const validByMaterials = allActivities.filter(act => {
-      return act.items.every(reqItem => chosenItems.includes(reqItem));
-    });
+    // 1. Calculate how many chosen items each activity uses
+    const scored = allActivities.map(act => {
+      const matchedItems = act.items.filter(item => chosenItems.includes(item));
+      return { 
+        activity: act, 
+        matchCount: matchedItems.length,
+        // Check if the activity requires ANY item that wasn't selected
+        hasUnselectedReqs: act.items.some(req => !chosenItems.includes(req))
+      };
+    }).filter(i => i.matchCount > 0);
 
-    // Tier 1: Valid Materials + Exact Age + Mess + Energy
-    pool = validByMaterials.filter(act => 
-      act.ageGroups.includes(selectedAge) &&
-      act.messLevel === selectedMess &&
-      act.energyLevel === selectedEnergy
-    );
+    if (scored.length > 0) {
+      // Find the highest number of selected items combined in a single activity
+      const maxMatchCount = Math.max(...scored.map(i => i.matchCount));
 
-    // Tier 2: Relax Mess level if no exact match
-    if (pool.length === 0) {
-      pool = validByMaterials.filter(act => 
-        act.ageGroups.includes(selectedAge) &&
-        act.energyLevel === selectedEnergy
-      );
-    }
+      // Tier 1: Activities matching the MOST selected items together + Exact Context + NO extra unselected items
+      let tier1 = scored.filter(i => 
+        i.matchCount === maxMatchCount &&
+        !i.hasUnselectedReqs &&
+        i.activity.ageGroups.includes(selectedAge) &&
+        i.activity.messLevel === selectedMess &&
+        i.activity.energyLevel === selectedEnergy
+      ).map(i => i.activity);
 
-    // Tier 3: Relax Energy level if still no match
-    if (pool.length === 0) {
-      pool = validByMaterials.filter(act => 
-        act.ageGroups.includes(selectedAge)
-      );
-    }
+      // Tier 2: Max matched items + Exact Context (allowing minor flexible extras)
+      if (tier1.length === 0) {
+        tier1 = scored.filter(i => 
+          i.matchCount === maxMatchCount &&
+          i.activity.ageGroups.includes(selectedAge) &&
+          i.activity.messLevel === selectedMess &&
+          i.activity.energyLevel === selectedEnergy
+        ).map(i => i.activity);
+      }
 
-    // Tier 4: Any activity that strictly uses ONLY the selected materials
-    if (pool.length === 0) {
-      pool = validByMaterials;
-    }
+      // Tier 3: Relax Mess & Energy filters while keeping highest item overlap
+      if (tier1.length === 0) {
+        tier1 = scored.filter(i => 
+          i.matchCount === maxMatchCount &&
+          i.activity.ageGroups.includes(selectedAge)
+        ).map(i => i.activity);
+      }
 
-    // Tier 5: Fallback if no strict 100% material match exists in JSON
-    // (Pulls activities that use AT LEAST ONE selected item, but prioritizes highest match ratio)
-    if (pool.length === 0) {
-      const partialMatches = allActivities.filter(act => 
-        act.items.some(i => chosenItems.includes(i))
-      );
-      pool = partialMatches;
+      // Tier 4: Fallback to lower item overlap counts (e.g. 2 items instead of 3)
+      if (tier1.length === 0) {
+        tier1 = scored.filter(i => 
+          i.activity.ageGroups.includes(selectedAge)
+        ).map(i => i.activity);
+      }
+
+      pool = tier1;
     }
   }
 
   if (pool.length === 0) pool = allActivities;
 
-  // Filter out current activity so "Try Another" never repeats the same card
+  // Filter out currently visible activity so "Try Another" rolls a fresh card
   let availablePool = pool;
   if (currentActivity && pool.length > 1) {
     availablePool = pool.filter(act => act.id !== currentActivity.id);
