@@ -38,7 +38,6 @@ let selectedAge = "toddler";
 let selectedMess = "zero";
 let selectedEnergy = "quiet";
 let currentActivity = null;
-let recentlyShownIds = [];
 let soundEnabled = true;
 let timerInterval = null;
 let timerSeconds = 120;
@@ -181,80 +180,66 @@ async function loadActivities() {
   }
 }
 
-// Guaranteed Multi-Option Engine
+// Fixed Matching Algorithm: Guarantees a fresh card every click
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
 
-  let candidatePool = [];
+  let pool = [];
   const chosenItems = Array.from(selectedItems);
 
   if (isSurpriseMode) {
-    candidatePool = allActivities.filter(act => 
+    pool = allActivities.filter(act => 
       act.ageGroups.includes(selectedAge) && 
       act.messLevel === selectedMess && 
       act.energyLevel === selectedEnergy
     );
   } else {
-    // 1. Score activities by how many chosen items they match
-    const scored = allActivities.map(act => {
-      const matchCount = act.items.filter(item => chosenItems.includes(item)).length;
-      return { activity: act, matchCount };
-    }).filter(item => item.matchCount > 0);
+    // 1. Gather all activities matching ANY selected item
+    const matches = allActivities.filter(act => act.items.some(i => chosenItems.includes(i)));
 
-    // Sort by item overlap strength (3 matches > 2 matches > 1 match)
-    scored.sort((a, b) => b.matchCount - a.matchCount);
+    // Tier A: Match Selected Items + Age + Mess + Energy
+    pool = matches.filter(act => 
+      act.ageGroups.includes(selectedAge) &&
+      act.messLevel === selectedMess &&
+      act.energyLevel === selectedEnergy
+    );
 
-    // 2. Build Candidate Pool: Gather matching activities until pool size >= 8
-    // Tier A: Match selected items + Age + Energy + Mess
-    let pool = scored.filter(i => 
-      i.activity.ageGroups.includes(selectedAge) &&
-      i.activity.energyLevel === selectedEnergy &&
-      i.activity.messLevel === selectedMess
-    ).map(i => i.activity);
-
-    // Tier B: If under 8 options, relax Mess constraint
-    if (pool.length < 8) {
-      const tierB = scored.filter(i => 
-        i.activity.ageGroups.includes(selectedAge) &&
-        i.activity.energyLevel === selectedEnergy
-      ).map(i => i.activity);
+    // Tier B: Relax Mess filter if pool < 3
+    if (pool.length < 3) {
+      const tierB = matches.filter(act => 
+        act.ageGroups.includes(selectedAge) &&
+        act.energyLevel === selectedEnergy
+      );
       pool = Array.from(new Set([...pool, ...tierB]));
     }
 
-    // Tier C: If under 8 options, relax Energy constraint
-    if (pool.length < 8) {
-      const tierC = scored.filter(i => 
-        i.activity.ageGroups.includes(selectedAge)
-      ).map(i => i.activity);
+    // Tier C: Relax Energy filter if pool < 3
+    if (pool.length < 3) {
+      const tierC = matches.filter(act => act.ageGroups.includes(selectedAge));
       pool = Array.from(new Set([...pool, ...tierC]));
     }
 
-    // Tier D: Include any activity that matches ANY selected item
-    if (pool.length < 8) {
-      const tierD = scored.map(i => i.activity);
-      pool = Array.from(new Set([...pool, ...tierD]));
+    // Tier D: All item matches
+    if (pool.length < 3) {
+      pool = matches;
     }
-
-    candidatePool = pool;
   }
 
-  // Safety Fallback
-  if (candidatePool.length === 0) candidatePool = allActivities;
+  // Safety Fallback if item selection yields zero matches
+  if (pool.length === 0) pool = allActivities;
 
-  // Filter out recently shown items to eliminate repeating choices
-  const freshMatches = candidatePool.filter(a => !recentlyShownIds.includes(a.id));
-  const finalPool = freshMatches.length > 0 ? freshMatches : candidatePool;
+  // STRICT Anti-Repeat Rule: Filter out ONLY the currently visible activity
+  let availablePool = pool;
+  if (currentActivity && pool.length > 1) {
+    availablePool = pool.filter(act => act.id !== currentActivity.id);
+  }
 
-  // Pick Random result from candidate pool
-  const selected = finalPool[Math.floor(Math.random() * finalPool.length)];
+  // Pick a truly random item from the available pool
+  const selected = availablePool[Math.floor(Math.random() * availablePool.length)];
   currentActivity = selected;
 
-  // Track history (keep last 20 to prevent repeats)
-  recentlyShownIds.push(selected.id);
-  if (recentlyShownIds.length > 20) recentlyShownIds.shift();
-
-  // Run Shuffle Animation
+  // Run Shuffle Animation & Render
   runSlotAnimation(() => {
     renderResultCard(selected);
     incrementStreak();
