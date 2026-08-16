@@ -4,115 +4,114 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>The Boredom Buster 🚀</title>
-  
-  <!-- PWA & Mobile Meta -->
+
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ff5964" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  
+
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
   <div class="app-container">
-    
-    <!-- Top Utility Bar -->
     <div class="top-bar">
-      <button class="sound-toggle" id="soundToggleBtn" aria-label="Toggle Sound Effects">🔊</button>
+      <button class="sound-toggle" id="soundToggleBtn" aria-label="Toggle Sound Effects" aria-pressed="true">🔊</button>
     </div>
 
-    <!-- Header -->
     <header class="header">
       <h1>Boredom Buster 🚀</h1>
-      <p class="tagline">Tap what you have. Get 2-minute sanity saver magic.</p>
+      <p class="tagline">Tap what you have. Get a fast, actually-matching activity.</p>
       <div class="streak-badge" id="streakBadge">
         🏆 <span id="streakCount">0</span> Boredoms Busted!
       </div>
     </header>
 
-    <!-- MAIN GENERATOR VIEW -->
     <main id="generatorView">
-      
-      <!-- Section 1: Item Grid -->
       <section class="section">
         <div class="section-header">
           <label class="section-title">1. What's lying around?</label>
-          <span class="subtext">Pick 1 to 3 items</span>
+          <span class="subtext">Pick up to 3 — we'll use at least one</span>
         </div>
-        <div class="items-grid" id="itemsGrid">
-          <!-- Populated dynamically by app.js -->
-        </div>
-        <button class="btn-surprise" id="surpriseBtn">✨ "Surprise Me!" (Skip Item Selection)</button>
+        <div class="items-grid" id="itemsGrid"></div>
+        <label class="toggle-row" for="useAllItemsToggle">
+          <span>
+            <strong>Use ALL my selected items</strong>
+            <small>Only show ideas that use every item you picked.</small>
+          </span>
+          <input type="checkbox" id="useAllItemsToggle" />
+        </label>
+        <button class="btn-surprise" id="surpriseBtn">✨ Surprise Me! (Skip Item Selection)</button>
       </section>
 
-      <!-- Section 2: Context Filters -->
       <section class="section filters-section">
         <label class="section-title">2. What's the situation?</label>
 
-        <!-- Age Group -->
         <div class="filter-group">
           <label class="filter-label">Who is this for?</label>
           <div class="pill-options" id="ageOptions">
-            <button class="pill active" data-value="toddler">Toddler (1-3)</button>
-            <button class="pill" data-value="preschool">Preschool (4-5)</button>
-            <button class="pill" data-value="big-kid">Big Kid (6-9)</button>
-            <button class="pill" data-value="tween">Tween+ (10+)</button>
+            <button class="pill active" aria-pressed="true" data-value="toddler">Toddler (1-3)</button>
+            <button class="pill" aria-pressed="false" data-value="preschool">Preschool (4-5)</button>
+            <button class="pill" aria-pressed="false" data-value="big-kid">Big Kid (6-9)</button>
+            <button class="pill" aria-pressed="false" data-value="tween">Tween+ (10+)</button>
           </div>
         </div>
 
-        <!-- Mess Level -->
         <div class="filter-group">
           <label class="filter-label">Mess Tolerance</label>
           <div class="pill-options" id="messOptions">
-            <button class="pill active" data-value="zero">🧼 Zero Mess</button>
-            <button class="pill" data-value="minor">🟡 Minor Mess</button>
-            <button class="pill" data-value="full">💥 Full Explosion</button>
+            <button class="pill active" aria-pressed="true" data-value="zero">🧼 Zero Mess</button>
+            <button class="pill" aria-pressed="false" data-value="minor">🟡 Up to Minor</button>
+            <button class="pill" aria-pressed="false" data-value="full">💥 Anything Goes</button>
           </div>
         </div>
 
-        <!-- Energy Level -->
         <div class="filter-group">
           <label class="filter-label">Energy Goal</label>
           <div class="pill-options" id="energyOptions">
-            <button class="pill active" data-value="quiet">😴 Quiet Time</button>
-            <button class="pill" data-value="burn">⚡ Burn Energy</button>
+            <button class="pill active" aria-pressed="true" data-value="quiet">😴 Quiet Time</button>
+            <button class="pill" aria-pressed="false" data-value="burn">⚡ Burn Energy</button>
           </div>
         </div>
+
+        <div class="filter-group">
+          <label class="filter-label">How involved do I want to be?</label>
+          <div class="pill-options three" id="independenceOptions">
+            <button class="pill active" aria-pressed="true" data-value="either">✨ Either</button>
+            <button class="pill" aria-pressed="false" data-value="independent">🙌 Independent</button>
+            <button class="pill" aria-pressed="false" data-value="together">👨‍👩‍👧 Together</button>
+          </div>
+        </div>
+
+        <div id="matchPreview" class="match-preview">Loading activity matches…</div>
       </section>
 
-      <!-- Main Action Button -->
-      <button class="btn-primary" id="generateBtn" disabled>
-        Pick Items Above
-      </button>
+      <div id="generatorMessage" class="generator-message hidden"></div>
 
-      <!-- PWA Installation -->
-      <button class="btn-pwa hidden" id="installPwaBtn">
-        📱 Install App on Home Screen
-      </button>
+      <button class="btn-primary" id="generateBtn" disabled>Pick Items Above</button>
+      <button class="btn-pwa hidden" id="installPwaBtn">📱 Install App on Home Screen</button>
     </main>
 
-    <!-- Slot Machine Animation Overlay -->
     <div class="slot-overlay hidden" id="slotOverlay">
       <div class="slot-card">
         <span class="slot-icon" id="slotIcon">🎰</span>
-        <div class="slot-text" id="slotText">Shuffling magic...</div>
+        <div class="slot-text" id="slotText">Matching your stuff...</div>
       </div>
     </div>
 
-    <!-- RESULT CARD VIEW -->
     <main id="resultView" class="hidden">
       <div class="result-card">
         <div class="card-badges">
           <span class="badge time" id="resTime">⏱️ under 2 min</span>
           <span class="badge mess" id="resMess">🧼 Zero Mess</span>
           <span class="badge energy" id="resEnergy">😴 Quiet</span>
+          <span class="badge involvement" id="resInvolvement">🙌 Independent-ish</span>
         </div>
 
         <h2 class="activity-title" id="resTitle">Activity Title</h2>
+        <div class="match-reason" id="matchReason">✨ Great match.</div>
 
         <div class="materials-box">
           <strong>📦 Grab these:</strong> <span id="resMaterials">...</span>
@@ -120,12 +119,9 @@
 
         <div class="steps-container">
           <h3>Quick Steps:</h3>
-          <ol id="resSteps">
-            <!-- Injected by JS -->
-          </ol>
+          <ol id="resSteps"></ol>
         </div>
 
-        <!-- Embedded Activity Stopwatch -->
         <div class="timer-widget">
           <div class="timer-display" id="timerDisplay">02:00</div>
           <div class="timer-controls">
@@ -134,11 +130,14 @@
           </div>
         </div>
 
-        <div class="pro-tip" id="resTip">
-          💡 Parent Pro-Tip here...
-        </div>
+        <div class="pro-tip" id="resTip">💡 Parent Pro-Tip here...</div>
 
-        <!-- Action Row -->
+        <div class="feedback-row" aria-label="Rate this recommendation">
+          <button class="btn-feedback" id="greatIdeaBtn">👍 Great idea</button>
+          <button class="btn-feedback" id="notForUsBtn">👎 Not for us</button>
+        </div>
+        <p class="learning-note">Your feedback and favorites quietly improve future recommendations on this device.</p>
+
         <div class="action-buttons">
           <button class="btn-secondary" id="tryAnotherBtn">🔄 Try Another</button>
           <button class="btn-save" id="saveBtn">❤️ Save</button>
@@ -148,19 +147,14 @@
       </div>
     </main>
 
-    <!-- SAVED FAVORITES TRAY -->
     <section class="saved-section">
       <button class="saved-toggle-btn" id="toggleSavedBtn">
         ❤️ Saved Favorites (<span id="savedCount">0</span>)
       </button>
-      <div class="saved-list hidden" id="savedList">
-        <!-- Injected by JS -->
-      </div>
+      <div class="saved-list hidden" id="savedList"></div>
     </section>
-
   </div>
 
-  <!-- Confetti Canvas Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="app.js"></script>
   <script>

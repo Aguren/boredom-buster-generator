@@ -1,5 +1,9 @@
-// App State
+// Boredom Buster v2
+// Smarter recommendation engine with structured materials, variety history,
+// personalization, exact "use all" mode, and feedback-based learning.
+
 let allActivities = [];
+
 const availableItems = [
   { id: "box", name: "Cardboard Box", icon: "📦" },
   { id: "socks", name: "Socks", icon: "🧦" },
@@ -33,86 +37,191 @@ const availableItems = [
   { id: "books", name: "Hardcover Books", icon: "📚" }
 ];
 
+const itemById = Object.fromEntries(availableItems.map(item => [item.id, item]));
+
 let selectedItems = new Set();
 let selectedAge = "toddler";
 let selectedMess = "zero";
 let selectedEnergy = "quiet";
+let selectedIndependence = "either";
+let useAllItems = false;
 let currentActivity = null;
 let soundEnabled = true;
 let timerInterval = null;
 let timerSeconds = 120;
+let lastGenerationWasSurprise = false;
 
-// Web Audio API Synthesizer
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const RECENT_LIMIT = 12;
+const STORAGE = {
+  recent: "bb_recent_ids_v2",
+  feedback: "bb_feedback_v2",
+  saved: "bb_saved_acts",
+  streak: "bb_streak_count"
+};
+
+let recentIds = readJsonStorage(STORAGE.recent, []);
+let feedback = readJsonStorage(STORAGE.feedback, {});
+
+let audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioCtor = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtor) audioCtx = new AudioCtor();
+  }
+  return audioCtx;
+}
 
 function playAudioTone(freq, type, duration) {
   if (!soundEnabled) return;
   try {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
     osc.type = type;
     osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(ctx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.stop(ctx.currentTime + duration);
   } catch (e) {
     console.log("Audio play error", e);
   }
 }
 
 function triggerHaptic() {
-  if (navigator.vibrate) {
-    navigator.vibrate(35);
+  if (navigator.vibrate) navigator.vibrate(35);
+}
+
+function readJsonStorage(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    console.warn(`Could not read ${key}`, e);
+    return fallback;
   }
 }
 
-// DOM Initialization
+function writeJsonStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn(`Could not save ${key}`, e);
+  }
+}
+
+function normalizeActivity(act) {
+  // Supports both v2 records and legacy records if an older JSON somehow loads.
+  const legacyItems = Array.isArray(act.items) ? act.items : [];
+  const primaryItems = Array.isArray(act.primaryItems) && act.primaryItems.length
+    ? act.primaryItems
+    : legacyItems.slice(0, 1);
+  const optionalItems = Array.isArray(act.optionalItems)
+    ? act.optionalItems
+    : legacyItems.slice(1);
+  const mergedItems = [...new Set([...primaryItems, ...optionalItems])];
+
+  return {
+    ...act,
+    primaryItems,
+    optionalItems,
+    items: mergedItems,
+    independence: act.independence || "together"
+  };
+}
+
+// -------------------------
+// Initialization
+// -------------------------
 document.addEventListener("DOMContentLoaded", () => {
   renderItemsGrid();
-  loadActivities();
   setupFilterPills();
+  setupControls();
   updateStreakDisplay();
   updateSavedDisplay();
+  loadActivities();
+});
 
+async function loadActivities() {
+  try {
+    const res = await fetch("activities.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`activities.json returned ${res.status}`);
+    const payload = await res.json();
+    allActivities = payload.map(normalizeActivity);
+    updateMatchPreview();
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    showGeneratorMessage("I couldn't load the activity library. Refresh the page and try again.", "error");
+  }
+}
+
+function setupControls() {
   const generateBtn = document.getElementById("generateBtn");
   const surpriseBtn = document.getElementById("surpriseBtn");
-  
+  const tryAnotherBtn = document.getElementById("tryAnotherBtn");
+  const startOverBtn = document.getElementById("startOverBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const shareBtn = document.getElementById("shareBtn");
+  const soundBtn = document.getElementById("soundToggleBtn");
+  const useAllToggle = document.getElementById("useAllItemsToggle");
+  const greatIdeaBtn = document.getElementById("greatIdeaBtn");
+  const notForUsBtn = document.getElementById("notForUsBtn");
+
   if (generateBtn) generateBtn.addEventListener("click", () => generateActivity(false));
   if (surpriseBtn) surpriseBtn.addEventListener("click", () => generateActivity(true));
-  
-  document.getElementById("tryAnotherBtn").addEventListener("click", () => generateActivity(selectedItems.size === 0));
-  document.getElementById("startOverBtn").addEventListener("click", resetToGenerator);
-  document.getElementById("saveBtn").addEventListener("click", saveCurrentActivity);
-  document.getElementById("shareBtn").addEventListener("click", shareCurrentActivity);
-  
-  const soundBtn = document.getElementById("soundToggleBtn");
+  if (tryAnotherBtn) tryAnotherBtn.addEventListener("click", () => generateActivity(lastGenerationWasSurprise));
+  if (startOverBtn) startOverBtn.addEventListener("click", resetToGenerator);
+  if (saveBtn) saveBtn.addEventListener("click", saveCurrentActivity);
+  if (shareBtn) shareBtn.addEventListener("click", shareCurrentActivity);
+  if (greatIdeaBtn) greatIdeaBtn.addEventListener("click", () => rateCurrentActivity(1));
+  if (notForUsBtn) notForUsBtn.addEventListener("click", () => rateCurrentActivity(-1, true));
+
+  if (useAllToggle) {
+    useAllToggle.addEventListener("change", e => {
+      useAllItems = e.target.checked;
+      updateMatchPreview();
+      hideGeneratorMessage();
+    });
+  }
+
   if (soundBtn) {
     soundBtn.addEventListener("click", () => {
       soundEnabled = !soundEnabled;
       soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+      soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+      if (soundEnabled) playAudioTone(520, "sine", 0.08);
     });
   }
 
-  document.getElementById("toggleSavedBtn").addEventListener("click", () => {
-    document.getElementById("savedList").classList.toggle("hidden");
-  });
+  const savedToggle = document.getElementById("toggleSavedBtn");
+  if (savedToggle) {
+    savedToggle.addEventListener("click", () => {
+      document.getElementById("savedList")?.classList.toggle("hidden");
+    });
+  }
 
-  document.getElementById("timerStartBtn").addEventListener("click", toggleTimer);
-  document.getElementById("timerResetBtn").addEventListener("click", resetTimer);
-});
+  document.getElementById("timerStartBtn")?.addEventListener("click", toggleTimer);
+  document.getElementById("timerResetBtn")?.addEventListener("click", resetTimer);
+}
 
-// Render Interactive Item Grid
+// -------------------------
+// Item Selection
+// -------------------------
 function renderItemsGrid() {
   const grid = document.getElementById("itemsGrid");
   if (!grid) return;
   grid.innerHTML = "";
+
   availableItems.forEach(item => {
-    const card = document.createElement("div");
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = "item-card";
     card.dataset.id = item.id;
+    card.setAttribute("aria-pressed", "false");
     card.innerHTML = `
       <span class="icon">${item.icon}</span>
       <span class="label">${item.name}</span>
@@ -129,29 +238,43 @@ function toggleItem(id, cardElement) {
   if (selectedItems.has(id)) {
     selectedItems.delete(id);
     cardElement.classList.remove("selected");
+    cardElement.setAttribute("aria-pressed", "false");
   } else {
     if (selectedItems.size >= 3) {
       const firstAdded = Array.from(selectedItems)[0];
       selectedItems.delete(firstAdded);
       const prevSelected = document.querySelector(`[data-id="${firstAdded}"]`);
-      if (prevSelected) prevSelected.classList.remove("selected");
+      if (prevSelected) {
+        prevSelected.classList.remove("selected");
+        prevSelected.setAttribute("aria-pressed", "false");
+      }
     }
     selectedItems.add(id);
     cardElement.classList.add("selected");
+    cardElement.setAttribute("aria-pressed", "true");
   }
 
+  updateGenerateButton();
+  updateMatchPreview();
+  hideGeneratorMessage();
+}
+
+function updateGenerateButton() {
   const btn = document.getElementById("generateBtn");
-  if (btn) {
-    if (selectedItems.size > 0) {
-      btn.disabled = false;
-      btn.textContent = `Bust Boredom! (${selectedItems.size} Selected)`;
-    } else {
-      btn.disabled = true;
-      btn.textContent = "Pick Items Above";
-    }
+  if (!btn) return;
+
+  if (selectedItems.size > 0) {
+    btn.disabled = false;
+    btn.textContent = `Bust Boredom! (${selectedItems.size} Selected)`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = "Pick Items Above";
   }
 }
 
+// -------------------------
+// Filters
+// -------------------------
 function setupFilterPills() {
   const bindPills = (containerId, setter) => {
     const pills = document.querySelectorAll(`#${containerId} .pill`);
@@ -159,122 +282,229 @@ function setupFilterPills() {
       pill.addEventListener("click", () => {
         triggerHaptic();
         playAudioTone(520, "sine", 0.06);
-        pills.forEach(p => p.classList.remove("active"));
+        pills.forEach(p => {
+          p.classList.remove("active");
+          p.setAttribute("aria-pressed", "false");
+        });
         pill.classList.add("active");
+        pill.setAttribute("aria-pressed", "true");
         setter(pill.dataset.value);
+        updateMatchPreview();
+        hideGeneratorMessage();
       });
     });
   };
 
-  bindPills("ageOptions", val => selectedAge = val);
-  bindPills("messOptions", val => selectedMess = val);
-  bindPills("energyOptions", val => selectedEnergy = val);
+  bindPills("ageOptions", value => selectedAge = value);
+  bindPills("messOptions", value => selectedMess = value);
+  bindPills("energyOptions", value => selectedEnergy = value);
+  bindPills("independenceOptions", value => selectedIndependence = value);
 }
 
-async function loadActivities() {
-  try {
-    const res = await fetch("activities.json");
-    allActivities = await res.json();
-  } catch (err) {
-    console.error("Error loading JSON:", err);
+function messAllowed(activityMess) {
+  if (selectedMess === "zero") return activityMess === "zero";
+  if (selectedMess === "minor") return activityMess === "zero" || activityMess === "minor";
+  return ["zero", "minor", "full"].includes(activityMess); // Anything Goes
+}
+
+function passesContextFilters(act) {
+  if (!act.ageGroups.includes(selectedAge)) return false;
+  if (act.energyLevel !== selectedEnergy) return false;
+  if (!messAllowed(act.messLevel)) return false;
+  if (selectedIndependence !== "either" && act.independence !== selectedIndependence) return false;
+  return true;
+}
+
+function activityItemSet(act) {
+  return new Set([...act.primaryItems, ...act.optionalItems]);
+}
+
+function getEligibleActivities({ surprise = false } = {}) {
+  const chosen = Array.from(selectedItems);
+
+  return allActivities.filter(act => {
+    if (!passesContextFilters(act)) return false;
+    if (surprise || chosen.length === 0) return true;
+
+    const activityItems = activityItemSet(act);
+    const matchCount = chosen.filter(id => activityItems.has(id)).length;
+
+    if (useAllItems) return matchCount === chosen.length;
+    return matchCount > 0;
+  });
+}
+
+function updateMatchPreview() {
+  const el = document.getElementById("matchPreview");
+  if (!el || allActivities.length === 0) return;
+
+  const eligible = getEligibleActivities({ surprise: selectedItems.size === 0 });
+  if (selectedItems.size === 0) {
+    el.textContent = `${eligible.length} ideas match these filters.`;
+  } else if (useAllItems) {
+    el.textContent = `${eligible.length} ideas use all selected items and match these filters.`;
+  } else {
+    el.textContent = `${eligible.length} ideas use at least one selected item and match these filters.`;
   }
+  el.classList.toggle("low-match", eligible.length > 0 && eligible.length < 5);
 }
 
-// Upgraded Matching Engine: Ranks by Item Combination Count
+// -------------------------
+// Personalization + Ranking
+// -------------------------
+function getSavedActivities() {
+  const raw = readJsonStorage(STORAGE.saved, []);
+  return Array.isArray(raw) ? raw : [];
+}
+
+function getSavedIds() {
+  return new Set(getSavedActivities().map(a => typeof a === "string" ? a : a.id).filter(Boolean));
+}
+
+function buildItemAffinity() {
+  const affinity = Object.fromEntries(availableItems.map(item => [item.id, 0]));
+  const byId = Object.fromEntries(allActivities.map(act => [act.id, act]));
+
+  // Favorites are a gentle positive signal.
+  for (const saved of getSavedActivities()) {
+    const id = typeof saved === "string" ? saved : saved.id;
+    const act = byId[id] || (typeof saved === "object" ? normalizeActivity(saved) : null);
+    if (!act) continue;
+    act.primaryItems.forEach(item => { if (item in affinity) affinity[item] += 1.25; });
+    act.optionalItems.forEach(item => { if (item in affinity) affinity[item] += 0.35; });
+  }
+
+  // Explicit feedback is stronger. A dislike of a balloon activity, for example,
+  // slightly lowers other balloon-heavy activities without blocking them forever.
+  for (const [id, value] of Object.entries(feedback)) {
+    const act = byId[id];
+    if (!act || !value) continue;
+    const direction = value > 0 ? 1 : -1;
+    act.primaryItems.forEach(item => { if (item in affinity) affinity[item] += direction * 2.25; });
+    act.optionalItems.forEach(item => { if (item in affinity) affinity[item] += direction * 0.6; });
+  }
+
+  return affinity;
+}
+
+function scoreActivity(act, chosenItems, itemAffinity, savedIds) {
+  let score = 10;
+  const chosen = new Set(chosenItems);
+  const primaryMatches = act.primaryItems.filter(item => chosen.has(item));
+  const optionalMatches = act.optionalItems.filter(item => chosen.has(item));
+
+  score += primaryMatches.length * 12;
+  score += optionalMatches.length * 4;
+
+  // Extra reward for combining multiple things the user actually selected.
+  const totalMatches = primaryMatches.length + optionalMatches.length;
+  if (totalMatches >= 2) score += 4;
+  if (totalMatches >= 3) score += 3;
+
+  // Prefer the user's exact tolerance boundary slightly, but never violate tolerance.
+  if (selectedMess === "minor" && act.messLevel === "minor") score += 1.5;
+  if (selectedMess === "full" && act.messLevel === "full") score += 1.5;
+
+  // Personalization derived from favorite/disliked materials.
+  act.primaryItems.forEach(item => { score += itemAffinity[item] || 0; });
+  act.optionalItems.forEach(item => { score += (itemAffinity[item] || 0) * 0.35; });
+
+  if (savedIds.has(act.id)) score += 2;
+  if (feedback[act.id] > 0) score += 4;
+  if (feedback[act.id] < 0) score -= 14;
+
+  // Strong variety penalty, not a hard ban. Sparse combinations can still function.
+  const recentIndex = recentIds.indexOf(act.id);
+  if (recentIndex !== -1) score -= Math.max(8, 24 - recentIndex);
+  else score += 2;
+
+  if (currentActivity && act.id === currentActivity.id) score -= 40;
+
+  return { score, primaryMatches, optionalMatches, totalMatches };
+}
+
+function weightedChoice(scored) {
+  if (!scored.length) return null;
+
+  scored.sort((a, b) => b.score - a.score);
+  const best = scored[0].score;
+
+  // Keep a broad pool of strong choices instead of only the single highest tier.
+  let finalists = scored.filter(row => row.score >= best - 12).slice(0, 20);
+  if (finalists.length < Math.min(8, scored.length)) finalists = scored.slice(0, Math.min(12, scored.length));
+
+  const floor = Math.min(...finalists.map(row => row.score));
+  const weighted = finalists.map(row => ({
+    ...row,
+    weight: Math.pow(Math.max(1, row.score - floor + 2), 1.35)
+  }));
+
+  const total = weighted.reduce((sum, row) => sum + row.weight, 0);
+  let roll = Math.random() * total;
+  for (const row of weighted) {
+    roll -= row.weight;
+    if (roll <= 0) return row;
+  }
+  return weighted[weighted.length - 1];
+}
+
 function generateActivity(isSurpriseMode = false) {
   triggerHaptic();
   playAudioTone(300, "triangle", 0.15);
+  hideGeneratorMessage();
 
-  let pool = [];
-  const chosenItems = Array.from(selectedItems);
+  if (!allActivities.length) {
+    showGeneratorMessage("The activity library is still loading. Try again in a moment.", "error");
+    return;
+  }
 
-  if (isSurpriseMode) {
-    pool = allActivities.filter(act => 
-      act.ageGroups.includes(selectedAge) && 
-      act.messLevel === selectedMess && 
-      act.energyLevel === selectedEnergy
-    );
-  } else {
-    // 1. Calculate how many chosen items each activity uses
-    const scored = allActivities.map(act => {
-      const matchedItems = act.items.filter(item => chosenItems.includes(item));
-      return { 
-        activity: act, 
-        matchCount: matchedItems.length,
-        // Check if the activity requires ANY item that wasn't selected
-        hasUnselectedReqs: act.items.some(req => !chosenItems.includes(req))
-      };
-    }).filter(i => i.matchCount > 0);
+  lastGenerationWasSurprise = isSurpriseMode || selectedItems.size === 0;
+  const eligible = getEligibleActivities({ surprise: lastGenerationWasSurprise });
 
-    if (scored.length > 0) {
-      // Find the highest number of selected items combined in a single activity
-      const maxMatchCount = Math.max(...scored.map(i => i.matchCount));
-
-      // Tier 1: Activities matching the MOST selected items together + Exact Context + NO extra unselected items
-      let tier1 = scored.filter(i => 
-        i.matchCount === maxMatchCount &&
-        !i.hasUnselectedReqs &&
-        i.activity.ageGroups.includes(selectedAge) &&
-        i.activity.messLevel === selectedMess &&
-        i.activity.energyLevel === selectedEnergy
-      ).map(i => i.activity);
-
-      // Tier 2: Max matched items + Exact Context (allowing minor flexible extras)
-      if (tier1.length === 0) {
-        tier1 = scored.filter(i => 
-          i.matchCount === maxMatchCount &&
-          i.activity.ageGroups.includes(selectedAge) &&
-          i.activity.messLevel === selectedMess &&
-          i.activity.energyLevel === selectedEnergy
-        ).map(i => i.activity);
-      }
-
-      // Tier 3: Relax Mess & Energy filters while keeping highest item overlap
-      if (tier1.length === 0) {
-        tier1 = scored.filter(i => 
-          i.matchCount === maxMatchCount &&
-          i.activity.ageGroups.includes(selectedAge)
-        ).map(i => i.activity);
-      }
-
-      // Tier 4: Fallback to lower item overlap counts (e.g. 2 items instead of 3)
-      if (tier1.length === 0) {
-        tier1 = scored.filter(i => 
-          i.activity.ageGroups.includes(selectedAge)
-        ).map(i => i.activity);
-      }
-
-      pool = tier1;
+  if (eligible.length === 0) {
+    if (useAllItems && selectedItems.size > 0) {
+      showGeneratorMessage("No activity uses all of those items with these filters. Turn off “Use ALL my items” or change one filter.", "warning");
+    } else {
+      showGeneratorMessage("No activities match that exact combination yet. Try another energy, involvement, or mess setting.", "warning");
     }
+    return;
   }
 
-  if (pool.length === 0) pool = allActivities;
+  const chosen = Array.from(selectedItems);
+  const itemAffinity = buildItemAffinity();
+  const savedIds = getSavedIds();
+  const scored = eligible.map(act => ({ activity: act, ...scoreActivity(act, chosen, itemAffinity, savedIds) }));
+  const picked = weightedChoice(scored);
+  if (!picked) return;
 
-  // Filter out currently visible activity so "Try Another" rolls a fresh card
-  let availablePool = pool;
-  if (currentActivity && pool.length > 1) {
-    availablePool = pool.filter(act => act.id !== currentActivity.id);
-  }
-
-  const selected = availablePool[Math.floor(Math.random() * availablePool.length)];
-  currentActivity = selected;
+  currentActivity = picked.activity;
+  rememberRecent(currentActivity.id);
 
   runSlotAnimation(() => {
-    renderResultCard(selected);
+    renderResultCard(currentActivity, picked);
     incrementStreak();
     fireConfetti();
     playAudioTone(587.33, "sine", 0.2);
   });
 }
 
+function rememberRecent(id) {
+  recentIds = [id, ...recentIds.filter(existing => existing !== id)].slice(0, RECENT_LIMIT);
+  writeJsonStorage(STORAGE.recent, recentIds);
+}
+
+// -------------------------
+// Result UI
+// -------------------------
 function runSlotAnimation(callback) {
   const overlay = document.getElementById("slotOverlay");
   const icon = document.getElementById("slotIcon");
   const text = document.getElementById("slotText");
+  if (!overlay) return callback();
 
   overlay.classList.remove("hidden");
   const icons = ["🎲", "🚀", "🎨", "🎰", "⚡", "✨"];
-  const texts = ["Shuffling magic...", "Checking kitchen...", "Busting boredom...", "Almost got it!"];
+  const texts = ["Matching your stuff...", "Checking the filters...", "Avoiding repeats...", "Found a good one!"];
   let step = 0;
 
   const interval = setInterval(() => {
@@ -288,29 +518,54 @@ function runSlotAnimation(callback) {
     clearInterval(interval);
     overlay.classList.add("hidden");
     callback();
-  }, 850);
+  }, 700);
 }
 
 function fireConfetti() {
   if (typeof confetti === "function") {
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.7 }
-    });
+    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
   }
 }
 
-function renderResultCard(act) {
+function itemLabel(id) {
+  return itemById[id]?.name || id.replaceAll("_", " ");
+}
+
+function buildMatchReason(act, scoreInfo) {
+  if (lastGenerationWasSurprise || selectedItems.size === 0) {
+    const involvement = act.independence === "independent" ? "independent-friendly" : "good to do together";
+    return `✨ Fits your ${energyLabel(act.energyLevel).toLowerCase()} goal and is ${involvement}.`;
+  }
+
+  const primary = scoreInfo.primaryMatches.map(itemLabel);
+  const optional = scoreInfo.optionalMatches.map(itemLabel);
+  const pieces = [];
+
+  if (primary.length) pieces.push(`built around ${primary.join(" + ")}`);
+  if (optional.length) pieces.push(`also uses ${optional.join(" + ")}`);
+
+  if (!pieces.length) return "✨ Matches your current filters.";
+  return `✨ Great match: ${pieces.join(" and ")}.`;
+}
+
+function messLabel(level) {
+  if (level === "zero") return "🧼 Zero Mess";
+  if (level === "minor") return "🟡 Minor Mess";
+  return "💥 Messy Fun";
+}
+
+function energyLabel(level) {
+  return level === "quiet" ? "Quiet Time" : "Burn Energy";
+}
+
+function renderResultCard(act, scoreInfo) {
   document.getElementById("resTitle").textContent = act.title;
   document.getElementById("resTime").textContent = `⏱️ ${act.setupTime}`;
-  document.getElementById("resMess").textContent = 
-    act.messLevel === 'zero' ? '🧼 Zero Mess' : 
-    act.messLevel === 'minor' ? '🟡 Minor Mess' : '💥 Full Explosion';
-  document.getElementById("resEnergy").textContent = 
-    act.energyLevel === 'quiet' ? '😴 Quiet Time' : '⚡ Burn Energy';
-
+  document.getElementById("resMess").textContent = messLabel(act.messLevel);
+  document.getElementById("resEnergy").textContent = act.energyLevel === "quiet" ? "😴 Quiet Time" : "⚡ Burn Energy";
+  document.getElementById("resInvolvement").textContent = act.independence === "independent" ? "🙌 Independent-ish" : "👨‍👩‍👧 Better Together";
   document.getElementById("resMaterials").textContent = act.materialsText;
+  document.getElementById("matchReason").textContent = buildMatchReason(act, scoreInfo);
 
   const stepsList = document.getElementById("resSteps");
   stepsList.innerHTML = "";
@@ -321,19 +576,69 @@ function renderResultCard(act) {
   });
 
   document.getElementById("resTip").innerHTML = `💡 <strong>Parent Pro-Tip:</strong> ${act.tip}`;
-
+  refreshFeedbackButtons();
   resetTimer();
 
   document.getElementById("generatorView").classList.add("hidden");
   document.getElementById("resultView").classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function resetToGenerator() {
   document.getElementById("resultView").classList.add("hidden");
   document.getElementById("generatorView").classList.remove("hidden");
+  updateMatchPreview();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// Stopwatch Module
+function showGeneratorMessage(message, type = "warning") {
+  const box = document.getElementById("generatorMessage");
+  if (!box) return;
+  box.textContent = message;
+  box.className = `generator-message ${type}`;
+}
+
+function hideGeneratorMessage() {
+  const box = document.getElementById("generatorMessage");
+  if (!box) return;
+  box.textContent = "";
+  box.className = "generator-message hidden";
+}
+
+// -------------------------
+// Feedback + Personalization
+// -------------------------
+function rateCurrentActivity(value, generateAnother = false) {
+  if (!currentActivity) return;
+  feedback[currentActivity.id] = value;
+  writeJsonStorage(STORAGE.feedback, feedback);
+  refreshFeedbackButtons();
+  triggerHaptic();
+  playAudioTone(value > 0 ? 660 : 240, value > 0 ? "sine" : "triangle", 0.09);
+
+  if (generateAnother) {
+    setTimeout(() => generateActivity(lastGenerationWasSurprise), 120);
+  }
+}
+
+function refreshFeedbackButtons() {
+  if (!currentActivity) return;
+  const value = feedback[currentActivity.id] || 0;
+  const like = document.getElementById("greatIdeaBtn");
+  const dislike = document.getElementById("notForUsBtn");
+  if (like) {
+    like.classList.toggle("active-feedback", value > 0);
+    like.textContent = value > 0 ? "👍 Great idea ✓" : "👍 Great idea";
+  }
+  if (dislike) {
+    dislike.classList.toggle("active-feedback", value < 0);
+    dislike.textContent = value < 0 ? "👎 Not for us ✓" : "👎 Not for us";
+  }
+}
+
+// -------------------------
+// Timer
+// -------------------------
 function toggleTimer() {
   const startBtn = document.getElementById("timerStartBtn");
   const resetBtn = document.getElementById("timerResetBtn");
@@ -373,12 +678,12 @@ function updateTimerDisplay() {
   const mins = Math.floor(timerSeconds / 60);
   const secs = timerSeconds % 60;
   const display = document.getElementById("timerDisplay");
-  if (display) {
-    display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
+  if (display) display.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-// Web Share API
+// -------------------------
+// Sharing
+// -------------------------
 async function shareCurrentActivity() {
   if (!currentActivity) return;
   const shareData = {
@@ -390,45 +695,47 @@ async function shareCurrentActivity() {
   try {
     if (navigator.share) {
       await navigator.share(shareData);
-    } else {
+    } else if (navigator.clipboard) {
       await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
-      alert("Activity steps copied to clipboard!");
+      alert("Activity copied to clipboard!");
     }
   } catch (err) {
     console.log("Share cancelled", err);
   }
 }
 
-// LocalStorage Persistence
+// -------------------------
+// Streak + Favorites
+// -------------------------
 function updateStreakDisplay() {
-  const count = localStorage.getItem("bb_streak_count") || 0;
+  const count = localStorage.getItem(STORAGE.streak) || 0;
   const streakEl = document.getElementById("streakCount");
   if (streakEl) streakEl.textContent = count;
 }
 
 function incrementStreak() {
-  let count = parseInt(localStorage.getItem("bb_streak_count") || 0);
+  let count = parseInt(localStorage.getItem(STORAGE.streak) || "0", 10);
   count++;
-  localStorage.setItem("bb_streak_count", count);
+  localStorage.setItem(STORAGE.streak, String(count));
   updateStreakDisplay();
 }
 
 function saveCurrentActivity() {
   if (!currentActivity) return;
-  let saved = JSON.parse(localStorage.getItem("bb_saved_acts") || "[]");
-  
-  if (!saved.some(a => a.id === currentActivity.id)) {
+  let saved = getSavedActivities();
+
+  if (!saved.some(a => (typeof a === "string" ? a : a.id) === currentActivity.id)) {
     saved.push(currentActivity);
-    localStorage.setItem("bb_saved_acts", JSON.stringify(saved));
+    writeJsonStorage(STORAGE.saved, saved);
     updateSavedDisplay();
-    alert("Saved to your favorites!");
+    alert("Saved to your favorites! Future recommendations will learn from it.");
   } else {
     alert("Already saved in your favorites!");
   }
 }
 
 function updateSavedDisplay() {
-  const saved = JSON.parse(localStorage.getItem("bb_saved_acts") || "[]");
+  const saved = getSavedActivities();
   const countEl = document.getElementById("savedCount");
   if (countEl) countEl.textContent = saved.length;
 
@@ -437,24 +744,59 @@ function updateSavedDisplay() {
   container.innerHTML = "";
 
   if (saved.length === 0) {
-    container.innerHTML = `<p style="font-size:0.85rem; color:#888; text-align:center;">No saved favorites yet.</p>`;
+    container.innerHTML = `<p class="empty-saved">No saved favorites yet.</p>`;
     return;
   }
 
-  saved.forEach(act => {
+  saved.forEach(savedAct => {
+    const id = typeof savedAct === "string" ? savedAct : savedAct.id;
+    const act = allActivities.find(a => a.id === id) || savedAct;
+    if (!act || !id) return;
+
     const item = document.createElement("div");
     item.className = "saved-item";
-    item.innerHTML = `
-      <span>${act.title}</span>
-      <span style="cursor:pointer; color:#ef4444;" onclick="removeSaved('${act.id}')">🗑️</span>
-    `;
+
+    const title = document.createElement("span");
+    title.textContent = act.title || id;
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "saved-remove";
+    remove.textContent = "🗑️";
+    remove.setAttribute("aria-label", `Remove ${act.title || "favorite"}`);
+    remove.addEventListener("click", () => removeSaved(id));
+
+    item.append(title, remove);
     container.appendChild(item);
   });
 }
 
 function removeSaved(id) {
-  let saved = JSON.parse(localStorage.getItem("bb_saved_acts") || "[]");
-  saved = saved.filter(a => a.id !== id);
-  localStorage.setItem("bb_saved_acts", JSON.stringify(saved));
+  let saved = getSavedActivities();
+  saved = saved.filter(a => (typeof a === "string" ? a : a.id) !== id);
+  writeJsonStorage(STORAGE.saved, saved);
   updateSavedDisplay();
 }
+
+// -------------------------
+// PWA install prompt
+// -------------------------
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  document.getElementById('installPwaBtn')?.classList.remove('hidden');
+});
+
+document.getElementById('installPwaBtn')?.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  try { await deferredInstallPrompt.userChoice; } catch (e) { /* user dismissed */ }
+  deferredInstallPrompt = null;
+  document.getElementById('installPwaBtn')?.classList.add('hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  document.getElementById('installPwaBtn')?.classList.add('hidden');
+});

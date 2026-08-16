@@ -1,6 +1,7 @@
 {
   "short_name": "BoredomBuster",
   "name": "The Boredom Buster Activity Generator",
+  "description": "Fast household-object activity ideas matched to age, energy, mess tolerance, and parent involvement.",
   "icons": [
     {
       "src": "https://fav.farm/🚀",
